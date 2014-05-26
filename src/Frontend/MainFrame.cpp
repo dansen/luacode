@@ -818,11 +818,9 @@ void MainFrame::OnFileExit(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnFileNew(wxCommandEvent& event)
 {
-
     Project::File* file = m_project->AddTemporaryFile("");
     UpdateForNewFile(file);
     OpenProjectFile(file);
-
 }
 
 void MainFrame::OnFileOpen(wxCommandEvent& event)

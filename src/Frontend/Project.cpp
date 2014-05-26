@@ -370,6 +370,7 @@ Project::File* Project::AddTemporaryFile(const wxString& fileName)
 
     if (fileName.IsEmpty())
     {
+		file->type = "lua";
         file->tempName = CreateTempName();
     }
 
@@ -907,7 +908,7 @@ bool Project::LoadGeneralSettings(const wxString& fileName)
 wxString Project::CreateTempName()
 {
     ++m_tempIndex;
-    return wxString::Format("Untitled%d", m_tempIndex);
+    return wxString::Format("untitled.lua");
 }
 
 bool Project::LoadSccNode(wxXmlNode* root)
