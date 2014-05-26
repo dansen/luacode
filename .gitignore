@@ -1,0 +1,8 @@
+*.pdb
+*.idb
+*.log
+*.obj
+*.lastbuildstate
+*.sdf
+*.tlog
+*.opensdf
