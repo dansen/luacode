@@ -238,7 +238,8 @@ public:
      * Called when the user selects Edit/Uncomment Selection from the menu.
      */
     void OnEditUncomment(wxCommandEvent& event);
-
+	void OnEditInsertAfterLine(wxCommandEvent& event);
+	void OnEditInsertBeforeLine(wxCommandEvent& event);
     /**
      * Called when the user selects Project/Add Existing File from the menu.
      */
@@ -1445,6 +1446,9 @@ private:
 
         ID_Search                           = 86,
         ID_WindowSearch                     = 87,
+
+		ID_EditInsertBeforeLine = 88,
+		ID_EditInsertAfterLine = 89,
         
         ID_FirstExternalTool                = 1000,
         ID_FirstRecentFile                  = 2000,

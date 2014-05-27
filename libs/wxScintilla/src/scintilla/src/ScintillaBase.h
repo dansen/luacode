@@ -31,7 +31,10 @@ protected:
 		idcmdCopy=13,
 		idcmdPaste=14,
 		idcmdDelete=15,
-		idcmdSelectAll=16
+		idcmdSelectAll=16,
+
+		idcmdInsertBeforeLine = 17,
+		idcmdInsertAfterLine = 18
 	};
 
 	bool displayPopupMenu;

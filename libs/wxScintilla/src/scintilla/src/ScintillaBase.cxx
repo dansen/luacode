@@ -129,6 +129,12 @@ void ScintillaBase::Command(int cmdId) {
 	case idcmdSelectAll:
 		WndProc(SCI_SELECTALL, 0, 0);
 		break;
+	case idcmdInsertBeforeLine:
+		WndProc(SCI_INSERTBEFORELINE, 0, 0);
+		break;
+	case idcmdInsertAfterLine:
+		WndProc(SCI_INSERTAFTERLINE, 0, 0);
+		break;
 	}
 }
 
@@ -522,6 +528,16 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 	case SCI_AUTOCSHOW:
 		listType = 0;
 		AutoCompleteStart(wParam, reinterpret_cast<const char *>(lParam));
+		break;
+
+	case SCI_INSERTBEFORELINE:
+	{
+		pdoc->InsertString(currentPos, "hello", 5);
+	}
+		break;
+
+	case SCI_INSERTAFTERLINE:
+
 		break;
 
 	case SCI_AUTOCCANCEL:

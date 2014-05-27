@@ -50,7 +50,7 @@ CodeEdit::CodeEdit()
     // The minimum number of characters that must be typed before autocomplete
     // is displayed for global symbols. We impose a minimum so that autocomplete
     // doesn't popup too much.
-    m_minAutoCompleteLength = 2;
+    m_minAutoCompleteLength = 1;
     m_autoCompleteManager   = NULL;
 
     m_tipWindow             = NULL;
@@ -153,14 +153,11 @@ void CodeEdit::SetEditorSettings(const EditorSettings& settings)
 
     if (settings.GetShowLineNumbers())
     {
-
         // Figure out how wide the margin needs to be do display
         // the most number of linqes we'd reasonbly have.
-        int marginSize = TextWidth(wxSCI_STYLE_LINENUMBER, "_99999");
+        int marginSize = TextWidth(wxSCI_STYLE_LINENUMBER, "99999");
         SetMarginWidth(0, marginSize);
-
         SetMarginType(0,wxSCI_MARGIN_NUMBER);
-
     }
     else
     {
@@ -173,7 +170,6 @@ void CodeEdit::SetEditorSettings(const EditorSettings& settings)
 
 void CodeEdit::SetDefaultLexer()
 {
-
     SetLexer(wxSCI_LEX_NULL);
 
     SetKeyWords(1, "");

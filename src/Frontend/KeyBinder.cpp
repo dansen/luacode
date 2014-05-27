@@ -475,24 +475,27 @@ wxString KeyBinder::GetKeyBindingAsText(const Key& key)
         res << wxT("Insert"); break;
     case WXK_NUMPAD_DELETE:
         res << wxT("Delete"); break;
+	case '=':
     case WXK_NUMPAD_EQUAL:
         res << wxT("="); break;
     case WXK_NUMPAD_MULTIPLY:
         res << wxT("*"); break;
+	case '+':
     case WXK_NUMPAD_ADD:
         res << wxT("+"); break;
     case WXK_NUMPAD_SEPARATOR:
         res << wxT("Separator"); break;
     case WXK_NUMPAD_SUBTRACT:
         res << wxT("-"); break;
+	case '.':
     case WXK_NUMPAD_DECIMAL:
         res << wxT("."); break;
+	case '/':
     case WXK_NUMPAD_DIVIDE:
         res << wxT("/"); break;
     default:
-
         // ASCII chars...
-        if (wxIsalnum(key.code))
+		if (wxIsalnum(key.code) || wxIsgraph(key.code))
         {
             res << (wxChar)key.code;
             break;

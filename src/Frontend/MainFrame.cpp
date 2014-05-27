@@ -128,7 +128,10 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_UPDATE_UI(ID_EditComment,                   MainFrame::EnableWhenTextIsSelected)
     EVT_MENU(ID_EditUncomment,                      MainFrame::OnEditUncomment)
     EVT_UPDATE_UI(ID_EditUncomment,                 MainFrame::EnableWhenTextIsSelected)
-    
+	EVT_MENU(ID_EditInsertAfterLine, MainFrame::OnEditInsertAfterLine)
+	EVT_UPDATE_UI(ID_EditInsertAfterLine, MainFrame::EnableWhenFileIsOpen)
+	EVT_MENU(ID_EditInsertBeforeLine, MainFrame::OnEditInsertBeforeLine)
+	EVT_UPDATE_UI(ID_EditInsertBeforeLine, MainFrame::EnableWhenFileIsOpen)
     // Project menu events.
     EVT_MENU(ID_ProjectAddExistingFile,             MainFrame::OnProjectAddExistingFile)
     EVT_MENU(ID_ProjectAddNewFile,                  MainFrame::OnProjectAddNewFile)
@@ -529,7 +532,7 @@ MainFrame::~MainFrame()
     delete m_findDialog;
     m_findDialog = NULL;
 
-    SaveOptions();
+    //SaveOptions();
 
     // Since the explorer references files in the project, we need to clear out
     // its references before we delete the project.
@@ -614,7 +617,8 @@ void MainFrame::InitializeMenu()
     menuEdit->Append(ID_EditUntabify,                   _("Unta&bify Selection"), _("Removes all tabs from the selected text"));
     menuEdit->Append(ID_EditComment,                    _("Co&mment Selection"));
     menuEdit->Append(ID_EditUncomment,                  _("&Uncomment Selection"));
-
+	menuEdit->Append(ID_EditInsertBeforeLine, _("&Insert Before Line"));
+	menuEdit->Append(ID_EditInsertAfterLine, _("&Insert After Line"));
     // Project menu.
 
     wxMenu* menuRecentProjects = new wxMenu;
@@ -1232,6 +1236,53 @@ void MainFrame::OnEditComment(wxCommandEvent& event)
         m_openFiles[pageIndex]->edit->CommentSelection();
     }
 
+}
+
+void MainFrame::OnEditInsertBeforeLine(wxCommandEvent& event)
+{
+	int pageIndex = GetSelectedPage();
+	CodeEdit* edit = m_openFiles[pageIndex]->edit;
+	int pos = edit->GetCurrentPos();
+	//查找当前行的开头\t数目
+	while (pos > 0){
+		--pos;
+		char c = edit->GetCharAt(pos);
+		if (c == '\n'){
+			break;
+		}
+	}
+
+	edit->EnsureCaretVisible();
+	edit->SetCurrentPos(pos);
+	edit->AddText("\n");
+	if(pos == 0){
+		edit->SetCurrentPos(pos);
+		edit->SetAnchor(pos);
+	}else{
+		edit->SetCurrentPos(pos + 1);
+		edit->SetAnchor(pos+1);
+	}
+	
+}
+
+void MainFrame::OnEditInsertAfterLine(wxCommandEvent& event)
+{
+	int pageIndex = GetSelectedPage();
+	CodeEdit* edit = m_openFiles[pageIndex]->edit;
+	int pos = edit->GetCurrentPos();
+	
+	while(pos < edit->GetLength()){
+		char c = edit->GetCharAt(pos);
+		if (c == '\n'){
+			break;
+		}
+		++pos;
+	}
+	edit->EnsureCaretVisible();
+	edit->SetCurrentPos(pos);
+	edit->AddText("\n");
+	edit->SetCurrentPos(pos+1);
+	edit->SetAnchor(pos + 1);
 }
 
 void MainFrame::OnEditUncomment(wxCommandEvent& event)
@@ -1979,6 +2030,34 @@ void MainFrame::OnFileEvent(FileEvent& event)
     UpdateDocumentReadOnlyStatus();
 }
 
+class wxOKButton : public wxButton{
+public:
+	wxOKButton(wxWindow *parent,
+	wxWindowID id,
+	const wxString& label = wxEmptyString,
+	const wxPoint& pos = wxDefaultPosition,
+	const wxSize& size = wxDefaultSize,
+	long style = 0,
+	const wxValidator& validator = wxDefaultValidator,
+	const wxString& name = wxButtonNameStr)
+	{
+		Create(parent, id, label, pos, size, style, validator, name);
+	}
+	// implementation from now on
+	virtual void Command(wxCommandEvent& event)
+	{
+		return wxButton::Command(event);
+	}
+	virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+	{
+		return wxButton::MSWWindowProc(nMsg, wParam, lParam);
+	}
+	virtual bool MSWCommand(WXUINT param, WXWORD id)
+	{
+		return wxButton::MSWCommand(param, id);
+	}
+};
+
 void MainFrame::OnToolsSettings(wxCommandEvent& event)
 {
 
@@ -2003,9 +2082,13 @@ void MainFrame::OnToolsSettings(wxCommandEvent& event)
     systemSettings->AddFileType(".deproj", 1);
     systemSettings->AddFileType(".lua", 2);
 
-    if (dialog.ShowModal() == wxID_OK)
+	dialog.SetAffirmativeId(0);
+	wxOKButton btn(&dialog, 0, "OK");
+	wxWindow * w = dialog.FindWindow(wxID_OK);
+	btn.SetPosition(w->GetPosition());
+	w->Show(false);
+    if (dialog.ShowModal() == 0)
     {
-
         systemSettings->ApplyFileAssociations();
 
         m_keyBinder.ClearCommands();
@@ -2023,7 +2106,7 @@ void MainFrame::OnToolsSettings(wxCommandEvent& event)
         m_systemSettings    = systemSettings->GetSettings();
 
         UpdateEditorOptions();
-        
+		SaveOptions();
     }
 
 }

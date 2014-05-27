@@ -188,7 +188,7 @@ void ViewStyle::Init(size_t stylesSize_) {
 	whitespaceBackground.desired = ColourDesired(0xff, 0xff, 0xff);
 	selbar.desired = Platform::Chrome();
 	selbarlight.desired = Platform::ChromeHighlight();
-	styles[STYLE_LINENUMBER].fore.desired = ColourDesired(0, 0, 0);
+	styles[STYLE_LINENUMBER].fore.desired = ColourDesired(143, 144, 138);
 	styles[STYLE_LINENUMBER].back.desired = Platform::Chrome();
 	caretcolour.desired = ColourDesired(0, 0, 0);
 	showCaretLineBackground = false;
