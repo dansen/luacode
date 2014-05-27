@@ -28,7 +28,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "StlUtility.h"
 #include "Symbol.h"
 #include "DebugFrontend.h"
-
+#include <set>
 #include <wx/file.h>
 #include <wx/listctrl.h>
 #include <hash_map>
@@ -342,7 +342,7 @@ void ProjectExplorerWindow::AddFile(wxTreeItemId parent, Project::File* file)
 
         wxTreeItemId node = fileNode;
 
-        if (!file->symbols[i]->module.IsEmpty())
+		if (!file->symbols[i]->module.IsEmpty() && file->symbols[i]->type == Symbol::SymbolFunction)
         {
 
             stdext::hash_map<std::string, wxTreeItemId>::const_iterator iterator;
@@ -368,7 +368,9 @@ void ProjectExplorerWindow::AddFile(wxTreeItemId parent, Project::File* file)
 
 void ProjectExplorerWindow::AddSymbol(wxTreeItemId parent, Project::File* file, Symbol* symbol)
 {
-
+	if(symbol->type != Symbol::SymbolFunction){
+		return;
+	}
     ItemData* data = new ItemData;
     data->file      = file;
     data->symbol    = symbol;

@@ -19,13 +19,13 @@ You should have received a copy of the GNU General Public License
 along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
+#include <set>
 #include "SymbolParserThread.h"
 #include "SymbolParserEvent.h"
 #include "Symbol.h"
 #include "StlUtility.h"
 #include "Tokenizer.h"
-
+#include <regex>
 #include <wx/wfstream.h>
 #include <wx/sstream.h>
 
@@ -89,9 +89,11 @@ wxThread::ExitCode SymbolParserThread::Entry()
             {
 
                 std::vector<Symbol*> symbols;
+				std::set<wxString> symbolNames;
+
                 wxStringInputStream input(m_headItem->code);
 
-                ParseFileSymbols(input, symbols);
+				ParseFileSymbols(m_headItem->fileName, input, symbols, symbolNames);
 
                 m_itemsLock.Enter();
                 bool isLastItem=m_items.empty();
@@ -121,13 +123,14 @@ wxThread::ExitCode SymbolParserThread::Entry()
 
 }
 
-void SymbolParserThread::QueueForParsing(const wxString& code, unsigned int fileId)
+void SymbolParserThread::QueueForParsing(const wxString& fileName, const wxString& code, unsigned int fileId)
 {
 
     QueueItem* item = new QueueItem;
     
     item->code = code;
     item->fileId = fileId;
+	item->fileName = fileName;
 
     {
         wxCriticalSectionLocker locker(m_itemsLock);
@@ -139,9 +142,25 @@ void SymbolParserThread::QueueForParsing(const wxString& code, unsigned int file
 
 }
 
-void SymbolParserThread::ParseFileSymbols(wxInputStream& input, std::vector<Symbol*>& symbols)
+bool isIdentify(const char * token) 
 {
+	std::regex pattern("[A-Za-z_][A-Za-z_0-9]+");
+	bool valid = std::regex_match(token, pattern);
+	return valid;
+}
 
+void SymbolParserThread::addSymbol(std::vector<Symbol*>& symbols, Symbol * sym, std::set<wxString> names)
+{
+	if(names.find(sym->name) == names.end()){
+		names.insert(sym->name); 
+	}else{
+		return;
+	}
+	symbols.push_back(sym);
+}
+
+void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& input, std::vector<Symbol*>& symbols, std::set<wxString> names)
+{
     if (!input.IsOk())
     {
         return;
@@ -155,7 +174,6 @@ void SymbolParserThread::ParseFileSymbols(wxInputStream& input, std::vector<Symb
     {
         if (token == "function")
         {
-
             unsigned int defLineNumber = lineNumber;
 
             // Lua functions can have these forms:
@@ -182,23 +200,31 @@ void SymbolParserThread::ParseFileSymbols(wxInputStream& input, std::vector<Symb
             if (t2 == "(")
             {
                 // The form function Name (...).
-                symbols.push_back(new Symbol("", t1, defLineNumber));
+				addSymbol(symbols, new Symbol("", t1, defLineNumber, fileName, Symbol::SymbolFunction), names);
             }
             else
             {
-                
                 wxString t3;
                 if (!GetToken(input, t3, lineNumber)) break;
 
                 if (t2 == "." || t2 == ":")
                 {
-                    symbols.push_back(new Symbol(t1, t3, defLineNumber));
+					addSymbol(symbols, new Symbol(t1, t3, defLineNumber, fileName, Symbol::SymbolFunction), names);
                 }
-
             }
-
-
-        }
+        }else if(isIdentify(token)){
+			//¼ì²é.Óë:
+			wxString next;
+			PeekToken(input, next);
+			if(next == "." || next == ":"){
+				addSymbol(symbols, new Symbol("", token, lineNumber, fileName, Symbol::SymbolIdentifier), names);
+				GetToken(input, next, lineNumber);
+				GetToken(input, next, lineNumber);
+				addSymbol(symbols, new Symbol(token, next, lineNumber, fileName, Symbol::SymbolIdentifier), names);
+			}else{
+				addSymbol(symbols, new Symbol("", token, lineNumber, fileName, Symbol::SymbolIdentifier), names);
+			}
+		}
     }
 
 }

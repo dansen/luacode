@@ -28,6 +28,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include <wx/wx.h>
 
 #include <vector>
+#include <set>
 
 //
 // Forward declarations.
@@ -49,8 +50,13 @@ public:
         Type_Unknown,
         Type_Function,
         Type_Class,
+		Type_KeyWord,
         Type_Variable,
     };
+
+	AutoCompleteManager();
+
+	void addEntry(const char * name, Type type, const char * scope = "");
 
     /**
      * Rebuiilds the list of autocompletions from the symbols in the specified project.
@@ -88,8 +94,8 @@ private:
     void BuildFromFile(const Project::File* file);
 
 private:
-
-    std::vector<Entry>  m_entries;
+	typedef std::set<Entry>::iterator ENTRY_ITR;
+    std::set<Entry>  m_entries;
 
 };
 

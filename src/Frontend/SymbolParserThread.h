@@ -67,15 +67,15 @@ public:
     /**
      * Queues a file to have its symbols parsed.
      */
-    void QueueForParsing(const wxString& code, unsigned int fileId);
+	void QueueForParsing(const wxString& fileName, const wxString& code, unsigned int fileId);
 
 private:
 
     /**
      * Parses the symbols for the file.
      */
-    void ParseFileSymbols(wxInputStream& input, std::vector<Symbol*>& symbols);
-
+	void ParseFileSymbols(wxString & fileName, wxInputStream& input, std::vector<Symbol*>& symbols, std::set<wxString> names);
+	void addSymbol(std::vector<Symbol*>& symbols, Symbol * sym, std::set<wxString> names);
 private:
 
     /**
@@ -84,6 +84,7 @@ private:
     struct QueueItem
     {
         unsigned int    fileId;
+		wxString		fileName;
         wxString        code;
     };
 

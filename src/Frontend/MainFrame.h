@@ -1164,7 +1164,7 @@ private:
      * Reloads the contents of the specified file from disk.
      */
     void ReloadFile(OpenFile* file);
-
+	void loadFile(OpenFile* file, const char * path);
     /**
      * Searches the files for the specified text. If baseDirectory is specified,
      * the filenames are all displayed relative to the directory.

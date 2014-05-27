@@ -27,9 +27,11 @@ Symbol::Symbol()
     line = 0;
 }
 
-Symbol::Symbol(const wxString& _module, const wxString& _name, unsigned int _line)
+Symbol::Symbol(const wxString& _module, const wxString& _name, unsigned int _line, const wxString& _file, SymbolType _type)
 {
     module = _module;
     name   = _name;
     line   = _line;
+	file = _file;
+	type = _type;
 }

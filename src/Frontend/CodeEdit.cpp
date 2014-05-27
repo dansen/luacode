@@ -50,7 +50,7 @@ CodeEdit::CodeEdit()
     // The minimum number of characters that must be typed before autocomplete
     // is displayed for global symbols. We impose a minimum so that autocomplete
     // doesn't popup too much.
-    m_minAutoCompleteLength = 1;
+    m_minAutoCompleteLength = 2;
     m_autoCompleteManager   = NULL;
 
     m_tipWindow             = NULL;
@@ -215,7 +215,7 @@ void CodeEdit::SetLuaLexer()
         "and       break     do        else      elseif "
         "end       false     for       function  if "
         "in        local     nil       not       or "
-        "repeat    return    then      true      until     while ";
+        "repeat    return    then      true      until     while module";
 
     SetKeyWords(1, keywords);
 

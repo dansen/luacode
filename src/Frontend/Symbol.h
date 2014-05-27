@@ -28,18 +28,25 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 class Symbol
 {
-    
 public:
-
+	enum SymbolType {
+		SymbolFunction,
+		SymbolIdentifier,
+		SymbolKeyword
+	};
+public:
     Symbol();
-    Symbol(const wxString& module, const wxString& name, unsigned int line);
-
+	Symbol(const wxString& module, const wxString& name, unsigned int line, const wxString& file, SymbolType type);
+	bool operator<(const Symbol& entry) const
+	{
+		return name.Cmp(entry.name) < 0;
+	}
 public:
-
+	wxString			file;
     wxString            module;
     wxString            name;
     unsigned int        line;
-
+	SymbolType type;
 };
 
 #endif

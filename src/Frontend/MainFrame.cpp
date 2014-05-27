@@ -3798,7 +3798,7 @@ void MainFrame::FindText(OpenFile* file, const wxString& text, int flags)
             m_findDialog->Enable(false);
         }
 
-        wxMessageBox("The specified text could not be found.", s_applicationName, wxOK | wxICON_INFORMATION, this);
+        //wxMessageBox("The specified text could not be found.", s_applicationName, wxOK | wxICON_INFORMATION, this);
         
         if (m_findDialog != NULL)
         {
@@ -4416,12 +4416,8 @@ MainFrame::OpenFile* MainFrame::OpenProjectFile(Project::File* file)
     }
     else if (wxFileExists(fileName))
     {
-		//openFile->edit->SetText("This script was loaded as a compiled binary file.  To view script source code,\nthe uncompiled script file must be added to the current project.");
-		//读取文件内容
-		std::string s = fileStringANSI(file->fileName.GetFullPath());
-		openFile->edit->SetText(s.c_str());
-		openFile->edit->SetSavePoint();
-		openFile->edit->EmptyUndoBuffer();
+		//openFile->edit->LoadFile(file->fileName.GetFullPath());
+		loadFile(openFile, file->fileName.GetFullPath());
     }
     else if (file->scriptIndex != -1)
     {
@@ -4988,7 +4984,7 @@ void MainFrame::CheckReload(OpenFile* file)
         wxString message;
         message.Printf("File '%s' has been changed. Reload from disk?", fileName.ToAscii());
 
-        if (wxMessageBox(message, s_applicationName, wxYES_NO | wxICON_EXCLAMATION, this) == wxYES)
+        //if (wxMessageBox(message, s_applicationName, wxYES_NO | wxICON_EXCLAMATION, this) == wxYES)
         {
             ReloadFile(file);
         }
@@ -5289,6 +5285,15 @@ void MainFrame::GetNotebookTabSelectedFileNames(std::vector<std::string>& fileNa
 
 }
 
+void MainFrame::loadFile(OpenFile* openFile, const char * path)
+{
+	//读取文件内容
+	std::string s = fileStringANSI(path);
+	openFile->edit->SetText(s.c_str());
+	openFile->edit->SetSavePoint();
+	openFile->edit->EmptyUndoBuffer();
+}
+
 void MainFrame::ReloadFile(OpenFile* file)
 {
 
@@ -5298,7 +5303,9 @@ void MainFrame::ReloadFile(OpenFile* file)
     //Disable modified events so OnCodeEditModified is not called
     editor.SetModEventMask(0);
 
-    editor.LoadFile(file->file->fileName.GetFullPath());
+    //editor.LoadFile(file->file->fileName.GetFullPath());
+	loadFile(file, file->file->fileName.GetFullPath());
+
     file->timeStamp = GetFileModifiedTime(file->file->fileName.GetFullPath());
 
     editor.SetModEventMask(wxSCI_MODEVENTMASKALL);

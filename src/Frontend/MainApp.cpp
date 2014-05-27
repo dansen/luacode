@@ -115,7 +115,7 @@ void redirectSTD2console()
 
 bool MainApp::OnInit()
 {
-	redirectSTD2console();
+	//redirectSTD2console();
     UINT openFilesMessage = RegisterWindowMessage("Decoda_OpenFiles");
 
     // Check to see if another instances is running.

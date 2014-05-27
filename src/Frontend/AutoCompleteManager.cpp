@@ -42,8 +42,10 @@ bool AutoCompleteManager::Entry::operator<(const Entry& entry) const
 
 void AutoCompleteManager::BuildFromProject(const Project* project)
 {
-    
     m_entries.clear();
+	addEntry("local", Type_Function);
+	addEntry("function", Type_Function);
+	addEntry("module(, package.seeall)", Type_Function);
 
     for (unsigned int fileIndex = 0; fileIndex < project->GetNumFiles(); ++fileIndex)
     {
@@ -51,8 +53,7 @@ void AutoCompleteManager::BuildFromProject(const Project* project)
     }
 
     // Sort the autocompletions (necessary for binary search).
-    std::sort(m_entries.begin(), m_entries.end());
-
+    //std::sort(m_entries.begin(), m_entries.end());
 }
 
 void AutoCompleteManager::BuildFromFile(const Project::File* file)
@@ -61,7 +62,17 @@ void AutoCompleteManager::BuildFromFile(const Project::File* file)
     for (unsigned int symbolIndex = 0; symbolIndex < file->symbols.size(); ++symbolIndex)
     {
         const Symbol* symbol = file->symbols[symbolIndex];
-        m_entries.push_back( Entry(symbol->name, Type_Function, symbol->module) );
+		bool exist = false;
+// 		for (int i = 0; i < m_entries.size(); ++i){
+// 			if (m_entries[i].name == symbol->name){
+// 				exist = true;
+// 				break;
+// 			}
+// 		}
+		if (exist == false){
+			m_entries.insert(Entry(symbol->name, Type_Function, symbol->module));
+		}
+        
     }
 
 }
@@ -72,14 +83,13 @@ void AutoCompleteManager::GetMatchingItems(const wxString& prefix, bool member, 
     // Autocompletion selection is case insensitive so transform everything
     // to lowercase.
     wxString test = prefix.Lower();
-
+	
     // Add the items to the list that begin with the specified prefix. This
     // could be done much fater with a binary search since our items are in
     // alphabetical order.
-
-    for (unsigned int i = 0; i < m_entries.size(); ++i)
+	
+	for (ENTRY_ITR itr = m_entries.begin(); itr != m_entries.end(); ++itr)
     {
-
         // Check that the scope is correct.
         
         bool inScope = false;
@@ -89,19 +99,18 @@ void AutoCompleteManager::GetMatchingItems(const wxString& prefix, bool member, 
             // We've got no way of knowing the type of the variable in Lua (since
             // variables don't have types, only values have types), so we display
             // all members if the prefix contains a member selection operator (. or :)
-            inScope = (m_entries[i].scope.IsEmpty() != member);
+			inScope = (itr->scope.IsEmpty() != member);
         }
-        
-        if (inScope && m_entries[i].lowerCaseName.StartsWith(test))
+
+		if (inScope && itr->lowerCaseName.StartsWith(test))
         {
-            
-            items += m_entries[i].name;
+			items += itr->name;
 
             // Add the appropriate icon for the type of the identifier.
-            if (m_entries[i].type != Type_Unknown)
+			if (itr->type != Type_Unknown)
             {
                 items += "?";
-                items += '0' + m_entries[i].type;
+				items += '0' + itr->type;
             }
 
             items += ' ';
@@ -109,4 +118,14 @@ void AutoCompleteManager::GetMatchingItems(const wxString& prefix, bool member, 
         }
     }
 
+}
+
+void AutoCompleteManager::addEntry(const char *name, Type type, const char *scope /*= ""*/)
+{
+	m_entries.insert(Entry(name, type, scope));
+}
+
+AutoCompleteManager::AutoCompleteManager()
+{
+	
 }

@@ -86,14 +86,17 @@ void SymbolParser::QueueForParsing(Project::File* file)
     {
 
         wxString code;
+		wxString fileName;
 
         if (file->scriptIndex != -1)
         {
             const DebugFrontend::Script* script = DebugFrontend::Get().GetScript(file->scriptIndex);
+			fileName = script->name;
             code = script->source.c_str();
         }
         else if (wxFileExists(file->fileName.GetFullPath()))
         {
+			fileName = file->fileName.GetFullPath();
             ReadFile(file->fileName.GetFullPath(), code);
         }
         else
@@ -101,7 +104,7 @@ void SymbolParser::QueueForParsing(Project::File* file)
             return;
         }
 
-        m_symbolParserThread.QueueForParsing(code, file->fileId);
+		m_symbolParserThread.QueueForParsing(fileName, code, file->fileId);
     
     }
 
