@@ -1271,7 +1271,7 @@ void MainFrame::OnEditInsertAfterLine(wxCommandEvent& event)
 	CodeEdit* edit = m_openFiles[pageIndex]->edit;
 	int pos = edit->GetCurrentPos();
 	
-	while(pos < edit->GetLength()){
+	while(pos < edit->GetLength()){ 
 		char c = edit->GetCharAt(pos);
 		if (c == '\n'){
 			break;
@@ -3895,7 +3895,7 @@ void MainFrame::LoadOptions()
     wxXmlNode* keyBindingNode = NULL;
 
     wxXmlDocument document;
-    if (document.Load(GetAppDataDirectory() + "options.xml"))
+    if (document.Load("options.xml"))
     {
         
         wxXmlNode* root = document.GetRoot();
@@ -5849,7 +5849,7 @@ wxString MainFrame::GetAppDataDirectory() const
     TCHAR path[_MAX_PATH];
     SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, path);
     strcat(path, "\\Decoda\\");
-    return path;
+	return "";// path;
 }
 
 bool MainFrame::ShowProjectSettingsDialog()
