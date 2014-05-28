@@ -75,7 +75,8 @@ class SymbolParserEvent;
  */
 class MainFrame: public wxFrame
 {
-
+private:
+	bool isConsoleOpened;
 public:
 
     /**
@@ -138,6 +139,8 @@ public:
      * Called when the user selects File/New from the menu.
      */
     void OnFileNew(wxCommandEvent& event);
+
+	void onOpenConsole(wxCommandEvent& event);
 
     /**
      * Called when the user selects File/Open from the menu.
@@ -1450,6 +1453,8 @@ private:
 		ID_EditInsertBeforeLine = 88,
 		ID_EditInsertAfterLine = 89,
         
+		ID_OpenConsole = 90,
+
         ID_FirstExternalTool                = 1000,
         ID_FirstRecentFile                  = 2000,
         ID_FirstRecentProjectFile           = 3000,

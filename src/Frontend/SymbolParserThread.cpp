@@ -144,9 +144,28 @@ void SymbolParserThread::QueueForParsing(const wxString& fileName, const wxStrin
 
 bool isIdentify(const char * token) 
 {
-	std::regex pattern("[A-Za-z_][A-Za-z_0-9]+");
-	bool valid = std::regex_match(token, pattern);
-	return valid;
+// 	std::regex pattern("[A-Za-z_][A-Za-z_0-9]+");
+// 	bool valid = std::regex_match(token, pattern);
+// 	return valid;
+	int i = 0;
+	while(token[i]){
+		bool alpha = (token[i] >= 'a' && token[i] <= 'z') || (token[i] >= 'A' && token[i] <= 'Z');
+
+		if(i == 0){
+			if (token[i] != '_' && !alpha){
+				//printf("%s ", token);
+				return false;
+			}
+		}else{
+			bool num = token[i] >= '0' && token[i] <= '9';
+			if(token[i] != '_' && !alpha && !num){
+				//printf("%s ", token);
+				return false;
+			}
+		}
+		++i;
+	}
+	return i>0;
 }
 
 void SymbolParserThread::addSymbol(std::vector<Symbol*>& symbols, Symbol * sym, std::set<wxString> names)
@@ -219,8 +238,9 @@ void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& in
 			if(next == "." || next == ":"){
 				addSymbol(symbols, new Symbol("", token, lineNumber, fileName, Symbol::SymbolIdentifier), names);
 				GetToken(input, next, lineNumber);
-				GetToken(input, next, lineNumber);
-				addSymbol(symbols, new Symbol(token, next, lineNumber, fileName, Symbol::SymbolIdentifier), names);
+				wxString module = token;
+				GetToken(input, token, lineNumber);
+				addSymbol(symbols, new Symbol(module, token, lineNumber, fileName, Symbol::SymbolIdentifier), names);
 			}else{
 				addSymbol(symbols, new Symbol("", token, lineNumber, fileName, Symbol::SymbolIdentifier), names);
 			}

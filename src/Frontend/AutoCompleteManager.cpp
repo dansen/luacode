@@ -25,6 +25,8 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <algorithm>
 
+std::hash<std::string> AutoCompleteManager::hashFN;
+
 AutoCompleteManager::Entry::Entry()
 {
 }
@@ -33,51 +35,35 @@ AutoCompleteManager::Entry::Entry(const wxString& _name, Type _type, const wxStr
     : name(_name), type(_type), scope(_scope)
 {
     lowerCaseName = name.Lower();
+	hashVal = hashFN(name.c_str());
 }
 
 bool AutoCompleteManager::Entry::operator<(const Entry& entry) const
 {
-    return name.Cmp(entry.name) < 0;
+	return hashVal < entry.hashVal;
 }
 
-void AutoCompleteManager::BuildFromProject(const Project* project)
+void AutoCompleteManager::RebuildFromProject(const Project* project)
 {
     m_entries.clear();
-	addEntry("local", Type_Function);
-	addEntry("function", Type_Function);
-	addEntry("module(, package.seeall)", Type_Function);
 
     for (unsigned int fileIndex = 0; fileIndex < project->GetNumFiles(); ++fileIndex)
     {
         BuildFromFile(project->GetFile(fileIndex));
     }
-
-    // Sort the autocompletions (necessary for binary search).
-    //std::sort(m_entries.begin(), m_entries.end());
 }
 
 void AutoCompleteManager::BuildFromFile(const Project::File* file)
 {
-
     for (unsigned int symbolIndex = 0; symbolIndex < file->symbols.size(); ++symbolIndex)
     {
         const Symbol* symbol = file->symbols[symbolIndex];
-		bool exist = false;
-// 		for (int i = 0; i < m_entries.size(); ++i){
-// 			if (m_entries[i].name == symbol->name){
-// 				exist = true;
-// 				break;
-// 			}
-// 		}
-		if (exist == false){
-			m_entries.insert(Entry(symbol->name, Type_Function, symbol->module));
-		}
-        
+		m_entries.insert(Entry(symbol->name, Type_Function, symbol->module));
     }
 
 }
 
-void AutoCompleteManager::GetMatchingItems(const wxString& prefix, bool member, wxString& items) const
+void AutoCompleteManager::GetMatchingItems(const wxString& module, const wxString& prefix, bool member, wxString& items) const
 {
     
     // Autocompletion selection is case insensitive so transform everything
@@ -102,7 +88,7 @@ void AutoCompleteManager::GetMatchingItems(const wxString& prefix, bool member, 
 			inScope = (itr->scope.IsEmpty() != member);
         }
 
-		if (inScope && itr->lowerCaseName.StartsWith(test))
+		if (inScope && itr->lowerCaseName.StartsWith(test) && itr->scope == module)
         {
 			items += itr->name;
 

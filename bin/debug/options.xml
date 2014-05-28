@@ -3,8 +3,8 @@
   <window>
     <maximized>true</maximized>
     <rect>
-      <x>324</x>
-      <y>104</y>
+      <x>98</x>
+      <y>209</y>
       <xSize>1024</xSize>
       <ySize>768</ySize>
     </rect>
@@ -230,6 +230,14 @@
     <command>
       <id>82</id>
       <key>Alt+F9</key>
+    </command>
+    <command>
+      <id>90</id>
+      <key>F1</key>
+    </command>
+    <command>
+      <id>91</id>
+      <key>F1</key>
     </command>
   </keybindings>
   <recent_files>

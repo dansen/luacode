@@ -29,7 +29,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <set>
-
+#include <functional>
 //
 // Forward declarations.
 //
@@ -61,14 +61,18 @@ public:
     /**
      * Rebuiilds the list of autocompletions from the symbols in the specified project.
      */
-    void BuildFromProject(const Project* project);
+    void RebuildFromProject(const Project* project);
 
     /**
      * Gets a list of the autocompletions matching the specified prefix. If member is true,
      * only autocompletions that are members of some scope are included. The return items
      * string is in the format used by Scintilla to display autocompletions.
      */
-    void GetMatchingItems(const wxString& prefix, bool member, wxString& items) const;
+	void GetMatchingItems(const wxString& module, const wxString& prefix, bool member, wxString& items) const;
+	/**
+	* Adds the autocompletions for the specified file.
+	*/
+	void BuildFromFile(const Project::File* file);
 
 private:
 
@@ -83,17 +87,11 @@ private:
         wxString    name;
         wxString    lowerCaseName;
         Type        type;
-
+		unsigned int hashVal;
         wxString    scope;
-
     };
-
-    /**
-     * Adds the autocompletions for the specified file.
-     */
-    void BuildFromFile(const Project::File* file);
-
 private:
+	static std::hash<std::string> hashFN;
 	typedef std::set<Entry>::iterator ENTRY_ITR;
     std::set<Entry>  m_entries;
 

@@ -685,6 +685,8 @@ void CodeEdit::StartAutoCompletion(const wxString& token)
     // If the token refers to a member, the prefix is the member name.
 
     wxString prefix;
+	wxString module;
+
     bool member = false;
 
     if (GetLexer() == wxSCI_LEX_LUA)
@@ -717,6 +719,9 @@ void CodeEdit::StartAutoCompletion(const wxString& token)
         }
 
         int end = std::max(end1, end2);
+		if(end != 0){
+			module = token.Left(end-1);
+		}
         prefix = token.Right( token.Length() - end );
 
     }
@@ -733,7 +738,7 @@ void CodeEdit::StartAutoCompletion(const wxString& token)
         return;
     }
 
-    m_autoCompleteManager->GetMatchingItems(prefix, member, items);
+    m_autoCompleteManager->GetMatchingItems(module, prefix, member, items);
     
     if (!AutoCompActive() || m_autoCompleteItems != items)
     {

@@ -7,4 +7,4 @@
 *.tlog
 *.opensdf
 *.ilk
-*.ilk
+bin/debug/Decoda.ilk
