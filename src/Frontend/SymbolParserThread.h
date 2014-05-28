@@ -26,7 +26,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include <wx/wx.h>
 #include <wx/thread.h>
 #include <vector>
-
+#include <set>
 //
 // Forward declarations.
 //

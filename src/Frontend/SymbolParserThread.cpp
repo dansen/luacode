@@ -188,11 +188,17 @@ void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& in
     wxString token;
 
     unsigned int lineNumber = 1;
+	wxString fileModule; //文件中有module
 
     while (GetToken(input, token, lineNumber))
     {
-        if (token == "function")
-        {
+		if (token == "module"){
+			// (
+			GetToken(input, token, lineNumber);
+			// string
+			GetToken(input, token, lineNumber);
+			fileModule = token.SubString(1, token.Length()-1);
+		}else if (token == "function"){
             unsigned int defLineNumber = lineNumber;
 
             // Lua functions can have these forms:
@@ -219,16 +225,17 @@ void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& in
             if (t2 == "(")
             {
                 // The form function Name (...).
-				addSymbol(symbols, new Symbol("", t1, defLineNumber, fileName, Symbol::SymbolFunction), names);
+				addSymbol(symbols, new Symbol(fileModule.IsEmpty() ? "" : fileModule,
+					t1, defLineNumber, fileName, Symbol::SymbolFunction), names);
             }
             else
             {
-                wxString t3;
-                if (!GetToken(input, t3, lineNumber)) break;
-
+                wxString name;
+				if (!GetToken(input, name, lineNumber)) break;
+				// function class.name(
                 if (t2 == "." || t2 == ":")
                 {
-					addSymbol(symbols, new Symbol(t1, t3, defLineNumber, fileName, Symbol::SymbolFunction), names);
+					addSymbol(symbols, new Symbol(t1, name, defLineNumber, fileName, Symbol::SymbolFunction), names);
                 }
             }
         }else if(isIdentify(token)){
