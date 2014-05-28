@@ -1043,11 +1043,10 @@ void ListBoxImpl::Create (Window &parent, int ctrlID, Point location_,
                           int lineHeight_, bool unicodeMode_) {
     lineHeight =  lineHeight_;
     unicodeMode = unicodeMode_;
-    maxStrWidth = 0;
+    maxStrWidth = 20;
     id = new wxSCIListBoxWin (GETWIN(parent.GetID()), ctrlID, location_);
     if (imgList != NULL) GETLB(id)->SetImageList (imgList, wxIMAGE_LIST_SMALL);
 }
-
 
 void ListBoxImpl::SetAverageCharWidth(int width) {
     aveCharWidth = width;

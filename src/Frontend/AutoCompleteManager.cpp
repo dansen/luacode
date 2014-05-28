@@ -155,5 +155,6 @@ void AutoCompleteManager::addEntry(const char *name, Type type, const char *scop
 
 AutoCompleteManager::AutoCompleteManager()
 {
-	
+	addEntry("function", Type_Function, "");
+	addEntry("module", Type_Function, "");
 }
