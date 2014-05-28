@@ -3772,7 +3772,7 @@ void MainFrame::FindText(OpenFile* file, const wxString& text, int flags)
                 m_findDialog->Enable(false);
             }
             
-            wxMessageBox("Find reached the start point of the search.", s_applicationName, wxOK | wxICON_INFORMATION, this);
+            //wxMessageBox("Find reached the start point of the search.", s_applicationName, wxOK | wxICON_INFORMATION, this);
 
             if (m_findDialog != NULL)
             {

@@ -234,7 +234,8 @@ static void ColouriseLuaDoc(
                 sc.SetState(SCE_LUA_COMMENTDOC);
 
 
-			} else if (sc.Match('-', '-') || sc.Match('/', '/')) {
+			//} else if (sc.Match('-', '-') || sc.Match('/', '/')) {
+			} else if (sc.Match('-', '-') ) {
 				sc.SetState(SCE_LUA_COMMENTLINE);
 				if (sc.Match("--[")) {
 					sc.Forward(2);

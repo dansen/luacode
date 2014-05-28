@@ -76,9 +76,12 @@ static int calSequenceScore(const char * p, const char * c)
 			++i;
 			++j;
 		}else{
-			++score;
+			score += 100;
 			++j;
 		}
+	}
+	while(p[j++]){
+		score++;
 	}
 	//printf("%s %s %d\n", c, p, score);
 	return score;
