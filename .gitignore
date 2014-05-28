@@ -8,3 +8,5 @@
 *.opensdf
 *.ilk
 bin/debug/Decoda.ilk
+bin/debug/Decoda.exe
+bin/debug/Decoda.ilk

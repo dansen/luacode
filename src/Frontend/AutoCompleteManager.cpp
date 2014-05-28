@@ -35,7 +35,7 @@ AutoCompleteManager::Entry::Entry(const wxString& _name, Type _type, const wxStr
     : name(_name), type(_type), scope(_scope)
 {
     lowerCaseName = name.Lower();
-	hashVal = hashFN(name.c_str());
+	hashVal = hashFN((scope+name).c_str());
 }
 
 bool AutoCompleteManager::Entry::operator<(const Entry& entry) const
@@ -115,7 +115,7 @@ void AutoCompleteManager::GetMatchingItems(const wxString& module, const wxStrin
         // Check that the scope is correct.
         
         bool inScope = false;
-
+		printf("%s\t", itr->scope);
         if (/**/true)
         {
             // We've got no way of knowing the type of the variable in Lua (since

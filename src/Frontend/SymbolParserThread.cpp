@@ -197,7 +197,7 @@ void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& in
 			GetToken(input, token, lineNumber);
 			// string
 			GetToken(input, token, lineNumber);
-			fileModule = token.SubString(1, token.Length()-1);
+			fileModule = token.SubString(1, token.Length()-2);
 		}else if (token == "function"){
             unsigned int defLineNumber = lineNumber;
 
@@ -225,7 +225,8 @@ void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& in
             if (t2 == "(")
             {
                 // The form function Name (...).
-				addSymbol(symbols, new Symbol(fileModule.IsEmpty() ? "" : fileModule,
+				wxString module = fileModule.IsEmpty() ? "" : fileModule;
+				addSymbol(symbols, new Symbol(module,
 					t1, defLineNumber, fileName, Symbol::SymbolFunction), names);
             }
             else
