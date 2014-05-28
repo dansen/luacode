@@ -281,7 +281,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 END_EVENT_TABLE()
 
 const wxString MainFrame::s_scriptExtensions        = _("Lua files (*.lua)|*.lua|All files (*.*)|*.*");
-const wxString MainFrame::s_applicationName         = _("Decoda");
+const wxString MainFrame::s_applicationName         = _("luacode");
 
 const wxString MainFrame::s_modeName[]              = { wxT("editing"), wxT("debugging") };
 const char* MainFrame::s_updateUrl                  = "http://www.unknownworlds.com/download.php?file=decoda_builds.xml";

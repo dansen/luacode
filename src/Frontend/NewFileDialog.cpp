@@ -241,7 +241,7 @@ void NewFileDialog::VerifyFileNameAndEnd()
     }
     else
     {
-        wxMessageBox("You must enter a valid name", "Decoda", wxOK | wxICON_ERROR, this);
+        wxMessageBox("You must enter a valid name", "luacode", wxOK | wxICON_ERROR, this);
     }
 
 }

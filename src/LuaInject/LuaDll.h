@@ -143,7 +143,7 @@ bool InstallLuaHooker(HINSTANCE hInstance, const char* symbolsDirectory);
 bool GetIsLuaLoaded();
 
 /**
- * Registers the "decoda" Lua library with the state.
+ * Registers the "luacode" Lua library with the state.
  */
 void RegisterDebugLibrary(unsigned long api, lua_State* L);
 

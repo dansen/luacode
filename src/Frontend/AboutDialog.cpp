@@ -47,7 +47,7 @@ AboutDialog::AboutDialog( wxWindow* parent ) :
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Decoda"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("luacode"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->SetFont( wxFont( 14, 74, 90, 92, false, wxT("Tahoma") ) );
 	
 	bSizer4->Add( m_staticText3, 0, wxALL, 5 );

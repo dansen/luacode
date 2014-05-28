@@ -111,7 +111,7 @@ bool MainApp::OnInit()
 
     MainFrame* frame = new MainFrame("Script Debugger", openFilesMessage, wxDefaultPosition, wxSize(1024,768));
 
-    HWND hWndPrev = m_singleInstance.Connect(reinterpret_cast<HWND>(frame->GetHandle()), "Decoda");
+    HWND hWndPrev = m_singleInstance.Connect(reinterpret_cast<HWND>(frame->GetHandle()), "luacode");
 
     // If we're loading files from the command line (but not a project) file,
     // then don't create a new instance. This happens when the user double clicks

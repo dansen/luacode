@@ -72,7 +72,7 @@ public:
         __try
         {
             
-            m_result = m_sourceControl->SccInitialize(&m_sourceControl->m_context, m_sourceControl->m_hWnd, "Decoda", m_sourceControl->m_name,
+            m_result = m_sourceControl->SccInitialize(&m_sourceControl->m_context, m_sourceControl->m_hWnd, "luacode", m_sourceControl->m_name,
                 &m_sourceControl->m_caps, m_sourceControl->m_auxPathLabel, &m_sourceControl->m_maxCheckoutCommentLength, &m_sourceControl->m_maxCommentLength);
         
             if (m_result >= 0)

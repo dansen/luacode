@@ -62,7 +62,7 @@ SystemSettingsPanel::SystemSettingsPanel( wxWindow* parent, int id, wxPoint pos,
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, -1, wxT("Updates") ), wxVERTICAL );
 
-	m_checkForUpdates = new wxCheckBox( this, ID_CheckForUpdates, wxT("Automatically check for updates to Decoda"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkForUpdates = new wxCheckBox( this, ID_CheckForUpdates, wxT("Automatically check for updates to luacode"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer4->Add( m_checkForUpdates, 0, wxALL, 5 );
     fgSizer4->Add (sbSizer4, 0, wxEXPAND | wxALL, 5);
 	
@@ -122,7 +122,7 @@ void SystemSettingsPanel::ApplyFileAssociations()
         if (m_fileTypesBox->IsChecked(i) != GetIsRegistered(m_fileTypes[i].ext, openCommand))
         {
 
-            wxString docType = "Decoda" + m_fileTypes[i].ext;
+            wxString docType = "luacode" + m_fileTypes[i].ext;
 
             wxRegKey extKey("HKEY_CLASSES_ROOT\\" + m_fileTypes[i].ext);
             
@@ -199,7 +199,7 @@ bool SystemSettingsPanel::GetIsRegistered(const wxString& ext, const wxString& o
 
         wxString docType = extKey.QueryDefaultValue();
 
-        if (docType == "Decoda" + ext)
+        if (docType == "luacode" + ext)
         {
 
             wxRegKey docKey("HKEY_CLASSES_ROOT\\" + docType + "\\shell\\open\\command"); 
