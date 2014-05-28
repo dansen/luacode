@@ -74,8 +74,6 @@ public:
 	*/
 	void BuildFromFile(const Project::File* file);
 
-private:
-
     struct Entry
     {
 

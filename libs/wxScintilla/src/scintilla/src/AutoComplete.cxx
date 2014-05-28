@@ -124,6 +124,32 @@ void AutoComplete::Move(int delta) {
 	lb->Select(current);
 }
 
+static bool isseq_ignorecase(const char * p, const char * c)
+{
+	int i = 0;
+	int j = 0;
+	while (c[i]){
+		if (!p[j]){
+			return false;
+		}
+		char tc = c[i], tp = p[j];
+		if(c[i] >= 'A' && c[i] <= 'Z'){
+			tc = c[i] + 32;
+		}
+		if(p[j] >= 'A' && p[j] <= 'Z'){
+			tp = p[j] + 32;
+		}
+
+		if (tp == tc){
+			++i;
+			++j;
+		} else{
+			++j;
+		}
+	}
+	return true;
+}
+
 void AutoComplete::Select(const char *word) {
 	size_t lenWord = strlen(word);
 	int location = -1;
@@ -136,7 +162,8 @@ void AutoComplete::Select(const char *word) {
 		lb->GetValue(pivot, item, maxItemLen);
 		int cond;
 		if (ignoreCase)
-			cond = CompareNCaseInsensitive(word, item, lenWord);
+			cond = isseq_ignorecase(item, word);
+			//cond = CompareNCaseInsensitive(word, item, lenWord);
 		else
 			cond = strncmp(word, item, lenWord);
 		if (!cond) {
@@ -144,7 +171,8 @@ void AutoComplete::Select(const char *word) {
 			while (pivot > start) {
 				lb->GetValue(pivot-1, item, maxItemLen);
 				if (ignoreCase)
-					cond = CompareNCaseInsensitive(word, item, lenWord);
+					cond = isseq_ignorecase(item, word); 
+					//cond = CompareNCaseInsensitive(word, item, lenWord);
 				else
 					cond = strncmp(word, item, lenWord);
 				if (0 != cond)
@@ -160,19 +188,21 @@ void AutoComplete::Select(const char *word) {
 						location = pivot;
 						break;
 					}
-					if (CompareNCaseInsensitive(word, item, lenWord))
+					if (isseq_ignorecase(item, word))
+					//if (cond = CompareNCaseInsensitive(word, item, lenWord))
 						break;
 				}
 			}
 		} else if (cond < 0) {
 			end = pivot - 1;
 		} else if (cond > 0) {
+			location = pivot;
 			start = pivot + 1;
 		}
 	}
 	if (location == -1 && autoHide)
 		Cancel();
 	else
-		lb->Select(location);
+		lb->Select(0);
 }
 

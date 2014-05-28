@@ -63,6 +63,41 @@ void AutoCompleteManager::BuildFromFile(const Project::File* file)
 
 }
 
+static int calSequenceScore(const char * p, const char * c)
+{
+	int i = 0;
+	int j = 0;
+	int score = 1;
+	while(c[i]){
+		if(!p[j]){
+			return false;
+		}
+		if(p[j] == c[i]){
+			++i;
+			++j;
+		}else{
+			++score;
+			++j;
+		}
+	}
+	//printf("%s %s %d\n", c, p, score);
+	return score;
+}
+
+struct StringScore{
+	const AutoCompleteManager::Entry * entry;
+	int score;
+public:
+	StringScore(){}
+	StringScore(const AutoCompleteManager::Entry * entry_, int score_){
+		entry = entry_;
+		score = score_;
+	}
+	bool operator < (const StringScore & sc) const{
+		return this->score < sc.score;
+	}
+};
+
 void AutoCompleteManager::GetMatchingItems(const wxString& module, const wxString& prefix, bool member, wxString& items) const
 {
     
@@ -73,7 +108,8 @@ void AutoCompleteManager::GetMatchingItems(const wxString& module, const wxStrin
     // Add the items to the list that begin with the specified prefix. This
     // could be done much fater with a binary search since our items are in
     // alphabetical order.
-	
+	std::multiset<StringScore> scores;
+
 	for (ENTRY_ITR itr = m_entries.begin(); itr != m_entries.end(); ++itr)
     {
         // Check that the scope is correct.
@@ -88,22 +124,28 @@ void AutoCompleteManager::GetMatchingItems(const wxString& module, const wxStrin
 			inScope = (itr->scope.IsEmpty() != member);
         }
 
-		if (inScope && itr->lowerCaseName.StartsWith(test) && itr->scope == module)
-        {
-			items += itr->name;
-
-            // Add the appropriate icon for the type of the identifier.
-			if (itr->type != Type_Unknown)
-            {
-                items += "?";
-				items += '0' + itr->type;
-            }
-
-            items += ' ';
-
+		//if (inScope &&  itr->lowerCaseName.StartsWith(test) && itr->scope == module)
+		int score = calSequenceScore(itr->lowerCaseName, test);
+		if (inScope && score != 0 && itr->scope == module)
+		{
+			const Entry  & entry = *itr;
+			scores.insert(StringScore(&entry, score));
         }
     }
 
+	for (std::set<StringScore>::iterator itr = scores.begin(); itr != scores.end(); ++itr){
+
+		items += itr->entry->name;
+		printf("%s %d\n", itr->entry->name.c_str(), itr->score);
+		// Add the appropriate icon for the type of the identifier.
+		if (itr->entry->type != Type_Unknown)
+		{
+			items += "?";
+			items += '0' + itr->entry->type;
+		}
+
+		items += ' ';
+	}
 }
 
 void AutoCompleteManager::addEntry(const char *name, Type type, const char *scope /*= ""*/)
