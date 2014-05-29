@@ -395,7 +395,7 @@
 #define SCE_LUA_COMMENTLINE 2
 #define SCE_LUA_COMMENTDOC 3
 #define SCE_LUA_NUMBER 4
-#define SCE_LUA_WORD 5
+#define SCE_LUA_WORD 5 // 关键字
 #define SCE_LUA_STRING 6
 #define SCE_LUA_CHARACTER 7
 #define SCE_LUA_LITERALSTRING 8
@@ -403,10 +403,10 @@
 #define SCE_LUA_OPERATOR 10
 #define SCE_LUA_IDENTIFIER 11
 #define SCE_LUA_STRINGEOL 12
-#define SCE_LUA_WORD2 13
-#define SCE_LUA_WORD3 14
-#define SCE_LUA_WORD4 15
-#define SCE_LUA_WORD5 16
+#define SCE_LUA_WORD2 13 //inner function 内部函数
+#define SCE_LUA_WORD3 14 //function 函数 
+#define SCE_LUA_WORD4 15 //function parameter 函数参数
+#define SCE_LUA_WORD5 16 //table 表
 #define SCE_LUA_WORD6 17
 #define SCE_LUA_WORD7 18
 #define SCE_LUA_WORD8 19

@@ -99,6 +99,13 @@ const LexerModule *LexerModule::Find(const char *languageName) {
 	return 0;
 }
 
+/**
+ **startPos 开始位置
+ **lengthDoc 文本长度
+ **initStyle 初始样式
+ **keywordlists 关键字表
+ **styler 着色器？
+ */
 void LexerModule::Lex(unsigned int startPos, int lengthDoc, int initStyle,
 	  WordList *keywordlists[], Accessor &styler) const {
 	if (fnLexer)

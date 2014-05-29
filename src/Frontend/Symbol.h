@@ -32,7 +32,10 @@ public:
 	enum SymbolType {
 		SymbolFunction,
 		SymbolIdentifier,
-		SymbolKeyword
+		SymbolKeyword,
+		SymbolTable,
+		SymbolTableFunction,
+		SymbolTableVariable,
 	};
 public:
     Symbol();

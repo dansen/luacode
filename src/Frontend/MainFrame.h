@@ -48,9 +48,10 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "DebugFrontend.h"
 #include "ProcessOutputSink.h"
 
+#include <functional>
 #include <vector>
 #include <string>
-
+#include <set>
 //
 // Forward declarations.
 //
@@ -70,6 +71,23 @@ class ListWindow;
 class SymbolParser;
 class SymbolParserEvent;
 
+
+struct Keyword {
+	int hashVal;
+	wxString * val;
+	static std::hash<std::string> hashFN;
+public:
+	Keyword(const char * str){
+		val = new wxString(str);
+		hashVal = hashFN(str);
+	}
+	bool operator<(const Keyword& entry) const
+	{
+		return hashVal < entry.hashVal;
+	}
+
+};
+
 /**
  * Main application window.
  */
@@ -77,6 +95,10 @@ class MainFrame: public wxFrame
 {
 private:
 	bool isConsoleOpened;
+	typedef std::set<Keyword>::iterator KEYWORD_ITR;
+	bool keywordDirty[KeywordTotal];
+	std::set<Keyword> keywords[KeywordTotal];
+	wxString keywordStr[KeywordTotal];
 public:
 
     /**
@@ -90,6 +112,11 @@ public:
         time_t                  timeStamp;
     };
 
+	//添加关键字
+	void addKeyword(KeywordType type, const char * str);
+	//更新
+	void updateKeyword(KeywordType type);
+	void applyKeyword(CodeEdit * edit, KeywordType type);
     /**
      * Returns the name of the application used for displaying in window title bars, etc.
      */

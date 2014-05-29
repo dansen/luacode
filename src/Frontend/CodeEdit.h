@@ -25,7 +25,17 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <wx/wx.h>
 #include <wx/wxscintilla.h>
+#include <set>
 
+
+enum KeywordType {
+	KeywordKeyword = 0,
+	KeywordInnerFuntion,
+	KeywordFunction,
+	KeywordFunctionParameter,
+	KeywordTable,
+	KeywordTotal
+};
 //
 // Forward declarations.
 //
@@ -34,6 +44,7 @@ class FontColorSettings;
 class EditorSettings;
 class ToolTipWindow;
 class AutoCompleteManager;
+
 
 /**
  * Code editor component.
@@ -56,8 +67,9 @@ public:
      * Constructor.
      */
     CodeEdit();
+	~CodeEdit();
 
-    /**
+	/**
      * Sets the auto completion manager used to supply the editor with data
      * for trying to complete the user's typing.
      */

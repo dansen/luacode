@@ -244,12 +244,22 @@ void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& in
 			wxString next;
 			PeekToken(input, next);
 			if(next == "." || next == ":"){
-				addSymbol(symbols, new Symbol("", token, lineNumber, fileName, Symbol::SymbolIdentifier), names);
+				//将table名加入token
+				addSymbol(symbols, new Symbol("", token, lineNumber, fileName, Symbol::SymbolTable), names);
 				GetToken(input, next, lineNumber);
 				wxString module = token;
 				GetToken(input, token, lineNumber);
-				addSymbol(symbols, new Symbol(module, token, lineNumber, fileName, Symbol::SymbolIdentifier), names);
+				//函数还是table中的变量
+				wxString brace;
+				PeekToken(input, brace);
+				if (brace == "("){
+					addSymbol(symbols, new Symbol(module, token, lineNumber, fileName, Symbol::SymbolTableFunction), names);
+				} else{
+					addSymbol(symbols, new Symbol(module, token, lineNumber, fileName, Symbol::SymbolTableVariable), names);
+				}
+				
 			}else{
+				//普通字符串
 				addSymbol(symbols, new Symbol("", token, lineNumber, fileName, Symbol::SymbolIdentifier), names);
 			}
 		}

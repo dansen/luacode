@@ -479,10 +479,11 @@ void ScintillaBase::Colourise(int start, int end) {
 		// fold points are discovered while performing styling and the folding
 		// code looks for child lines which may trigger styling.
 		performingStyle = true;
-
+		//修正end，防止溢出
 		int lengthDoc = pdoc->Length();
 		if (end == -1)
 			end = lengthDoc;
+
 		int len = end - start;
 
 		PLATFORM_ASSERT(len >= 0);
@@ -704,6 +705,7 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 			pdoc->ModifiedAt(wParam);
 			NotifyStyleToNeeded((lParam == -1) ? pdoc->Length() : lParam);
 		} else {
+			//开始着色
 			Colourise(wParam, lParam);
 		}
 		Redraw();

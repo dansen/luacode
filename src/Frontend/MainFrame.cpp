@@ -78,6 +78,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <hash_map>
 
+std::hash<std::string> Keyword::hashFN;
 
 // Event used to communicate when the update data has been downloaded.
 DECLARE_EVENT_TYPE(wxEVT_UPDATE_INFO_EVENT, -1)
@@ -501,8 +502,12 @@ MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint&
     NewProject();
     UpdateCaption();
 
-    m_lastProjectLoaded = lastProjectLoaded;
+	m_lastProjectLoaded = lastProjectLoaded;
     m_tabOrderIndex = -1;
+
+	for (int i = 0; i < KeywordTotal; ++i){
+		keywordDirty[i] = true;
+	}
 }
 
 MainFrame::~MainFrame()
@@ -5289,6 +5294,8 @@ void MainFrame::loadFile(OpenFile* openFile, const char * path)
 	openFile->edit->SetText(s.c_str());
 	openFile->edit->SetSavePoint();
 	openFile->edit->EmptyUndoBuffer();
+	applyKeyword(openFile->edit, KeywordFunction);
+	applyKeyword(openFile->edit, KeywordTable);
 }
 
 void MainFrame::ReloadFile(OpenFile* file)
@@ -5955,6 +5962,7 @@ void MainFrame::HandleUpdate()
 
 }
 
+//更新语法高亮
 void MainFrame::UpdateSyntaxColoring(OpenFile* openFile)
 {
 
@@ -6186,6 +6194,22 @@ void MainFrame::OnSymbolsParsed(SymbolParserEvent& event)
     {
         m_projectExplorer->UpdateFile(file);
 		m_autoCompleteManager.BuildFromFile(file);
+
+		for (unsigned int symbolIndex = 0; symbolIndex < file->symbols.size(); ++symbolIndex)
+		{
+			const Symbol* symbol = file->symbols[symbolIndex];
+			if (symbol->type == Symbol::SymbolFunction){
+				addKeyword(KeywordFunction, symbol->name);
+			} else if (symbol->type == Symbol::SymbolTable){
+				addKeyword(KeywordTable, symbol->name);
+			} else if (symbol->type == Symbol::SymbolTableFunction){
+				addKeyword(KeywordTable, symbol->name);
+			} else if (symbol->type == Symbol::SymbolTableVariable){
+				addKeyword(KeywordTable, symbol->name);
+			}
+		}
+		updateKeyword(KeywordFunction);
+		updateKeyword(KeywordTable);
     }
 }
 
@@ -6239,4 +6263,37 @@ void MainFrame::onOpenConsole(wxCommandEvent& event)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 	}
 	isConsoleOpened = !isConsoleOpened;
+}
+
+
+void MainFrame::addKeyword(KeywordType type, const char * str)
+{
+	if (keywords[type].insert(str).second){
+		keywordDirty[type] = true;
+	}
+}
+
+void MainFrame::updateKeyword(KeywordType type)
+{
+	if (keywordDirty[type] = true){
+		keywordStr[type] = "";
+
+		for (KEYWORD_ITR itr = keywords[type].begin(); itr != keywords[type].end(); ++itr){
+			keywordStr[type] += *itr->val;
+			keywordStr[type] += " ";
+		}
+
+		for (unsigned int i = 0; i < m_openFiles.size(); ++i)
+		{
+			m_openFiles[i]->edit->SetKeyWords(type, keywordStr[type]);
+			m_openFiles[i]->edit->Recolor();
+		}
+
+	}
+}
+
+void MainFrame::applyKeyword(CodeEdit * edit, KeywordType type)
+{
+	edit->SetKeyWords(type, keywordStr[type]);
+	edit->Recolor();
 }

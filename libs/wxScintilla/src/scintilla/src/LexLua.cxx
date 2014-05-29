@@ -39,12 +39,7 @@ static int LongDelimCheck(StyleContext &sc) {
 	return 0;
 }
 
-static void ColouriseLuaDoc(
-	unsigned int startPos,
-	int length,
-	int initStyle,
-	WordList *keywordlists[],
-	Accessor &styler) {
+static void ColouriseLuaDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[], Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
 	WordList &keywords2 = *keywordlists[1];
@@ -57,7 +52,7 @@ static void ColouriseLuaDoc(
 
 	// Accepts accented characters
 	CharacterSet setWordStart(CharacterSet::setAlpha, "_", 0x80, true);
-	CharacterSet setWord(CharacterSet::setAlphaNum, "._", 0x80, true);
+	CharacterSet setWord(CharacterSet::setAlphaNum, "_", 0x80, true);
 	// Not exactly following number definition (several dots are seen as OK, etc.)
 	// but probably enough in most cases.
 	CharacterSet setNumber(CharacterSet::setDigits, ".-+abcdefABCDEF");
@@ -86,6 +81,9 @@ static void ColouriseLuaDoc(
 		// shbang line: # is a comment only if first char of the script
 		sc.SetState(SCE_LUA_COMMENTLINE);
 	}
+
+	char lastOperator = 0;
+
 	for (; sc.More(); sc.Forward()) {
 		if (sc.atLineEnd) {
 			// Update the line state, so it can be seen by next line
@@ -109,7 +107,7 @@ static void ColouriseLuaDoc(
 
 		// Handle string line continuation
 		if ((sc.state == SCE_LUA_STRING || sc.state == SCE_LUA_CHARACTER) &&
-				sc.ch == '\\') {
+			sc.ch == '\\') {
 			if (sc.chNext == '\n' || sc.chNext == '\r') {
 				sc.Forward();
 				if (sc.ch == '\r' && sc.chNext == '\n') {
@@ -120,6 +118,7 @@ static void ColouriseLuaDoc(
 		}
 
 		// Determine if the current state should terminate.
+		//该部分做出变化，如上一次为操作符，则这一次默认
 		if (sc.state == SCE_LUA_OPERATOR) {
 			sc.SetState(SCE_LUA_DEFAULT);
 		} else if (sc.state == SCE_LUA_NUMBER) {
@@ -132,19 +131,25 @@ static void ColouriseLuaDoc(
 			}
 		} else if (sc.state == SCE_LUA_IDENTIFIER) {
 			if (!setWord.Contains(sc.ch) || sc.Match('.', '.')) {
-				char s[100];
+				char s[128];
+				char ch = sc.ch;
 				sc.GetCurrent(s, sizeof(s));
+				//注意这里的关键字，我们可以自定义一些关键字，也可以在文本解析时动态删减关键字，以达到我们自己的需求，而不用修改该层代码
 				if (keywords.InList(s)) {
-					sc.ChangeState(SCE_LUA_WORD);
-				} else if (keywords2.InList(s)) {
+					sc.ChangeState(SCE_LUA_WORD); //关键字
+				} else if (keywords2.InList(s)) { //内部函数
 					sc.ChangeState(SCE_LUA_WORD2);
-				} else if (keywords3.InList(s)) {
+				} else if (keywords5.InList(s)) { //表
+					if (lastOperator == '.' || lastOperator == ':' || ch == '.' || ch == ':'){
+						sc.ChangeState(SCE_LUA_WORD5);
+					} else if (keywords3.InList(s)) { //函数
+						sc.ChangeState(SCE_LUA_WORD3);
+					}
+				} else if (keywords3.InList(s)) { //函数
 					sc.ChangeState(SCE_LUA_WORD3);
-				} else if (keywords4.InList(s)) {
+				} else if (keywords4.InList(s)) { //函数参数
 					sc.ChangeState(SCE_LUA_WORD4);
-				} else if (keywords5.InList(s)) {
-					sc.ChangeState(SCE_LUA_WORD5);
-				} else if (keywords6.InList(s)) {
+				}  else if (keywords6.InList(s)) {
 					sc.ChangeState(SCE_LUA_WORD6);
 				} else if (keywords7.InList(s)) {
 					sc.ChangeState(SCE_LUA_WORD7);
@@ -152,6 +157,7 @@ static void ColouriseLuaDoc(
 					sc.ChangeState(SCE_LUA_WORD8);
 				}
 				sc.SetState(SCE_LUA_DEFAULT);
+				lastOperator = 0;
 			}
 		} else if (sc.state == SCE_LUA_COMMENTLINE || sc.state == SCE_LUA_PREPROCESSOR) {
 			if (sc.atLineEnd) {
@@ -179,12 +185,12 @@ static void ColouriseLuaDoc(
 				sc.ChangeState(SCE_LUA_STRINGEOL);
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
-        } else if (sc.state == SCE_LUA_COMMENTDOC) {
-            if (sc.Match('*', '/'))
-            {
-                sc.Forward(2);
-                sc.ForwardSetState(SCE_LUA_DEFAULT);
-            }
+		} else if (sc.state == SCE_LUA_COMMENTDOC) {
+			if (sc.Match('*', '/'))
+			{
+				sc.Forward(2);
+				sc.ForwardSetState(SCE_LUA_DEFAULT);
+			}
 		} else if (sc.state == SCE_LUA_LITERALSTRING || sc.state == SCE_LUA_COMMENT) {
 			if (sc.ch == '[') {
 				int sep = LongDelimCheck(sc);
@@ -205,6 +211,8 @@ static void ColouriseLuaDoc(
 					sc.ForwardSetState(SCE_LUA_DEFAULT);
 				}
 			}
+		} else {
+			sc.SetState(SCE_LUA_DEFAULT);
 		}
 
 		// Determine if a new state should be entered.
@@ -229,13 +237,13 @@ static void ColouriseLuaDoc(
 					sc.SetState(SCE_LUA_LITERALSTRING);
 					sc.Forward(sepCount);
 				}
-            } else if (sc.Match('/', '*')) {
+			} else if (sc.Match('/', '*')) {
 
-                sc.SetState(SCE_LUA_COMMENTDOC);
+				sc.SetState(SCE_LUA_COMMENTDOC);
 
 
-			//} else if (sc.Match('-', '-') || sc.Match('/', '/')) {
-			} else if (sc.Match('-', '-') ) {
+				//} else if (sc.Match('-', '-') || sc.Match('/', '/')) {
+			} else if (sc.Match('-', '-')) {
 				sc.SetState(SCE_LUA_COMMENTLINE);
 				if (sc.Match("--[")) {
 					sc.Forward(2);
@@ -251,8 +259,14 @@ static void ColouriseLuaDoc(
 			} else if (sc.atLineStart && sc.Match('$')) {
 				sc.SetState(SCE_LUA_PREPROCESSOR);	// Obsolete since Lua 4.0, but still in old code
 			} else if (setLuaOperator.Contains(sc.ch)) {
-				sc.SetState(SCE_LUA_OPERATOR);
-			}
+				if (sc.ch == '.' || sc.ch == ':'){
+					sc.SetState(SCE_LUA_WORD5);
+					lastOperator = sc.ch;
+				} else{
+					sc.SetState(SCE_LUA_OPERATOR);
+				}
+				
+			} 
 		}
 	}
 
@@ -282,7 +296,7 @@ static void ColouriseLuaDoc(
 }
 
 static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, WordList *[],
-                       Accessor &styler) {
+	Accessor &styler) {
 	unsigned int lengthDoc = startPos + length;
 	int visibleChars = 0;
 	int lineCurrent = styler.GetLine(startPos);

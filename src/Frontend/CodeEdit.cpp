@@ -44,9 +44,10 @@ BEGIN_EVENT_TABLE( CodeEdit, wxScintilla )
 
 END_EVENT_TABLE()
 
+
+
 CodeEdit::CodeEdit()
 {
-
     // The minimum number of characters that must be typed before autocomplete
     // is displayed for global symbols. We impose a minimum so that autocomplete
     // doesn't popup too much.
@@ -58,6 +59,11 @@ CodeEdit::CodeEdit()
 
     m_enableAutoComplete    = true;
     m_lineMappingDirty      = true;
+	
+}
+
+CodeEdit::~CodeEdit()
+{
 
 }
 
@@ -95,10 +101,35 @@ void CodeEdit::SetFontColorSettings(const FontColorSettings& settings)
     StyleSetForeground(wxSCI_LUA_COMMENTDOC,        settings.GetColors(FontColorSettings::DisplayItem_Comment).foreColor);
     StyleSetBackground(wxSCI_LUA_COMMENTDOC,        settings.GetColors(FontColorSettings::DisplayItem_Comment).backColor);
 
+	//关键字
     font = settings.GetFont(FontColorSettings::DisplayItem_Keyword);
-    StyleSetFont(wxSCI_LUA_WORD2,                   font);
-    StyleSetForeground(wxSCI_LUA_WORD2,             settings.GetColors(FontColorSettings::DisplayItem_Keyword).foreColor);
-    StyleSetBackground(wxSCI_LUA_WORD2,             settings.GetColors(FontColorSettings::DisplayItem_Keyword).backColor);
+    StyleSetFont(wxSCI_LUA_WORD,                   font);
+    StyleSetForeground(wxSCI_LUA_WORD,             settings.GetColors(FontColorSettings::DisplayItem_Keyword).foreColor);
+    StyleSetBackground(wxSCI_LUA_WORD,             settings.GetColors(FontColorSettings::DisplayItem_Keyword).backColor);
+
+	//内部函数
+	font = settings.GetFont(FontColorSettings::DisplayItem_InnerFunction);
+	StyleSetFont(wxSCI_LUA_WORD2, font);
+	StyleSetForeground(wxSCI_LUA_WORD2, settings.GetColors(FontColorSettings::DisplayItem_InnerFunction).foreColor);
+	StyleSetBackground(wxSCI_LUA_WORD2, settings.GetColors(FontColorSettings::DisplayItem_InnerFunction).backColor);
+
+	//函数
+	font = settings.GetFont(FontColorSettings::DisplayItem_Function);
+	StyleSetFont(wxSCI_LUA_WORD3, font);
+	StyleSetForeground(wxSCI_LUA_WORD3, settings.GetColors(FontColorSettings::DisplayItem_Function).foreColor);
+	StyleSetBackground(wxSCI_LUA_WORD3, settings.GetColors(FontColorSettings::DisplayItem_Function).backColor);
+
+	//函数参数
+	font = settings.GetFont(FontColorSettings::DisplayItem_FunctionParam);
+	StyleSetFont(wxSCI_LUA_WORD4, font);
+	StyleSetForeground(wxSCI_LUA_WORD4, settings.GetColors(FontColorSettings::DisplayItem_FunctionParam).foreColor);
+	StyleSetBackground(wxSCI_LUA_WORD4, settings.GetColors(FontColorSettings::DisplayItem_FunctionParam).backColor);
+
+	//表
+	font = settings.GetFont(FontColorSettings::DisplayItem_Table);
+	StyleSetFont(wxSCI_LUA_WORD5, font);
+	StyleSetForeground(wxSCI_LUA_WORD5, settings.GetColors(FontColorSettings::DisplayItem_Table).foreColor);
+	StyleSetBackground(wxSCI_LUA_WORD5, settings.GetColors(FontColorSettings::DisplayItem_Table).backColor);
 
     font = settings.GetFont(FontColorSettings::DisplayItem_Operator);
     StyleSetFont(wxSCI_LUA_OPERATOR,                font);
@@ -215,10 +246,13 @@ void CodeEdit::SetLuaLexer()
         "and       break     do        else      elseif "
         "end       false     for       function  if "
         "in        local     nil       not       or "
-        "repeat    return    then      true      until     while module";
+        "repeat    return    then      true      until     while";
 
-    SetKeyWords(1, keywords);
-
+	SetKeyWords(KeywordKeyword, keywords);
+	//102 217 239
+	const char * innerFunction =
+		"module print dofile ";
+	SetKeyWords(KeywordInnerFuntion, innerFunction);
 }
 
 bool CodeEdit::Untabify()
@@ -430,6 +464,7 @@ void CodeEdit::Recolor()
 {
     ClearDocumentStyle();
     int length = GetLength();
+	//对所有文本进行着色
     Colourise(0, length);
 }
 

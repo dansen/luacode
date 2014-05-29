@@ -25,7 +25,9 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <wx/xml/xml.h>
 
-const char* FontColorSettings::s_displayItemName[] = { "Default", "Comment", "Keyword", "Operator", "String", "Number", "Error", "Warning", "Selection" };
+const char* FontColorSettings::s_displayItemName[] = { 
+	"Default", "Comment", "Keyword", "Inner Function", "Function", "Function Parameter", "Table",
+	"Operator", "String", "Number", "Error", "Warning", "Selection" };
 
 FontColorSettings::FontColorSettings()
 {
@@ -46,7 +48,28 @@ FontColorSettings::FontColorSettings()
     m_colors[DisplayItem_Keyword].backColor     = wxColor(0xFF, 0xFF, 0xFF);
     m_colors[DisplayItem_Keyword].bold          = false;
     m_colors[DisplayItem_Keyword].italic        = false;
-    
+
+	//内部函数
+	m_colors[DisplayItem_InnerFunction].foreColor = wxColor(0x00, 0x00, 0x00);
+	m_colors[DisplayItem_InnerFunction].backColor = wxColor(0xFF, 0xFF, 0xFF);
+	m_colors[DisplayItem_InnerFunction].bold = false;
+	m_colors[DisplayItem_InnerFunction].italic = false;
+	//函数
+	m_colors[DisplayItem_Function].foreColor = wxColor(0x00, 0x00, 0x00);
+	m_colors[DisplayItem_Function].backColor = wxColor(0xFF, 0xFF, 0xFF);
+	m_colors[DisplayItem_Function].bold = false;
+	m_colors[DisplayItem_Function].italic = false;
+	//函数参数
+	m_colors[DisplayItem_FunctionParam].foreColor = wxColor(0x00, 0x00, 0x00);
+	m_colors[DisplayItem_FunctionParam].backColor = wxColor(0xFF, 0xFF, 0xFF);
+	m_colors[DisplayItem_FunctionParam].bold = false;
+	m_colors[DisplayItem_FunctionParam].italic = false;
+	//表
+	m_colors[DisplayItem_Table].foreColor = wxColor(0x00, 0x00, 0x00);
+	m_colors[DisplayItem_Table].backColor = wxColor(0xFF, 0xFF, 0xFF);
+	m_colors[DisplayItem_Table].bold = false;
+	m_colors[DisplayItem_Table].italic = false;
+
     m_colors[DisplayItem_Operator].foreColor    = wxColor(0x80, 0x80, 0x80);
     m_colors[DisplayItem_Operator].backColor    = wxColor(0xFF, 0xFF, 0xFF);
     m_colors[DisplayItem_Operator].bold         = false;
