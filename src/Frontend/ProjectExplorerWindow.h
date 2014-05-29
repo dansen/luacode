@@ -47,7 +47,8 @@ class ProjectExplorerWindow : public wxPanel
 {
 
 public:
-
+	void openSelectedFile();
+	void focusSearch();
     /**
      * Stores data for a node in the tree.
      */

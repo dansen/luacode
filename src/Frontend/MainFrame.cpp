@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
+#include "SearchTextCtrl.h"
 #include "Config.h"
 #include "MainFrame.h"
 #include "MainApp.h"
@@ -131,8 +131,12 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_UPDATE_UI(ID_EditUncomment,                 MainFrame::EnableWhenTextIsSelected)
 	EVT_MENU(ID_EditInsertAfterLine, MainFrame::OnEditInsertAfterLine)
 	EVT_UPDATE_UI(ID_EditInsertAfterLine, MainFrame::EnableWhenFileIsOpen)
+	
 	EVT_MENU(ID_EditInsertBeforeLine, MainFrame::OnEditInsertBeforeLine)
 	EVT_UPDATE_UI(ID_EditInsertBeforeLine, MainFrame::EnableWhenFileIsOpen)
+	//转到某个文件
+	EVT_MENU(ID_GotoFile, MainFrame::OnEditGotoFile)
+
     // Project menu events.
     EVT_MENU(ID_ProjectAddExistingFile,             MainFrame::OnProjectAddExistingFile)
     EVT_MENU(ID_ProjectAddNewFile,                  MainFrame::OnProjectAddNewFile)
@@ -624,6 +628,7 @@ void MainFrame::InitializeMenu()
     menuEdit->Append(ID_EditUncomment,                  _("&Uncomment Selection"));
 	menuEdit->Append(ID_EditInsertBeforeLine, _("&Insert Before Line"));
 	menuEdit->Append(ID_EditInsertAfterLine, _("&Insert After Line"));
+	menuEdit->Append(ID_GotoFile, _("&GoTo File ..."));
     // Project menu.
 
     wxMenu* menuRecentProjects = new wxMenu;
@@ -5608,6 +5613,11 @@ void MainFrame::EnableWhenFileIsOpen(wxUpdateUIEvent& event)
 {
     int pageIndex = GetSelectedPage();
     event.Enable(pageIndex != -1);
+}
+
+void MainFrame::OnEditGotoFile(wxCommandEvent& event)
+{
+	m_projectExplorer->focusSearch();
 }
 
 void MainFrame::EnableWhenFileHasFocus(wxUpdateUIEvent& event)

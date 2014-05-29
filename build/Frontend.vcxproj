@@ -171,6 +171,7 @@
     <ClInclude Include="..\src\Frontend\Tokenizer.h" />
     <ClInclude Include="..\src\Frontend\ToolTipWindow.h" />
     <ClInclude Include="..\src\Frontend\treelistctrl.h" />
+    <ClInclude Include="..\src\Frontend\Utility.h" />
     <ClInclude Include="..\src\Frontend\WatchCtrl.h" />
     <ClInclude Include="..\src\Frontend\WatchDropTarget.h" />
     <ClInclude Include="..\src\Frontend\WatchWindow.h" />
@@ -298,6 +299,7 @@
     </ClCompile>
     <ClCompile Include="..\src\Frontend\treelistctrl.cpp">
     </ClCompile>
+    <ClCompile Include="..\src\Frontend\Utility.cpp" />
     <ClCompile Include="..\src\Frontend\WatchCtrl.cpp">
     </ClCompile>
     <ClCompile Include="..\src\Frontend\WatchDropTarget.cpp">

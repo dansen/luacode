@@ -21,9 +21,11 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "SearchTextCtrl.h"
+#include "ProjectExplorerWindow.h"
 
 BEGIN_EVENT_TABLE(SearchTextCtrl, wxTextCtrl)
     EVT_KEY_DOWN( OnKeyDown )
+	EVT_TEXT_ENTER(wxID_ANY, OnEnter)
 END_EVENT_TABLE()
 
 SearchTextCtrl::SearchTextCtrl(wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator, const wxString& name)
@@ -47,6 +49,14 @@ void SearchTextCtrl::OnKeyDown(wxKeyEvent& event)
         // Keep processing the event.
         event.Skip(true);
     }
+}
+
+void SearchTextCtrl::OnEnter(wxCommandEvent & event)
+{
+	m_nextWindow->SetFocus();
+	ProjectExplorerWindow * pro = (ProjectExplorerWindow*)(this->GetParent());
+	pro->openSelectedFile();
+	Clear();
 }
 
 void SearchTextCtrl::SetNextWindow(wxWindow* nextWindow)

@@ -38,8 +38,8 @@ public:
      */
     SearchTextCtrl(wxWindow* parent, wxWindowID id, const wxString& value = "",
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr);
-
+		long style = wxTE_PROCESS_ENTER, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr);
+	void OnEnter(wxCommandEvent & event);
     /**
      * Called when the user presses a key in the control.
      */

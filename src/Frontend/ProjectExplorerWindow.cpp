@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
+#include "Utility.h"
 #include "ProjectExplorerWindow.h"
 #include "SearchTextCtrl.h"
 #include "ProjectFileInfoCtrl.h"
@@ -31,8 +31,11 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include <set>
 #include <wx/file.h>
 #include <wx/listctrl.h>
+#include <wx/event.h>
+#include <wx/wx.h>
+#include <wx/treebase.h>
 #include <hash_map>
-
+#include "MainFrame.h"
 #include "res/explorer.xpm"
 #include "res/filter_bitmap.xpm"
 
@@ -104,7 +107,7 @@ ProjectExplorerWindow::ProjectExplorerWindow(wxWindow* parent, wxWindowID winid)
     gSizer2->AddGrowableRow( 0 );
     gSizer2->SetFlexibleDirection( wxBOTH );
 
-    m_searchBox = new SearchTextCtrl( this, ID_Filter, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    m_searchBox = new SearchTextCtrl( this, ID_Filter, wxEmptyString, wxDefaultPosition, wxDefaultSize);
     
     m_filterButton = new wxBitmapButton( this, ID_FilterButton, wxNullBitmap, wxDefaultPosition, wxSize(18, 17), 0 );
     m_filterPopup  = NULL;
@@ -226,8 +229,9 @@ void ProjectExplorerWindow::Rebuild()
 
     // Select the first item in the newly created list
     wxTreeItemId firstItem = m_tree->GetFirstVisibleItem();
+	m_tree->UnselectAll();
     m_tree->SelectItem(firstItem);
-
+	
 }
 
 void ProjectExplorerWindow::RebuildForFile(Project::File* file)
@@ -270,7 +274,8 @@ void ProjectExplorerWindow::RebuildForFile(Project::File* file)
             // Filter all of the symbols, modules and file name.
                 
             // Check to see if the file name matches the filter.
-            if (MatchesFilter(file->fileName.GetFullName(), m_filter))
+            //if (MatchesFilter(file->fileName.GetFullName(), m_filter))
+			if (isseq_ignorecase(file->fileName.GetFullName(), m_filter))
             {
                 AddFile(m_root, file);
             }
@@ -281,7 +286,8 @@ void ProjectExplorerWindow::RebuildForFile(Project::File* file)
                 Symbol* symbol = file->symbols[j];
                 
                 // Check to see if the symbol matches the filter.
-                if (MatchesFilter(symbol->name, m_filter))
+                //if (MatchesFilter(symbol->name, m_filter))
+				if (isseq_ignorecase(symbol->name, m_filter))
                 {
                     AddSymbol(m_root, file, symbol);
                 }
@@ -756,4 +762,20 @@ void ProjectExplorerWindow::UpdateFilterButtonImage()
 
     m_filterButton->SetBitmapLabel(bitmap);
     
+}
+
+void ProjectExplorerWindow::focusSearch()
+{
+	m_searchBox->Clear();
+	m_searchBox->SetFocus();
+}
+
+void ProjectExplorerWindow::openSelectedFile()
+{
+	MainFrame * frame = (MainFrame*)(this->GetParent());
+	wxTreeEvent e;
+	wxTreeItemId id = GetSelection();
+	e.SetItem(id);
+	frame->OnProjectExplorerItemActivated(e);
+	m_searchBox->Clear();
 }

@@ -826,6 +826,7 @@ public:
      */
     void EnableWhenFileIsOpen(wxUpdateUIEvent& event);
 
+	void OnEditGotoFile(wxCommandEvent& event);
     /**
      * Enables the item when a file is open for editing and has the keyboard focus,
      */
@@ -1481,6 +1482,8 @@ private:
 		ID_EditInsertAfterLine = 89,
         
 		ID_OpenConsole = 90,
+
+		ID_GotoFile = 91,
 
         ID_FirstExternalTool                = 1000,
         ID_FirstRecentFile                  = 2000,
