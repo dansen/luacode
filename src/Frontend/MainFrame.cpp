@@ -6160,7 +6160,7 @@ Project::File* MainFrame::GetFileMatchingSource(const wxFileName& fileName, cons
 void MainFrame::AutoOpenLastProject()
 {
 
-    if (m_editorSettings.GetLoadLastProjectOnStartup() && !m_lastProjectLoaded.IsEmpty())
+    if (/*m_editorSettings.GetLoadLastProjectOnStartup() &&*/ !m_lastProjectLoaded.IsEmpty())
     {
         if (!OpenProject(m_lastProjectLoaded, false))
         {
@@ -6185,7 +6185,7 @@ void MainFrame::OnSymbolsParsed(SymbolParserEvent& event)
         if (!event.GetIsFinalQueueItem())
         {
             //Don't add symbol data yet.
-            return;
+            //return;
         }
         else
         {
@@ -6196,7 +6196,7 @@ void MainFrame::OnSymbolsParsed(SymbolParserEvent& event)
             //Set the project to itself so we can trigger Rebuild()
             m_projectExplorer->SetProject(m_project);
             
-            return;
+            //return;
         }
     }
 
@@ -6225,6 +6225,9 @@ void MainFrame::OnSymbolsParsed(SymbolParserEvent& event)
 
 void MainFrame::UpdateForNewFile(Project::File* file)
 {
+	if (file->tempName.empty()){
+		m_project->AddFile(file->fileName.GetFullPath());
+	}
     m_projectExplorer->InsertFile(file);
     m_symbolParser->QueueForParsing(file);
 }
