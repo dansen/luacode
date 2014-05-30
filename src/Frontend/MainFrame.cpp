@@ -4559,7 +4559,9 @@ void MainFrame::SetVmName(unsigned int vm, const wxString& name)
 
 bool MainFrame::SaveFile(OpenFile* file, bool promptForName)
 {
-                    
+	if (file->edit->GetModify() == false) {
+		return true;
+	}
     wxLogNull logNo;
 
     wxFileName fileName = file->file->fileName;
@@ -4631,7 +4633,7 @@ bool MainFrame::SaveFile(OpenFile* file, bool promptForName)
     file->edit->SetSavePoint();
 
     // The file name may have changed, so update the syntax coloring.
-    UpdateSyntaxColoring(file);
+    //UpdateSyntaxColoring(file);
 
     // Update the breakpoints.
     m_breakpointsWindow->UpdateBreakpoints();

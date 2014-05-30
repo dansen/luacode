@@ -50,6 +50,7 @@ std::string str2ansi(const char * str)
 	WideCharToMultiByte(CP_ACP, 0, wszBuf, -1, buf, ansiSize, NULL, NULL);
 	std::string tmp = buf;
 	delete[] buf;
+	delete[] wszBuf;
 	return tmp;
 }
 
@@ -70,6 +71,7 @@ bool saveFile(const char * path, std::string & str)
 		fwrite(buf, ansiSize-1, 1, fp);
 
 		delete[] buf;
+		delete[] wszBuf;
 	}
 
 	fclose(fp);
