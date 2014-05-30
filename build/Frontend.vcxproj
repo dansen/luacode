@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\src\Shared;..\libs\wxWidgets\include;..\libs\wxScintilla\include;..\libs\Update\include;..\libs\wxWidgets\lib\vc_lib\mswd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\src\lua\tolua;..\src\lua\lua;..\src\lua\cocos2dx_support;..\src\Shared;..\libs\wxWidgets\include;..\libs\wxScintilla\include;..\libs\Update\include;..\libs\wxWidgets\lib\vc_lib\mswd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -74,15 +74,15 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;rpcrt4.lib;imagehlp.lib;Update.lib;wxbase28d.lib;wxmsw28d_core.lib;wxmsw28d_aui.lib;wxscintillad.lib;wxbase28d_xml.lib;wxexpatd.lib;wxmsw28d_adv.lib;wxmsw28d_qa.lib;wxzlibd.lib;wxmsw28d_richtext.lib;wxmsw28d_html.lib;wxpngd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>liblua.lib;comctl32.lib;rpcrt4.lib;imagehlp.lib;Update.lib;wxbase28d.lib;wxmsw28d_core.lib;wxmsw28d_aui.lib;wxscintillad.lib;wxbase28d_xml.lib;wxexpatd.lib;wxmsw28d_adv.lib;wxmsw28d_qa.lib;wxzlibd.lib;wxmsw28d_richtext.lib;wxmsw28d_html.lib;wxpngd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)Decoda.exe</OutputFile>
-      <AdditionalLibraryDirectories>..\libs\wxWidgets\lib\vc_lib;..\libs\wxScintilla\lib;..\libs\Update\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\bin\debug;..\libs\wxWidgets\lib\vc_lib;..\libs\wxScintilla\lib;..\libs\Update\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>Full</Optimization>
-      <AdditionalIncludeDirectories>..\src\Shared;..\libs\wxWidgets\include;..\libs\wxScintilla\include;..\libs\Update\include;..\libs\wxWidgets\lib\vc_lib\msw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\src\lua\lua;..\src\lua\tolua;..\src\lua\cocos2dx_support;..\src\Shared;..\libs\wxWidgets\include;..\libs\wxScintilla\include;..\libs\Update\include;..\libs\wxWidgets\lib\vc_lib\msw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
@@ -103,9 +103,9 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>comctl32.lib;rpcrt4.lib;imagehlp.lib;Update.lib;wxbase28.lib;wxmsw28_core.lib;wxmsw28_aui.lib;wxscintilla.lib;wxbase28_xml.lib;wxexpat.lib;wxmsw28_adv.lib;wxmsw28_qa.lib;wxzlib.lib;wxmsw28_richtext.lib;wxmsw28_html.lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>liblua.lib;comctl32.lib;rpcrt4.lib;imagehlp.lib;Update.lib;wxbase28.lib;wxmsw28_core.lib;wxmsw28_aui.lib;wxscintilla.lib;wxbase28_xml.lib;wxexpat.lib;wxmsw28_adv.lib;wxmsw28_qa.lib;wxzlib.lib;wxmsw28_richtext.lib;wxmsw28_html.lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)Decoda.exe</OutputFile>
-      <AdditionalLibraryDirectories>..\libs\wxWidgets\lib\vc_lib;..\libs\wxScintilla\lib;..\libs\Update\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\bin\release;..\libs\wxWidgets\lib\vc_lib;..\libs\wxScintilla\lib;..\libs\Update\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -138,6 +138,8 @@
     <ClInclude Include="..\src\Frontend\LineMapper.h" />
     <ClInclude Include="..\src\Frontend\ListView.h" />
     <ClInclude Include="..\src\Frontend\ListWindow.h" />
+    <ClInclude Include="..\src\Frontend\luaext\luacodeTolua.h" />
+    <ClInclude Include="..\src\Frontend\luaext\ScriptManager.h" />
     <ClInclude Include="..\src\Frontend\MainApp.h" />
     <ClInclude Include="..\src\Frontend\MainFrame.h" />
     <ClInclude Include="..\src\Frontend\MainFrameDropTarget.h" />
@@ -235,6 +237,8 @@
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ListWindow.cpp">
     </ClCompile>
+    <ClCompile Include="..\src\Frontend\luaext\luacodeTolua.cpp" />
+    <ClCompile Include="..\src\Frontend\luaext\ScriptManager.cpp" />
     <ClCompile Include="..\src\Frontend\MainApp.cpp">
     </ClCompile>
     <ClCompile Include="..\src\Frontend\MainFrame.cpp">
@@ -299,7 +303,7 @@
     </ClCompile>
     <ClCompile Include="..\src\Frontend\treelistctrl.cpp">
     </ClCompile>
-    <ClCompile Include="..\src\Frontend\Utility.cpp" />
+    <ClCompile Include="..\src\Frontend\Utility.c" />
     <ClCompile Include="..\src\Frontend\WatchCtrl.cpp">
     </ClCompile>
     <ClCompile Include="..\src\Frontend\WatchDropTarget.cpp">

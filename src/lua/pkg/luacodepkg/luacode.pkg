@@ -1,0 +1,11 @@
+$#include "luacodeTolua.h"
+
+
+typedef unsigned int size_t;
+typedef unsigned char GLubyte;
+typedef unsigned int bituint;
+typedef long long int64_t;
+
+extern bool isseq(const char * p, const char * c);
+extern bool isseq_ignorecase(const char * p, const char * c);
+

@@ -1,425 +1,458 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{13126CE8-2EA9-9042-ACA1-909935B97ACD}</UniqueIdentifier>
+    <Filter Include="luaext">
+      <UniqueIdentifier>{246a02f1-d473-4c83-9fa9-57a2b1b5108c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{AF8D647E-5F31-0441-AD8E-5CEB01B263B0}</UniqueIdentifier>
+    <Filter Include="base">
+      <UniqueIdentifier>{483d766b-d511-4dc8-9a38-3445d94287b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="gui">
+      <UniqueIdentifier>{619cd77d-3ad9-430a-86b5-63732e6af75c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
       <UniqueIdentifier>{79D263B8-C494-FB41-AB34-5721589B7EC8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="scc">
+      <UniqueIdentifier>{64f3592a-68a3-4530-9cfd-fbc9e9143ef5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tool">
+      <UniqueIdentifier>{6f263a91-0244-4624-af0f-db5209c2a87f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logic">
+      <UniqueIdentifier>{86d7c20e-584c-4e39-ae25-60adb1c2e033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="autocomplete">
+      <UniqueIdentifier>{46fa319a-7ba8-4e80-a6b2-26101412d9c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{ad5abb54-7097-4de0-9af3-93a5ecedb126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="debug">
+      <UniqueIdentifier>{d47791e4-3f5d-45b0-acfe-3049db03e8d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Frontend\AboutDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\AutoCompleteManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\Bitmaps.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\BreakpointsWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ButtonBar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ChoiceDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\CodeEdit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\CodeEditDropTarget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\Config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\DebugEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\DebugFrontend.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\EditorSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\EditorSettingsPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ExceptionDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ExternalTool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ExternalToolsDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\FileChangeWatcher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\FileEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\FileStatusThread.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\FileUtility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\FindInFilesDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\FontColorSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\FontColorSettingsPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\KeyBinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\KeyBinderDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\KeyMonitorTextCtrl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\LineMapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ListView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ListWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\MainApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\MainFrame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\MainFrameDropTarget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\NewFileDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\NewProcessDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\OutputWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ProcessesDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ProcessOutputSink.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\Project.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ProjectExplorerWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ProjectFileInfoCtrl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ProjectFilterPopup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\QuickWatchDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ReadOnlyDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\scc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SearchTextCtrl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SearchWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SettingsDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ShowHelpEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SingleInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SourceControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\StaticTextEx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\StringHistory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\Symbol.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SymbolParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SymbolParserEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SymbolParserThread.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SystemSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\SystemSettingsPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ThreadEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\Tokenizer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\ToolTipWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\treelistctrl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\WatchCtrl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\WatchDropTarget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\WatchWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\XmlConfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frontend\XmlUtility.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\Frontend\luaext\luacodeTolua.h">
+      <Filter>luaext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\luaext\ScriptManager.h">
+      <Filter>luaext</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Frontend\Utility.h">
-      <Filter>Header Files</Filter>
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\WatchCtrl.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\treelistctrl.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\WatchWindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ToolTipWindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SystemSettingsPanel.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\StaticTextEx.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SettingsDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SearchTextCtrl.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SearchWindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\QuickWatchDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\OutputWindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\NewProcessDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\NewFileDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\MainApp.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\MainFrame.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ListWindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ListView.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\KeyMonitorTextCtrl.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\KeyBinderDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\AboutDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\BreakpointsWindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ButtonBar.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ChoiceDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\CodeEdit.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\DebugFrontend.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\EditorSettingsPanel.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\CodeEditDropTarget.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ExceptionDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ExternalToolsDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\FontColorSettingsPanel.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\MainFrameDropTarget.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ProcessesDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ProcessOutputSink.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ProjectExplorerWindow.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ProjectFilterPopup.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ReadOnlyDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\scc.h">
+      <Filter>scc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SourceControl.h">
+      <Filter>scc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ExternalTool.h">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\WatchDropTarget.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\Tokenizer.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ThreadEvent.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SystemSettings.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SymbolParserThread.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SymbolParserEvent.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SymbolParser.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\Symbol.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\StringHistory.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ShowHelpEvent.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\ProjectFileInfoCtrl.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\Project.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\LineMapper.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\KeyBinder.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\FontColorSettings.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\FileUtility.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\FileStatusThread.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\FileEvent.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\FindInFilesDialog.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\FileChangeWatcher.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\EditorSettings.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\AutoCompleteManager.h">
+      <Filter>logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\DebugEvent.h">
+      <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\XmlConfig.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\XmlUtility.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\Config.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\Bitmaps.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Frontend\SingleInstance.h">
+      <Filter>gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Frontend\AboutDialog.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\Frontend\luaext\luacodeTolua.cpp">
+      <Filter>luaext</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Frontend\AutoCompleteManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\Frontend\luaext\ScriptManager.cpp">
+      <Filter>luaext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\AboutDialog.cpp">
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\BreakpointsWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ButtonBar.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ChoiceDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\CodeEdit.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\CodeEditDropTarget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\Config.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\DebugEvent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\DebugFrontend.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\EditorSettings.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\EditorSettingsPanel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ExceptionDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\ExternalTool.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ExternalToolsDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\AutoCompleteManager.cpp">
+      <Filter>autocomplete</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\Config.cpp">
+      <Filter>config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\DebugEvent.cpp">
+      <Filter>debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\EditorSettings.cpp">
+      <Filter>config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\ExternalTool.cpp">
+      <Filter>tool</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\FileChangeWatcher.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>logic</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\FileEvent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>logic</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\FileStatusThread.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>logic</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\FileUtility.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>logic</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\FindInFilesDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\FontColorSettings.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\FontColorSettingsPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\KeyBinder.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\KeyBinderDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\KeyMonitorTextCtrl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\LineMapper.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ListView.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ListWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\MainApp.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\MainFrame.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\MainFrameDropTarget.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\NewFileDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\NewProcessDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\OutputWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ProcessesDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\ProcessOutputSink.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\Project.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ProjectExplorerWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ProjectFileInfoCtrl.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ProjectFilterPopup.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\QuickWatchDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ReadOnlyDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\SearchTextCtrl.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\SearchWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\SettingsDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Frontend\ShowHelpEvent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\Frontend\FontColorSettings.cpp">
+      <Filter>config</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Frontend\SingleInstance.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\Frontend\KeyBinder.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\LineMapper.cpp">
+      <Filter>logic</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\SourceControl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\StaticTextEx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\StringHistory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\Symbol.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\SymbolParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\SymbolParserEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\SymbolParserThread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\SystemSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\SystemSettingsPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\ThreadEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Frontend\Tokenizer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>scc</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ToolTipWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\treelistctrl.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\WatchCtrl.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\WatchDropTarget.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\WatchWindow.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\SystemSettingsPanel.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\SystemSettings.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\StaticTextEx.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\StringHistory.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\Tokenizer.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\ThreadEvent.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\SymbolParserThread.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\SymbolParserEvent.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\SymbolParser.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\Symbol.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\ShowHelpEvent.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\Project.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\ProcessOutputSink.cpp">
+      <Filter>logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\MainApp.cpp">
+      <Filter>logic</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\XmlConfig.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>config</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\XmlUtility.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>config</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Frontend\Utility.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\Frontend\SingleInstance.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\Utility.c">
+      <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\Frontend\Decoda.rc">
-      <Filter>Resource Files</Filter>
+      <Filter>res</Filter>
     </ResourceCompile>
   </ItemGroup>
 </Project>

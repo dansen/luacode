@@ -97,6 +97,9 @@ MainApp::MainApp()
 
 bool MainApp::OnInit()
 {
+	//Æô¶¯luaĞéÄâ»ú
+
+	//
     UINT openFilesMessage = RegisterWindowMessage("Decoda_OpenFiles");
 
     // Check to see if another instances is running.
