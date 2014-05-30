@@ -772,6 +772,7 @@ bool MainFrame::OpenProject(const wxString& fileName, bool reportError)
 
     // Remember that we loaded this project.
     m_lastProjectLoaded = fileName;
+	SaveOptions();
 
     return true;
 
