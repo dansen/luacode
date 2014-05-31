@@ -1,7 +1,7 @@
 /*
 
 Decoda
-Copyright (C) 2007-2013 Unknown Worlds Entertainment, Inc. 
+Copyright (C) 2007-2013 Unknown Worlds Entertainment, Inc.
 
 This file is part of Decoda.
 
@@ -31,35 +31,30 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "res/functionicon.xpm"
 #include "res/classicon.xpm"
 #include <algorithm>
+#include "Utility.h"
 
-BEGIN_EVENT_TABLE( CodeEdit, wxScintilla )
+BEGIN_EVENT_TABLE(CodeEdit, wxScintilla)
 
-    EVT_LEAVE_WINDOW(               CodeEdit::OnMouseLeave)
-    EVT_KILL_FOCUS(                 CodeEdit::OnKillFocus)
-    EVT_SCI_CHARADDED(  wxID_ANY,   CodeEdit::OnCharAdded)
-	EVT_SCI_KEY(  wxID_ANY, CodeEdit::OnEditKeyDown)
-	//EVT_SCI_UPDATEUI(wxID_ANY, CodeEdit::OnEditKeyDown)
-    EVT_SCI_CHANGE(     wxID_ANY,   CodeEdit::OnChange)
-    EVT_SCI_MODIFIED(   wxID_ANY,   CodeEdit::OnModified)
+EVT_LEAVE_WINDOW(CodeEdit::OnMouseLeave)
+EVT_KILL_FOCUS(CodeEdit::OnKillFocus)
+EVT_SCI_CHARADDED(wxID_ANY, CodeEdit::OnCharAdded)
+EVT_SCI_KEY(wxID_ANY, CodeEdit::OnEditKeyDown)
+//EVT_SCI_UPDATEUI(wxID_ANY, CodeEdit::OnEditKeyDown)
+EVT_SCI_CHANGE(wxID_ANY, CodeEdit::OnChange)
+EVT_SCI_MODIFIED(wxID_ANY, CodeEdit::OnModified)
 
 END_EVENT_TABLE()
 
-
-
 CodeEdit::CodeEdit()
 {
-    // The minimum number of characters that must be typed before autocomplete
-    // is displayed for global symbols. We impose a minimum so that autocomplete
-    // doesn't popup too much.
-    m_minAutoCompleteLength = 2;
-    m_autoCompleteManager   = NULL;
-
-    m_tipWindow             = NULL;
-    m_autoIndented          = false;
-
-    m_enableAutoComplete    = true;
-    m_lineMappingDirty      = true;
-	
+	// The minimum number of characters that must be typed before autocomplete
+	// is displayed for global symbols. We impose a minimum so that autocomplete
+	// doesn't popup too much.
+	m_minAutoCompleteLength = 2;
+	m_autoCompleteManager = NULL;
+	m_tipWindow = NULL;
+	m_enableAutoComplete = true;
+	m_lineMappingDirty = true;
 }
 
 CodeEdit::~CodeEdit()
@@ -69,43 +64,42 @@ CodeEdit::~CodeEdit()
 
 void CodeEdit::SetFontColorSettings(const FontColorSettings& settings)
 {
+	// For some reason StyleSetFont takes a (non-const) reference, so we need to make
+	// a copy before passing it in.
+	wxFont font = settings.GetFont();
 
-    // For some reason StyleSetFont takes a (non-const) reference, so we need to make
-    // a copy before passing it in.
-    wxFont font = settings.GetFont();
+	SetSelForeground(true, settings.GetColors(FontColorSettings::DisplayItem_Selection).foreColor);
+	SetSelBackground(true, settings.GetColors(FontColorSettings::DisplayItem_Selection).backColor);
 
-    SetSelForeground(true, settings.GetColors(FontColorSettings::DisplayItem_Selection).foreColor);
-    SetSelBackground(true, settings.GetColors(FontColorSettings::DisplayItem_Selection).backColor);
+	StyleSetFont(wxSCI_STYLE_DEFAULT, font);
+	StyleClearAll();
 
-    StyleSetFont(wxSCI_STYLE_DEFAULT, font);
-    StyleClearAll();
+	font = settings.GetFont(FontColorSettings::DisplayItem_Default);
+	StyleSetFont(wxSCI_LUA_DEFAULT, font);
+	StyleSetFont(wxSCI_LUA_IDENTIFIER, font);
+	StyleSetForeground(wxSCI_LUA_DEFAULT, settings.GetColors(FontColorSettings::DisplayItem_Default).foreColor);
+	StyleSetBackground(wxSCI_LUA_DEFAULT, settings.GetColors(FontColorSettings::DisplayItem_Default).backColor);
+	StyleSetForeground(wxSCI_STYLE_DEFAULT, settings.GetColors(FontColorSettings::DisplayItem_Default).foreColor);
+	StyleSetBackground(wxSCI_STYLE_DEFAULT, settings.GetColors(FontColorSettings::DisplayItem_Default).backColor);
+	StyleSetForeground(wxSCI_LUA_IDENTIFIER, settings.GetColors(FontColorSettings::DisplayItem_Default).foreColor);
+	StyleSetBackground(wxSCI_LUA_IDENTIFIER, settings.GetColors(FontColorSettings::DisplayItem_Default).backColor);
 
-    font = settings.GetFont(FontColorSettings::DisplayItem_Default);
-    StyleSetFont(wxSCI_LUA_DEFAULT,                 font);
-    StyleSetFont(wxSCI_LUA_IDENTIFIER,              font);
-    StyleSetForeground(wxSCI_LUA_DEFAULT,           settings.GetColors(FontColorSettings::DisplayItem_Default).foreColor);
-    StyleSetBackground(wxSCI_LUA_DEFAULT,           settings.GetColors(FontColorSettings::DisplayItem_Default).backColor);
-    StyleSetForeground(wxSCI_STYLE_DEFAULT,         settings.GetColors(FontColorSettings::DisplayItem_Default).foreColor);
-    StyleSetBackground(wxSCI_STYLE_DEFAULT,         settings.GetColors(FontColorSettings::DisplayItem_Default).backColor);
-    StyleSetForeground(wxSCI_LUA_IDENTIFIER,        settings.GetColors(FontColorSettings::DisplayItem_Default).foreColor);
-    StyleSetBackground(wxSCI_LUA_IDENTIFIER,        settings.GetColors(FontColorSettings::DisplayItem_Default).backColor);
-
-    font = settings.GetFont(FontColorSettings::DisplayItem_Comment);
-    StyleSetFont(wxSCI_LUA_COMMENT,                 font);
-    StyleSetFont(wxSCI_LUA_COMMENTLINE,             font);
-    StyleSetFont(wxSCI_LUA_COMMENTDOC,              font);
-    StyleSetForeground(wxSCI_LUA_COMMENT,           settings.GetColors(FontColorSettings::DisplayItem_Comment).foreColor);
-    StyleSetBackground(wxSCI_LUA_COMMENT,           settings.GetColors(FontColorSettings::DisplayItem_Comment).backColor);
-    StyleSetForeground(wxSCI_LUA_COMMENTLINE,       settings.GetColors(FontColorSettings::DisplayItem_Comment).foreColor);
-    StyleSetBackground(wxSCI_LUA_COMMENTLINE,       settings.GetColors(FontColorSettings::DisplayItem_Comment).backColor);
-    StyleSetForeground(wxSCI_LUA_COMMENTDOC,        settings.GetColors(FontColorSettings::DisplayItem_Comment).foreColor);
-    StyleSetBackground(wxSCI_LUA_COMMENTDOC,        settings.GetColors(FontColorSettings::DisplayItem_Comment).backColor);
+	font = settings.GetFont(FontColorSettings::DisplayItem_Comment);
+	StyleSetFont(wxSCI_LUA_COMMENT, font);
+	StyleSetFont(wxSCI_LUA_COMMENTLINE, font);
+	StyleSetFont(wxSCI_LUA_COMMENTDOC, font);
+	StyleSetForeground(wxSCI_LUA_COMMENT, settings.GetColors(FontColorSettings::DisplayItem_Comment).foreColor);
+	StyleSetBackground(wxSCI_LUA_COMMENT, settings.GetColors(FontColorSettings::DisplayItem_Comment).backColor);
+	StyleSetForeground(wxSCI_LUA_COMMENTLINE, settings.GetColors(FontColorSettings::DisplayItem_Comment).foreColor);
+	StyleSetBackground(wxSCI_LUA_COMMENTLINE, settings.GetColors(FontColorSettings::DisplayItem_Comment).backColor);
+	StyleSetForeground(wxSCI_LUA_COMMENTDOC, settings.GetColors(FontColorSettings::DisplayItem_Comment).foreColor);
+	StyleSetBackground(wxSCI_LUA_COMMENTDOC, settings.GetColors(FontColorSettings::DisplayItem_Comment).backColor);
 
 	//关键字
-    font = settings.GetFont(FontColorSettings::DisplayItem_Keyword);
-    StyleSetFont(wxSCI_LUA_WORD,                   font);
-    StyleSetForeground(wxSCI_LUA_WORD,             settings.GetColors(FontColorSettings::DisplayItem_Keyword).foreColor);
-    StyleSetBackground(wxSCI_LUA_WORD,             settings.GetColors(FontColorSettings::DisplayItem_Keyword).backColor);
+	font = settings.GetFont(FontColorSettings::DisplayItem_Keyword);
+	StyleSetFont(wxSCI_LUA_WORD, font);
+	StyleSetForeground(wxSCI_LUA_WORD, settings.GetColors(FontColorSettings::DisplayItem_Keyword).foreColor);
+	StyleSetBackground(wxSCI_LUA_WORD, settings.GetColors(FontColorSettings::DisplayItem_Keyword).backColor);
 
 	//内部函数
 	font = settings.GetFont(FontColorSettings::DisplayItem_InnerFunction);
@@ -131,107 +125,104 @@ void CodeEdit::SetFontColorSettings(const FontColorSettings& settings)
 	StyleSetForeground(wxSCI_LUA_WORD5, settings.GetColors(FontColorSettings::DisplayItem_Table).foreColor);
 	StyleSetBackground(wxSCI_LUA_WORD5, settings.GetColors(FontColorSettings::DisplayItem_Table).backColor);
 
-    font = settings.GetFont(FontColorSettings::DisplayItem_Operator);
-    StyleSetFont(wxSCI_LUA_OPERATOR,                font);
-    StyleSetForeground(wxSCI_LUA_OPERATOR,          settings.GetColors(FontColorSettings::DisplayItem_Operator).foreColor);
-    StyleSetBackground(wxSCI_LUA_OPERATOR,          settings.GetColors(FontColorSettings::DisplayItem_Operator).backColor);
+	font = settings.GetFont(FontColorSettings::DisplayItem_Operator);
+	StyleSetFont(wxSCI_LUA_OPERATOR, font);
+	StyleSetForeground(wxSCI_LUA_OPERATOR, settings.GetColors(FontColorSettings::DisplayItem_Operator).foreColor);
+	StyleSetBackground(wxSCI_LUA_OPERATOR, settings.GetColors(FontColorSettings::DisplayItem_Operator).backColor);
 
-    font = settings.GetFont(FontColorSettings::DisplayItem_String);
-    StyleSetFont(wxSCI_LUA_STRING,                  font);
-    StyleSetForeground(wxSCI_LUA_STRING,            settings.GetColors(FontColorSettings::DisplayItem_String).foreColor);
-    StyleSetBackground(wxSCI_LUA_STRING,            settings.GetColors(FontColorSettings::DisplayItem_String).backColor);
-    StyleSetFont(wxSCI_LUA_STRINGEOL,               font);
-    StyleSetForeground(wxSCI_LUA_STRINGEOL,         settings.GetColors(FontColorSettings::DisplayItem_String).foreColor);
-    StyleSetBackground(wxSCI_LUA_STRINGEOL,         settings.GetColors(FontColorSettings::DisplayItem_String).backColor);
-    StyleSetFont(wxSCI_LUA_LITERALSTRING,           font);
-    StyleSetForeground(wxSCI_LUA_LITERALSTRING,     settings.GetColors(FontColorSettings::DisplayItem_String).foreColor);
-    StyleSetBackground(wxSCI_LUA_LITERALSTRING,     settings.GetColors(FontColorSettings::DisplayItem_String).backColor);
-    StyleSetFont(wxSCI_LUA_CHARACTER,               font);
-    StyleSetForeground(wxSCI_LUA_CHARACTER,         settings.GetColors(FontColorSettings::DisplayItem_String).foreColor);
-    StyleSetBackground(wxSCI_LUA_CHARACTER,         settings.GetColors(FontColorSettings::DisplayItem_String).backColor);
+	font = settings.GetFont(FontColorSettings::DisplayItem_String);
+	StyleSetFont(wxSCI_LUA_STRING, font);
+	StyleSetForeground(wxSCI_LUA_STRING, settings.GetColors(FontColorSettings::DisplayItem_String).foreColor);
+	StyleSetBackground(wxSCI_LUA_STRING, settings.GetColors(FontColorSettings::DisplayItem_String).backColor);
+	StyleSetFont(wxSCI_LUA_STRINGEOL, font);
+	StyleSetForeground(wxSCI_LUA_STRINGEOL, settings.GetColors(FontColorSettings::DisplayItem_String).foreColor);
+	StyleSetBackground(wxSCI_LUA_STRINGEOL, settings.GetColors(FontColorSettings::DisplayItem_String).backColor);
+	StyleSetFont(wxSCI_LUA_LITERALSTRING, font);
+	StyleSetForeground(wxSCI_LUA_LITERALSTRING, settings.GetColors(FontColorSettings::DisplayItem_String).foreColor);
+	StyleSetBackground(wxSCI_LUA_LITERALSTRING, settings.GetColors(FontColorSettings::DisplayItem_String).backColor);
+	StyleSetFont(wxSCI_LUA_CHARACTER, font);
+	StyleSetForeground(wxSCI_LUA_CHARACTER, settings.GetColors(FontColorSettings::DisplayItem_String).foreColor);
+	StyleSetBackground(wxSCI_LUA_CHARACTER, settings.GetColors(FontColorSettings::DisplayItem_String).backColor);
 
-    font = settings.GetFont(FontColorSettings::DisplayItem_Number);
-    StyleSetFont(wxSCI_LUA_NUMBER,                  font);
-    StyleSetForeground(wxSCI_LUA_NUMBER,            settings.GetColors(FontColorSettings::DisplayItem_Number).foreColor);
-    StyleSetBackground(wxSCI_LUA_NUMBER,            settings.GetColors(FontColorSettings::DisplayItem_Number).backColor);
+	font = settings.GetFont(FontColorSettings::DisplayItem_Number);
+	StyleSetFont(wxSCI_LUA_NUMBER, font);
+	StyleSetForeground(wxSCI_LUA_NUMBER, settings.GetColors(FontColorSettings::DisplayItem_Number).foreColor);
+	StyleSetBackground(wxSCI_LUA_NUMBER, settings.GetColors(FontColorSettings::DisplayItem_Number).backColor);
 
-    StyleSetSize(wxSCI_STYLE_LINENUMBER, font.GetPointSize());
+	StyleSetSize(wxSCI_STYLE_LINENUMBER, font.GetPointSize());
 
-    // Set the caret color as the inverse of the background color so it's always visible.
-    SetCaretForeground( GetInverse(settings.GetColors(FontColorSettings::DisplayItem_Default).backColor) );
+	// Set the caret color as the inverse of the background color so it's always visible.
+	SetCaretForeground(GetInverse(settings.GetColors(FontColorSettings::DisplayItem_Default).backColor));
 
 }
 
 void CodeEdit::SetAutoCompleteManager(const AutoCompleteManager* autoCompleteManager)
 {
-    m_autoCompleteManager = autoCompleteManager;
+	m_autoCompleteManager = autoCompleteManager;
 }
 
 void CodeEdit::SetEditorSettings(const EditorSettings& settings)
 {
-    m_indentationSize = settings.GetIndentSize();
+	m_indentationSize = settings.GetIndentSize();
 
-    SetIndent(m_indentationSize);
-    SetTabWidth(m_indentationSize);
-    
-    bool useTabs = settings.GetUseTabs();
-    bool showWhiteSpace = settings.GetShowWhiteSpace();
+	SetIndent(m_indentationSize);
+	SetTabWidth(m_indentationSize);
 
-    SetUseTabs(useTabs);
-    SetTabIndents(useTabs);
-    SetBackSpaceUnIndents(useTabs);
-    SetViewWhiteSpace(showWhiteSpace);
+	bool useTabs = settings.GetUseTabs();
+	bool showWhiteSpace = settings.GetShowWhiteSpace();
 
-    if (settings.GetShowLineNumbers())
-    {
-        // Figure out how wide the margin needs to be do display
-        // the most number of linqes we'd reasonbly have.
-        int marginSize = TextWidth(wxSCI_STYLE_LINENUMBER, "99999");
-        SetMarginWidth(0, marginSize);
-        SetMarginType(0,wxSCI_MARGIN_NUMBER);
-    }
-    else
-    {
-        SetMarginWidth(0, 0);
-    }    
+	SetUseTabs(useTabs);
+	SetTabIndents(useTabs);
+	SetBackSpaceUnIndents(useTabs);
+	SetViewWhiteSpace(showWhiteSpace);
 
-    m_enableAutoComplete = settings.GetEnableAutoComplete();
+	if (settings.GetShowLineNumbers()) {
+		// Figure out how wide the margin needs to be do display
+		// the most number of linqes we'd reasonbly have.
+		int marginSize = TextWidth(wxSCI_STYLE_LINENUMBER, "99999");
+		SetMarginWidth(0, marginSize);
+		SetMarginType(0, wxSCI_MARGIN_NUMBER);
+	} else {
+		SetMarginWidth(0, 0);
+	}
 
-}    
+	m_enableAutoComplete = settings.GetEnableAutoComplete();
+
+}
 
 void CodeEdit::SetDefaultLexer()
 {
-    SetLexer(wxSCI_LEX_NULL);
+	SetLexer(wxSCI_LEX_NULL);
 
-    SetKeyWords(1, "");
+	SetKeyWords(1, "");
 
-    // Set the caret width to match MSVC.
-    SetCaretWidth(2);
+	// Set the caret width to match MSVC.
+	SetCaretWidth(2);
 
-    // Set the marker bitmaps.
-    MarkerDefineBitmap(Marker_Breakpoint,  wxMEMORY_BITMAP(Breakpoint_png) );
-    MarkerDefineBitmap(Marker_CurrentLine, wxMEMORY_BITMAP(Currentline_png) );
-    MarkerDefineBitmap(Marker_BreakLine,   wxMEMORY_BITMAP(Breakline_png) );
+	// Set the marker bitmaps.
+	MarkerDefineBitmap(Marker_Breakpoint, wxMEMORY_BITMAP(Breakpoint_png));
+	MarkerDefineBitmap(Marker_CurrentLine, wxMEMORY_BITMAP(Currentline_png));
+	MarkerDefineBitmap(Marker_BreakLine, wxMEMORY_BITMAP(Breakline_png));
 
-    // Setup the dwell time before a tooltip is displayed.
-    SetMouseDwellTime(300);
+	// Setup the dwell time before a tooltip is displayed.
+	SetMouseDwellTime(300);
 
-    SetMarginSensitive(1, true);
-    SetMarginType(1, wxSCI_MARGIN_SYMBOL);
+	SetMarginSensitive(1, true);
+	SetMarginType(1, wxSCI_MARGIN_SYMBOL);
 
-    // Set the autocomplete icons.
+	// Set the autocomplete icons.
 
-    wxColour maskColor(0xFF, 0x9B, 0x77);
+	wxColour maskColor(0xFF, 0x9B, 0x77);
 
-    wxBitmap functionIcon(functionicon, wxBITMAP_TYPE_XPM);
-    functionIcon.SetMask(new wxMask(functionicon, maskColor));
-    
-    RegisterImage(AutoCompleteManager::Type_Function, functionIcon);
+	wxBitmap functionIcon(functionicon, wxBITMAP_TYPE_XPM);
+	functionIcon.SetMask(new wxMask(functionicon, maskColor));
 
-    wxBitmap classIcon(classicon, wxBITMAP_TYPE_XPM);
-    classIcon.SetMask(new wxMask(classicon, maskColor));
-    
-    RegisterImage(AutoCompleteManager::Type_Class, classIcon);
+	RegisterImage(AutoCompleteManager::Type_Function, functionIcon);
+
+	wxBitmap classIcon(classicon, wxBITMAP_TYPE_XPM);
+	classIcon.SetMask(new wxMask(classicon, maskColor));
+
+	RegisterImage(AutoCompleteManager::Type_Class, classIcon);
 }
 
 void CodeEdit::SetLuaLexer()
@@ -244,82 +235,74 @@ void CodeEdit::SetLuaLexer()
 bool CodeEdit::Untabify()
 {
 
-    wxString text = GetText();
+	wxString text = GetText();
 
-    if (Untabify(text))
-    {
-        SetText(text);
-        return true;
-    }
+	if (Untabify(text)) {
+		SetText(text);
+		return true;
+	}
 
-    return false;
+	return false;
 
 }
 
 bool CodeEdit::UntabifySelection()
 {
 
-    wxString text = GetSelectedText();
+	wxString text = GetSelectedText();
 
-    if (Untabify(text))
-    {
-        ReplaceSelection(text);
-        return true;
-    }
+	if (Untabify(text)) {
+		ReplaceSelection(text);
+		return true;
+	}
 
-    return false;
+	return false;
 
 }
 
 bool CodeEdit::Untabify(wxString& text) const
 {
 
-    // wxString::Replace is very slow with a big string because the operation
-    // is performed in place (which requires a lot of copying). Instead we use
-    // a different method with a second string.
+	// wxString::Replace is very slow with a big string because the operation
+	// is performed in place (which requires a lot of copying). Instead we use
+	// a different method with a second string.
 
-    assert(m_indentationSize < 32);
+	assert(m_indentationSize < 32);
 
-    char indentation[32];
-    memset(indentation, ' ', 32);
-    indentation[m_indentationSize] = 0;
+	char indentation[32];
+	memset(indentation, ' ', 32);
+	indentation[m_indentationSize] = 0;
 
-    wxString result;
-    result.reserve(text.Length());
+	wxString result;
+	result.reserve(text.Length());
 
-    unsigned int numTabs = 0;
+	unsigned int numTabs = 0;
 
-    for (unsigned int i = 0; i < text.Length(); ++i)
-    {
+	for (unsigned int i = 0; i < text.Length(); ++i) {
 
-        if (text[i] == '\t')
-        {
-            result += indentation;
-            ++numTabs;
-        }
-        else
-        {
-            result += text[i];
-        }
+		if (text[i] == '\t') {
+			result += indentation;
+			++numTabs;
+		} else {
+			result += text[i];
+		}
 
-    }
+	}
 
-    if (numTabs > 0)
-    {
-        text = result;
-        return true;
-    }
-    return false;
+	if (numTabs > 0) {
+		text = result;
+		return true;
+	}
+	return false;
 
 }
 
 void CodeEdit::CommentSelection()
 {
 
-    if (GetLexer() == wxSCI_LEX_LUA)
-    {
-        CommentSelection("--");
-    }
+	if (GetLexer() == wxSCI_LEX_LUA) {
+		CommentSelection("--");
+	}
 
 }
 
@@ -327,208 +310,194 @@ void CodeEdit::CommentSelection(const wxString& comment)
 {
 
 
-    if (GetSelectionStart() < GetSelectionEnd())
-    {
-  
-        int startLine = LineFromPosition(GetSelectionStart());
-        int endLine   = LineFromPosition(GetSelectionEnd());
+	if (GetSelectionStart() < GetSelectionEnd()) {
 
-        // Find the minimum indentation level for all of the selected lines.
+		int startLine = LineFromPosition(GetSelectionStart());
+		int endLine = LineFromPosition(GetSelectionEnd());
 
-        int minIndentation = INT_MAX;
+		// Find the minimum indentation level for all of the selected lines.
 
-        for (int i = startLine; i <= endLine; ++i)
-        {
-            
-            wxString lineText = GetLine(i);
-            int firstNonWhitespace = GetFirstNonWhitespace(lineText);
+		int minIndentation = INT_MAX;
 
-            if (firstNonWhitespace != -1)
-            {
-                minIndentation = wxMin(firstNonWhitespace, minIndentation);
-            }
+		for (int i = startLine; i <= endLine; ++i) {
 
-        }
+			wxString lineText = GetLine(i);
+			int firstNonWhitespace = GetFirstNonWhitespace(lineText);
 
-        // Insert the comment string on each non-blank line.
+			if (firstNonWhitespace != -1) {
+				minIndentation = wxMin(firstNonWhitespace, minIndentation);
+			}
 
-        wxString result;
+		}
 
-        for (int i = startLine; i <= endLine; ++i)
-        {
+		// Insert the comment string on each non-blank line.
 
-            wxString lineText = GetLine(i);
+		wxString result;
 
-            if (GetFirstNonWhitespace(lineText) != -1)
-            {
-                lineText.insert(minIndentation, comment);
-            }
+		for (int i = startLine; i <= endLine; ++i) {
 
-            result += lineText;
+			wxString lineText = GetLine(i);
 
-        }
+			if (GetFirstNonWhitespace(lineText) != -1) {
+				lineText.insert(minIndentation, comment);
+			}
 
-        SetTargetStart(PositionFromLine(startLine));
-        SetTargetEnd(PositionFromLine(endLine + 1));
+			result += lineText;
 
-        ReplaceTarget(result);
+		}
 
-        // Select the replaced text.
-        SetSelectionStart(GetTargetStart());
-        SetSelectionEnd(GetTargetEnd() - 1);
-    
-    }
+		SetTargetStart(PositionFromLine(startLine));
+		SetTargetEnd(PositionFromLine(endLine + 1));
+
+		ReplaceTarget(result);
+
+		// Select the replaced text.
+		SetSelectionStart(GetTargetStart());
+		SetSelectionEnd(GetTargetEnd() - 1);
+
+	}
 
 }
 
 void CodeEdit::UncommentSelection()
 {
 
-    if (GetLexer() == wxSCI_LEX_LUA)
-    {
-        UncommentSelection("--");
-    }
+	if (GetLexer() == wxSCI_LEX_LUA) {
+		UncommentSelection("--");
+	}
 
 }
 
 void CodeEdit::UncommentSelection(const wxString& commentString)
 {
 
-    if (GetSelectionStart() < GetSelectionEnd())
-    {
+	if (GetSelectionStart() < GetSelectionEnd()) {
 
-        int startLine = LineFromPosition(GetSelectionStart());
-        int endLine   = LineFromPosition(GetSelectionEnd());
+		int startLine = LineFromPosition(GetSelectionStart());
+		int endLine = LineFromPosition(GetSelectionEnd());
 
-        wxString result;
-        
-        for (int i = startLine; i <= endLine; ++i)
-        {
+		wxString result;
 
-            wxString lineText = GetLine(i);
+		for (int i = startLine; i <= endLine; ++i) {
 
-            unsigned int c = GetFirstNonWhitespace(lineText);
+			wxString lineText = GetLine(i);
 
-            if (c != -1 && lineText.compare(c, commentString.Length(), commentString) == 0)
-            {
-                lineText.erase(c, commentString.Length());
-            }
+			unsigned int c = GetFirstNonWhitespace(lineText);
 
-            result += lineText;
+			if (c != -1 && lineText.compare(c, commentString.Length(), commentString) == 0) {
+				lineText.erase(c, commentString.Length());
+			}
 
-        }
+			result += lineText;
 
-        SetTargetStart(PositionFromLine(startLine));
-        SetTargetEnd(PositionFromLine(endLine + 1));
+		}
 
-        ReplaceTarget(result);
+		SetTargetStart(PositionFromLine(startLine));
+		SetTargetEnd(PositionFromLine(endLine + 1));
 
-        // Select the replaced text.
-        SetSelectionStart(GetTargetStart());
-        SetSelectionEnd(GetTargetEnd() - 1);
+		ReplaceTarget(result);
 
-    }
+		// Select the replaced text.
+		SetSelectionStart(GetTargetStart());
+		SetSelectionEnd(GetTargetEnd() - 1);
+
+	}
 
 }
 
 unsigned int CodeEdit::GetFirstNonWhitespace(const wxString& text) const
 {
 
-    for (unsigned int c = 0; c < text.Length(); ++c)
-    {
-        if (!IsSpace(text[c]))
-        {
-            return c;
-        }
-    }
+	for (unsigned int c = 0; c < text.Length(); ++c) {
+		if (!IsSpace(text[c])) {
+			return c;
+		}
+	}
 
-    return -1;
+	return -1;
 
 }
 
 void CodeEdit::Recolor()
 {
-    ClearDocumentStyle();
-    int length = GetLength();
+	ClearDocumentStyle();
+	int length = GetLength();
 	//对所有文本进行着色
-    Colourise(0, length);
+	Colourise(0, length);
 }
 
 bool CodeEdit::GetHoverText(int position, wxString& result)
 {
 
-    int selectionStart = GetSelectionStart();
-    int selectionEnd   = GetSelectionEnd();
+	int selectionStart = GetSelectionStart();
+	int selectionEnd = GetSelectionEnd();
 
-    if (position >= selectionStart && position < selectionEnd)
-    {
-        // We're mousing over the selected text.
-        result = GetSelectedText();
-        return true;
-    }
+	if (position >= selectionStart && position < selectionEnd) {
+		// We're mousing over the selected text.
+		result = GetSelectedText();
+		return true;
+	}
 
-    // We don't use the : character as a joiner since we don't
-    // want to evaulate with that.
-    return GetTokenFromPosition(position, ".", result);
-    
+	// We don't use the : character as a joiner since we don't
+	// want to evaulate with that.
+	return GetTokenFromPosition(position, ".", result);
+
 }
 
 bool CodeEdit::GetIsIdentifierChar(unsigned char c) const
 {
-    return isalnum(c) || c == '_';
+	return isalnum(c) || c == '_';
 }
 
 void CodeEdit::ShowToolTip(int position, const wxString& text)
 {
 
-    bool showToolTip = true;
+	bool showToolTip = true;
 
-    // There doesn't seem to be a way to determine the window that the mouse is inside
-    // in wxWidgets. If we port to another platform, we'll need to handle this.
+	// There doesn't seem to be a way to determine the window that the mouse is inside
+	// in wxWidgets. If we port to another platform, we'll need to handle this.
 
 #ifdef __WXMSW__
 
-    POINT cursorPos;
-    GetCursorPos(&cursorPos);
+	POINT cursorPos;
+	GetCursorPos(&cursorPos);
 
-    HWND hActiveWindow = WindowFromPoint(cursorPos);
-    showToolTip = hActiveWindow == GetHandle();
+	HWND hActiveWindow = WindowFromPoint(cursorPos);
+	showToolTip = hActiveWindow == GetHandle();
 
 #else
-    
-    wxCOMPILE_TIME_ASSERT(0, "Unportable code");
+
+	wxCOMPILE_TIME_ASSERT(0, "Unportable code");
 
 #endif
-    
-    HideToolTip();
 
-    if (showToolTip)
-    {
-        m_tipWindow = new ToolTipWindow(this, text);
-    }
+	HideToolTip();
+
+	if (showToolTip) {
+		m_tipWindow = new ToolTipWindow(this, text);
+	}
 
 }
 
 void CodeEdit::HideToolTip()
 {
-    if (m_tipWindow != NULL)
-    {
-        m_tipWindow->Destroy();
-        m_tipWindow = NULL;
-    }
+	if (m_tipWindow != NULL) {
+		m_tipWindow->Destroy();
+		m_tipWindow = NULL;
+	}
 }
 
 void CodeEdit::OnMouseLeave(wxMouseEvent& event)
 {
-    HideToolTip();
-    event.Skip();
+	HideToolTip();
+	event.Skip();
 }
 
 void CodeEdit::OnKillFocus(wxFocusEvent& event)
 {
-    AutoCompCancel();
-    HideToolTip();
-    event.Skip();
+	AutoCompCancel();
+	HideToolTip();
+	event.Skip();
 }
 
 void CodeEdit::OnEditKeyDown(wxScintillaEvent& event)
@@ -537,269 +506,262 @@ void CodeEdit::OnEditKeyDown(wxScintillaEvent& event)
 	//得到该位置的字符
 	int cnt = 0;
 	//计算偶数位
-	while (GetCharAt(pos) > 128){
+	while (GetCharAt(pos) > 128) {
 		--pos;
-		if(pos < 0){
+		if (pos < 0) {
 			break;
 		}
 		++cnt;
 	}
-	if(cnt != 0 && cnt % 2 == 0){
+	if (cnt != 0 && cnt % 2 == 0) {
 		SetAnchor(GetAnchor() - 1);
 		SetCurrentPos(GetCurrentPos() - 1);
 	}
 }
 
+static int indentCount(const char * lastLine){
+	int cnt = 0;
+	const char * s = lastLine;
+	while (*s) {
+		char c = *s++;
+		if (c == '(' || c == '\t') {
+			++cnt;
+		}else if (c == ')') {
+			--cnt;
+		}
+	}
+
+	if (strstr(lastLine, "function")) {
+		++cnt;
+	}
+	if (strstr(lastLine, " then") ) {
+		++cnt;
+	}
+	if (strstr(lastLine, " do")) {
+		++cnt;
+	}
+	return cnt;
+}
+
 void CodeEdit::OnCharAdded(wxScintillaEvent& event)
 {
+	char ch = event.GetKey();
 
-    // Indent the line to the same indentation as the previous line.
-    // Adapted from http://scintilla.sourceforge.net/ScintillaUsage.html
+	if (ch == '\n') {
+		int line = GetCurrentLine();
+		int lineLength = LineLength(line);
 
-    char ch = event.GetKey();
+		if (line > 0 && lineLength <= 2) {
+			wxString buffer = GetLine(line - 1);
+			int cnt = indentCount(buffer);
 
-    if  (ch == wxT('\r') || ch == '\n')
-    {
+			for (unsigned int i = 0; i < cnt; ++i) {
+				AddText("\t");
+			}
+		}
+	} else if (m_enableAutoComplete && m_autoCompleteManager != NULL) {
 
-        int line        = GetCurrentLine();
-        int lineLength  = LineLength(line);
+		// Handle auto completion.
 
-        if (line > 0 && lineLength <= 2)
-        {
+		wxString token;
 
-            wxString buffer = GetLine(line - 1);
-                
-            for (unsigned int i =  0; i < buffer.Length();  ++i)
-            {
-                if (buffer[i] != ' ' && buffer[i] != '\t')
-                {
-                    buffer.Truncate(i);
-                    break;
-                }
-            }
+		if (GetTokenFromPosition(GetCurrentPos() - 1, ".:", token)) {
+			StartAutoCompletion(token);
+		}
 
-            ReplaceSelection(buffer);
-            
-            // Remember that we just auto-indented so that the backspace
-            // key will un-autoindent us.
-            m_autoIndented = true;
-            
-        }
-        
-    }
-    else if (m_enableAutoComplete && m_autoCompleteManager != NULL)
-    {
+	}
 
-        // Handle auto completion.
-
-        wxString token;
-        
-        if (GetTokenFromPosition(GetCurrentPos() - 1, ".:", token))
-        {
-            StartAutoCompletion(token);
-        }
-
-    }
-
-    event.Skip();
+	event.Skip();
 
 }
 
 void CodeEdit::OnChange(wxScintillaEvent& event)
 {
-    m_lineMappingDirty = true;
-    event.Skip();
+	m_lineMappingDirty = true;
+	event.Skip();
 }
 
 void CodeEdit::OnModified(wxScintillaEvent& event)
 {
-    
-    event.Skip();    
 
-    int linesAdded = event.GetLinesAdded();
-        
-    // If we're inserting new lines before a line, so we need to move the
-    // markers down. Scintilla doesn't do this automatically for the current line.
+	event.Skip();
 
-    if (linesAdded > 0)
-    {
-    
-        unsigned int position = event.GetPosition();
-    
-        unsigned int line = LineFromPosition(position);
-        unsigned int lineStartPosition = PositionFromLine(line);
+	int linesAdded = event.GetLinesAdded();
 
-        if (position == lineStartPosition)
-        {
-            
-            int markers = MarkerGet(line);
+	// If we're inserting new lines before a line, so we need to move the
+	// markers down. Scintilla doesn't do this automatically for the current line.
 
-            // Delete all of the markers from the line.
-            for (int i = 0; i < 32; ++i)
-            {
-                MarkerDelete(line, i);
-            }
+	if (linesAdded > 0) {
 
-            // Add the markers back on the new line.
-            MarkerAddSet(line + linesAdded, markers);
+		unsigned int position = event.GetPosition();
 
-        }
+		unsigned int line = LineFromPosition(position);
+		unsigned int lineStartPosition = PositionFromLine(line);
 
-    }    
+		if (position == lineStartPosition) {
+
+			int markers = MarkerGet(line);
+
+			// Delete all of the markers from the line.
+			for (int i = 0; i < 32; ++i) {
+				MarkerDelete(line, i);
+			}
+
+			// Add the markers back on the new line.
+			MarkerAddSet(line + linesAdded, markers);
+
+		}
+
+	}
 
 }
 
 bool CodeEdit::GetTokenFromPosition(int position, const wxString& joiners, wxString& token)
 {
 
-    if (position != -1)
-    {
-       
-        // Search the text.
+	if (position != -1) {
 
-        int line = LineFromPosition(position);
-        int seek = position - PositionFromLine(line);
+		// Search the text.
 
-        wxString text = GetLine(LineFromPosition(position));
+		int line = LineFromPosition(position);
+		int seek = position - PositionFromLine(line);
 
-        if (!isalnum((unsigned char)text[seek]) && joiners.Find(text[seek]) == wxNOT_FOUND)
-        {
-            return false;
-        }
-        
-        // Search from the seek point to the left until we hit a non-alphanumeric which isn't a "."
-        // "." must be handled specially so that expressions like player.health are easy to evaluate. 
+		wxString text = GetLine(LineFromPosition(position));
 
-        int start = seek;
+		if (!isalnum((unsigned char)text[seek]) && joiners.Find(text[seek]) == wxNOT_FOUND) {
+			return false;
+		}
 
-        while (start > 0 && (GetIsIdentifierChar(text[start - 1]) || joiners.Find(text[start - 1]) != wxNOT_FOUND))
-        {
-            --start;
-        }
+		// Search from the seek point to the left until we hit a non-alphanumeric which isn't a "."
+		// "." must be handled specially so that expressions like player.health are easy to evaluate. 
 
-        // Search from the seek point to the right until we hit a non-alphanumeric
+		int start = seek;
 
-        unsigned int end = seek;
+		while (start > 0 && (GetIsIdentifierChar(text[start - 1]) || joiners.Find(text[start - 1]) != wxNOT_FOUND)) {
+			--start;
+		}
 
-        while (end + 1 < text.Length() && GetIsIdentifierChar(text[end + 1]))
-        {
-            ++end;
-        }
+		// Search from the seek point to the right until we hit a non-alphanumeric
 
-        token = text.SubString(start, end);
-        return true;
+		unsigned int end = seek;
 
-    }
+		while (end + 1 < text.Length() && GetIsIdentifierChar(text[end + 1])) {
+			++end;
+		}
 
-    return false;
+		token = text.SubString(start, end);
+		return true;
+
+	}
+
+	return false;
 
 }
 
 void CodeEdit::StartAutoCompletion(const wxString& token)
 {
 
-    wxASSERT(m_autoCompleteManager != NULL);
+	wxASSERT(m_autoCompleteManager != NULL);
 
-    wxString items;
+	wxString items;
 
-    // Get the actual prefix of the thing we're trying to match for autocompletion.
-    // If the token refers to a member, the prefix is the member name.
+	// Get the actual prefix of the thing we're trying to match for autocompletion.
+	// If the token refers to a member, the prefix is the member name.
 
-    wxString prefix;
+	wxString prefix;
 	wxString module;
 
-    bool member = false;
+	bool member = false;
 
-    if (GetLexer() == wxSCI_LEX_LUA)
-    {
+	if (GetLexer() == wxSCI_LEX_LUA) {
 
-        int end1 = token.Find('.', true);
+		int end1 = token.Find('.', true);
 
-        if (end1 == wxNOT_FOUND)
-        {
-            end1 = 0;
-        }
-        else
-        {
-            // Skip the '.' character.
-            ++end1;
-            member = true;
-        }
-
-        int end2 = token.Find(':', true);
-
-        if (end2 == wxNOT_FOUND)
-        {
-            end2 = 0;
-        }
-        else
-        {
-            // Skip the ':' character.
-            ++end2;
-            member = true;
-        }
-
-        int end = std::max(end1, end2);
-		if(end != 0){
-			module = token.Left(end-1);
+		if (end1 == wxNOT_FOUND) {
+			end1 = 0;
+		} else {
+			// Skip the '.' character.
+			++end1;
+			member = true;
 		}
-        prefix = token.Right( token.Length() - end );
 
-    }
-    else
-    {
-        // No autocompletion when using the default lexer.
-        return;
-    }
+		int end2 = token.Find(':', true);
 
-    if (!member && prefix.Length() < m_minAutoCompleteLength)
-    {
-        // Don't pop up the auto completion if the user hasn't typed in very
-        // much yet.
-        return;
-    }
+		if (end2 == wxNOT_FOUND) {
+			end2 = 0;
+		} else {
+			// Skip the ':' character.
+			++end2;
+			member = true;
+		}
 
-    m_autoCompleteManager->GetMatchingItems(module, prefix, member, items);
-    
-    if (!AutoCompActive() || m_autoCompleteItems != items)
-    {
+		int end = std::max(end1, end2);
+		if (end != 0) {
+			module = token.Left(end - 1);
+		}
+		prefix = token.Right(token.Length() - end);
 
-        // Remember the items in the list so that we don't redisplay the list
-        // with the same set of items (reduces flickering).
-        m_autoCompleteItems = items;
+	} else {
+		// No autocompletion when using the default lexer.
+		return;
+	}
 
-        if (!items.IsEmpty())
-        {
-            // Show the autocomplete selection list.
-            AutoCompShow(prefix.Length(), items);
-        }
-        else
-        {
-            // We have no matching items, so hide the autocompletion selection.
-            AutoCompCancel();
-        }
+	if (!member && prefix.Length() < m_minAutoCompleteLength) {
+		// Don't pop up the auto completion if the user hasn't typed in very
+		// much yet.
+		return;
+	}
 
-    }
+	m_autoCompleteManager->GetMatchingItems(module, prefix, member, items);
+
+	if (!AutoCompActive() || m_autoCompleteItems != items) {
+
+		// Remember the items in the list so that we don't redisplay the list
+		// with the same set of items (reduces flickering).
+		m_autoCompleteItems = items;
+
+		if (!items.IsEmpty()) {
+			// Show the autocomplete selection list.
+			AutoCompShow(prefix.Length(), items);
+		} else {
+			// We have no matching items, so hide the autocompletion selection.
+			AutoCompCancel();
+		}
+
+	}
 
 }
 
 bool CodeEdit::GetIsLineMappingDirty() const
 {
-    return m_lineMappingDirty;
+	return m_lineMappingDirty;
 }
 
 void CodeEdit::SetIsLineMappingDirty(bool lineMappingDirty)
 {
-    m_lineMappingDirty = lineMappingDirty;
+	m_lineMappingDirty = lineMappingDirty;
 }
 
 wxColor CodeEdit::GetInverse(const wxColor& color)
 {
 
-    unsigned char r = color.Red();
-    unsigned char g = color.Green();
-    unsigned char b = color.Blue();
+	unsigned char r = color.Red();
+	unsigned char g = color.Green();
+	unsigned char b = color.Blue();
 
-    return wxColor( r ^ 0xFF, g ^ 0xFF, b ^ 0xFF );
+	return wxColor(r ^ 0xFF, g ^ 0xFF, b ^ 0xFF);
 
+}
+
+void CodeEdit::formatCode()
+{
+	int pos = this->GetCurrentPos();
+	wxString & str = this->GetText();
+	int len = this->GetTextLength();
+	char * fstr = lua_format(str, &len);
+	str = wxString(fstr, len);
+	this->SetText(fstr);
+	this->SetCurrentPos(pos);
+	this->SetAnchor(pos);
+	delete[] fstr;
 }

@@ -31,7 +31,7 @@ local function initLuaStack()
 end
 
 local function main()
-	switch_console()
+	--switch_console()
 	initLuaStack()
 	refresh(nil)
 	--

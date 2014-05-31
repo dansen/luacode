@@ -1270,14 +1270,9 @@ void MainFrame::OnEditInsertBeforeLine(wxCommandEvent& event)
 	edit->EnsureCaretVisible();
 	edit->SetCurrentPos(pos);
 	edit->AddText("\n");
-	if(pos == 0){
-		edit->SetCurrentPos(pos);
-		edit->SetAnchor(pos);
-	}else{
-		edit->SetCurrentPos(pos + 1);
-		edit->SetAnchor(pos+1);
-	}
-	
+	wxScintillaEvent ev;
+	ev.SetKey('\n');
+	edit->OnCharAdded(ev);
 }
 
 void MainFrame::OnEditInsertAfterLine(wxCommandEvent& event)
@@ -1296,8 +1291,9 @@ void MainFrame::OnEditInsertAfterLine(wxCommandEvent& event)
 	edit->EnsureCaretVisible();
 	edit->SetCurrentPos(pos);
 	edit->AddText("\n");
-	edit->SetCurrentPos(pos+1);
-	edit->SetAnchor(pos + 1);
+	wxScintillaEvent ev;
+	ev.SetKey('\n');
+	edit->OnCharAdded(ev);
 }
 
 void MainFrame::OnEditUncomment(wxCommandEvent& event)
@@ -5640,12 +5636,7 @@ void MainFrame::OnEditFormatLua(wxCommandEvent& event)
 		return;
 	}
 	CodeEdit* edit = m_openFiles[pageIndex]->edit;
-	wxString & str = edit->GetText();
-	int len = edit->GetTextLength();
-	char * fstr = lua_format(str, &len);
-	str = wxString(fstr, len);
-	edit->SetText(fstr);
-	delete[] fstr;
+	edit->formatCode();
 }
 
 void MainFrame::OnEditGotoFile(wxCommandEvent& event)

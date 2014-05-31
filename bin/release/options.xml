@@ -196,6 +196,10 @@
       <key>Ctrl+P</key>
     </command>
     <command>
+      <id>93</id>
+      <key>Ctrl+Alt+F</key>
+    </command>
+    <command>
       <id>44</id>
       <key>Ctrl+Shift+A</key>
     </command>
@@ -277,7 +281,7 @@
     </command>
   </keybindings>
   <recent_files>
-    <file1></file1>
+    <file1>C:\Users\Savic\Desktop\untitled.lua</file1>
     <file2></file2>
     <file3></file3>
     <file4></file4>
@@ -298,6 +302,7 @@
     <file8></file8>
     <file9></file9>
   </recent_projects>
+  <last_project_loaded>D:\github\luacode\bin\luacode.deproj</last_project_loaded>
   <find_directories>
     <file1></file1>
     <file2></file2>

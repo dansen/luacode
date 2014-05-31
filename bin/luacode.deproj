@@ -10,9 +10,6 @@
     <filename>res\lua\init.lua</filename>
   </file>
   <file>
-    <filename>res\lua\util\json.lua</filename>
-  </file>
-  <file>
     <filename>res\lua\util\logger.lua</filename>
   </file>
   <file>

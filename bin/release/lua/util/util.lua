@@ -2,7 +2,6 @@ dofile("util/string.lua")
 dofile("util/table.lua")
 dofile("util/utf8.lua")
 dofile("util/logger.lua")
-dofile("util/json.lua")
 dofile("util/enum.lua")
 dofile("util/math.lua")
 
@@ -21,4 +20,3 @@ function codeedit(userdata)
 end
 
 refresh()
-

@@ -1,9 +1,9 @@
-dofile = function ( path )
+dofile = function (path)
 	ScriptManager:sharedMgr():dofile(path)
 end
 
 --三元函数
-function ternary( cond, t, f )
+function ternary(cond, t, f)
 	if cond then return t else return f end
 end
 
@@ -15,24 +15,24 @@ end
 --重写traceback函数
 function __G__TRACKBACK__(msg)
 	local traceback = debug.traceback()
-    logger.error(msg.."\n"..traceback)
+	logger.error(msg.."\n"..traceback)
 end
- 
+
 function keyboard_Pressed(key)
 	
 end
 
 local function initLuaStack()
 	-- avoid memory leak
-    collectgarbage("setpause", 100)
-    collectgarbage("setstepmul", 5000)
+	collectgarbage("setpause", 100)
+	collectgarbage("setstepmul", 5000)
 	--for random  
-	math.randomseed(tonumber(tostring(os.time()):reverse():sub(1,6)))
+	math.randomseed(tonumber(tostring(os.time()):reverse():sub(1, 6)))
 end
 
 local function main()
 	--switch_console()
-	initLuaStack() 
+	initLuaStack()
 	refresh(nil)
 	--
 	logger.info("lua系统启动完成!")

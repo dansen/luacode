@@ -14,3 +14,8 @@ function SetLuaLexer(edit)
 	local innerFunction = [[module print dofile collectgarbage]]
 	edit:SetKeyWords(KeywordType.KeywordInnerFuntion, innerFunction)
 end
+
+local function helloworld()
+	local a = 1
+	
+end
