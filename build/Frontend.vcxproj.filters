@@ -455,6 +455,9 @@
     <ClCompile Include="..\src\Frontend\base\Singleton.cpp">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Frontend\base\luaformat.c">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\Frontend\Decoda.rc">

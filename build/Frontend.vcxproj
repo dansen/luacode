@@ -189,6 +189,7 @@
     </ClCompile>
     <ClCompile Include="..\src\Frontend\AutoCompleteManager.cpp">
     </ClCompile>
+    <ClCompile Include="..\src\Frontend\base\luaformat.c" />
     <ClCompile Include="..\src\Frontend\base\Singleton.cpp" />
     <ClCompile Include="..\src\Frontend\BreakpointsWindow.cpp">
     </ClCompile>

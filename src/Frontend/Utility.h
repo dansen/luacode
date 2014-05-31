@@ -9,6 +9,7 @@ extern int isseq(const char * p, const char * c);
 extern int isseq_ignorecase(const char * p, const char * c);
 extern void switch_console();
 extern void color_print(const char * s, int color);
+extern char * lua_format(const char * buf, int * len);
 
 #ifdef __cplusplus
 } 

@@ -139,6 +139,9 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	//转到某个文件
 	EVT_MENU(ID_GotoFile, MainFrame::OnEditGotoFile)
 
+	EVT_MENU(ID_FormatLua, MainFrame::OnEditFormatLua)
+	EVT_UPDATE_UI(ID_FormatLua, MainFrame::EnableWhenFileIsOpen)
+
     // Project menu events.
     EVT_MENU(ID_ProjectAddExistingFile,             MainFrame::OnProjectAddExistingFile)
     EVT_MENU(ID_ProjectAddNewFile,                  MainFrame::OnProjectAddNewFile)
@@ -632,6 +635,7 @@ void MainFrame::InitializeMenu()
 	menuEdit->Append(ID_EditInsertBeforeLine, _("&Insert Before Line"));
 	menuEdit->Append(ID_EditInsertAfterLine, _("&Insert After Line"));
 	menuEdit->Append(ID_GotoFile, _("&GoTo File ..."));
+	menuEdit->Append(ID_FormatLua, _("&Lua Format ..."));
     // Project menu.
 
     wxMenu* menuRecentProjects = new wxMenu;
@@ -5626,6 +5630,21 @@ void MainFrame::EnableWhenFileIsOpen(wxUpdateUIEvent& event)
 {
     int pageIndex = GetSelectedPage();
     event.Enable(pageIndex != -1);
+}
+
+void MainFrame::OnEditFormatLua(wxCommandEvent& event)
+{
+	int pageIndex = GetSelectedPage();
+
+	if (pageIndex == -1) {
+		return;
+	}
+	CodeEdit* edit = m_openFiles[pageIndex]->edit;
+	wxString & str = edit->GetText();
+	int len = edit->GetTextLength();
+	char * fstr = lua_format(str, &len);
+	edit->SetText(fstr);
+	delete[] fstr;
 }
 
 void MainFrame::OnEditGotoFile(wxCommandEvent& event)
