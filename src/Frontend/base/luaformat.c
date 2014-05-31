@@ -205,6 +205,7 @@ static const string * lex(FormatState * fs){
 				next();
 				return readstring(fs);
 			}
+			return readpunct(fs);
 		}
 		else if (ispunct(c)){ //±êµã
 			return readpunct(fs);
@@ -217,6 +218,7 @@ static const string * lex(FormatState * fs){
 		else {
 			assert(0);
 		}
+		
 	}
 	return 0;
 }
@@ -281,7 +283,9 @@ char * lua_format(const char * buf, int * len){
 		if (!token){
 			break;
 		}
-
+		if (token->len > 100) {
+			printf("%d \n", token->len);
+		}
 		if (token->len == 0){
 			continue;
 		}
