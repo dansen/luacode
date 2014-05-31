@@ -2,8 +2,6 @@ local this = nil
 local npcCards = {}
 local mycards = {}
 --链条分层
-
---接口
 function nextLoop()
 	if FightSystem.getState() == STATE.LOOPING then
 		return
