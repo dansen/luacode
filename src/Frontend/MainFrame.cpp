@@ -5643,6 +5643,7 @@ void MainFrame::OnEditFormatLua(wxCommandEvent& event)
 	wxString & str = edit->GetText();
 	int len = edit->GetTextLength();
 	char * fstr = lua_format(str, &len);
+	str = wxString(fstr, len);
 	edit->SetText(fstr);
 	delete[] fstr;
 }

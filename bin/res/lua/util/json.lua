@@ -63,53 +63,53 @@ local isEncodable
 --- Encodes an arbitrary Lua object / variable.
 -- @param v The Lua object / variable to be JSON encoded.
 -- @return String containing the JSON encoding in internal Lua string format (i.e. not unicode)
-function encode (v)
-  -- Handle nil values
-  if v==nil then
-    return "null"
-  end
-  
-  local vtype = base.type(v)  
-
-  -- Handle strings
-  if vtype=='string' then    
-    return '"' .. encodeString(v) .. '"'	    -- Need to handle encoding in string
-  end
-  
-  -- Handle booleans
-  if vtype=='number' or vtype=='boolean' then
-    return base.tostring(v)
-  end
-  
-  -- Handle tables
-  if vtype=='table' then
-    local rval = {}
-    -- Consider arrays separately
-    local bArray, maxCount = isArray(v)
-    if bArray then
-      for i = 1,maxCount do
-        table.insert(rval, encode(v[i]))
-      end
-    else	-- An object, not an array
-      for i,j in base.pairs(v) do
-        if isEncodable(i) and isEncodable(j) then
-          table.insert(rval, '"' .. encodeString(i) .. '":' .. encode(j))
-        end
-      end
-    end
-    if bArray then
-      return '[' .. table.concat(rval,',') ..']'
-    else
-      return '{' .. table.concat(rval,',') .. '}'
-    end
-  end
-  
-  -- Handle null values
-  if vtype=='function' and v==null then
-    return 'null'
-  end
-  
-  base.assert(false,'encode attempt to encode unsupported type ' .. vtype .. ':' .. base.tostring(v))
+function encode(v)
+	-- Handle nil values
+	if v == nil then 
+		return "null"
+	end
+	
+	local vtype = base.type(v)
+	
+	-- Handle strings
+	if vtype == 'string' then 
+		return '"'..encodeString(v)..'"'-- Need to handle encoding in string
+	end
+	
+	-- Handle booleans
+	if vtype == 'number' or vtype == 'boolean' then 
+		return base.tostring(v)
+	end
+	
+	-- Handle tables
+	if vtype == 'table' then 
+		local rval = {}
+		-- Consider arrays separately
+		local bArray, maxCount = isArray(v)
+		if bArray then 
+			for i = 1, maxCount do 
+				table.insert(rval, encode(v[i]))
+			end
+		else -- An object, not an array
+			for i, j in base.pairs(v) do 
+				if isEncodable(i) and isEncodable(j) then 
+					table.insert(rval, '"'..encodeString(i)..'":'..encode(j))
+				end
+			end
+		end
+		if bArray then 
+			return '['..table.concat(rval, ',')..']'
+		else 
+			return '{'..table.concat(rval, ',')..'}'
+		end
+	end
+	
+	-- Handle null values
+	if vtype == 'function' and v == null then 
+		return 'null'
+	end
+	
+	base.assert(false, 'encode attempt to encode unsupported type '..vtype..':'..base.tostring(v))
 end
 
 
@@ -125,7 +125,7 @@ end
 --- The null function allows one to specify a null value in an associative array (which is otherwise
 -- discarded if you set the value with 'nil' in Lua. Simply set t = { first=json.null }
 function null()
-  return null -- so json.null() will also return null ;-)
+	return null-- so json.null() will also return null ;-)
 end
 
 -----------------------------------------------------------------------------
@@ -136,163 +136,163 @@ end
 -- This just involves back-quoting inverted commas, back-quotes and newlines, I think ;-)
 -- @param s The string to return as a JSON encoded (i.e. backquoted string)
 -- @return The string appropriately escaped.
-local qrep = {["\\"]="\\\\", ['"']='\\"',['\r']='\\r',['\n']='\\n',['\t']='\\t'}
+local qrep = {["\\"]=" \  \  \  \ ", ['"']=' \  \ "',['\r']='\\r',['\n']='\\n',['\t']='\\t'}
 function encodeString(s)
-  return tostring(s):gsub('["\\\r\n\t]',qrep)
+  return tostring(s):gsub('[" \  \  \ r \ n \ t]',qrep)
 end
 
 -- Determines whether the given Lua type is an array or a table / dictionary.
 -- We consider any table an array if it has indexes 1..n for its n items, and no
 -- other data in the table.
--- I think this method is currently a little 'flaky', but can't think of a good way around it yet...
+-- I think this method is currently a little 'flaky', but can'tthinkofagoodwayaroundityet...
 -- @param t The table to evaluate as an array
 -- @return boolean, number True if the table can be represented as an array, false otherwise. If true,
 -- the second returned value is the maximum
 -- number of indexed elements in the array. 
 function isArray(t)
-  -- Next we count all the elements, ensuring that any non-indexed elements are not-encodable 
-  -- (with the possible exception of 'n')
-  local maxIndex = 0
-  for k,v in base.pairs(t) do
-    if (base.type(k)=='number' and math.floor(k)==k and 1<=k) then	-- k,v is an indexed pair
-      if (not isEncodable(v)) then return false end	-- All array elements must be encodable
-      maxIndex = math.max(maxIndex,k)
-    else
-      if (k=='n') then
-        if v ~= table.getn(t) then return false end  -- False if n does not hold the number of elements
-      else -- Else of (k=='n')
-        if isEncodable(v) then return false end
-      end  -- End of (k~='n')
-    end -- End of k,v not an indexed pair
-  end  -- End of loop across all pairs
-  return true, maxIndex
-end
-
---- Determines whether the given Lua object / table / variable can be JSON encoded. The only
--- types that are JSON encodable are: string, boolean, number, nil, table and json.null.
--- In this implementation, all other types are ignored.
--- @param o The object to examine.
--- @return boolean True if the object should be JSON encoded, false if it should be ignored.
-function isEncodable(o)
-  local t = base.type(o)
-  return (t=='string' or t=='boolean' or t=='number' or t=='nil' or t=='table') or (t=='function' and o==null) 
-end
-
--- Radical performance improvement for decode from Eike Decker!
-do
-	local type = base.type
-	local error = base.print--base.error
-	local assert = base.assert
-	local print = base.print
-	local tonumber = base.tonumber
-	-- initialize some values to be used in decoding function
-	
-	-- initializes a table to contain a byte=>table mapping
-	-- the table contains tokens (byte values) as keys and maps them on other
-	-- token tables (mostly, the boolean value 'true' is used to indicate termination
-	-- of a token sequence)
-	-- the token table's purpose is, that it allows scanning a sequence of bytes
-	-- until something interesting has been found (e.g. a token that is not expected)
-	-- name is a descriptor for the table to be printed in error messages
-	local function init_token_table (tt)
-		local struct = {}
-		local value
-		function struct:link(other_tt)
-			value = other_tt
-			return struct
+	-- Next we count all the elements, ensuring that any non-indexed elements are not-encodable 
+	-- (with the possible exception of 'n')
+	local maxIndex = 0
+	for k, v in base.pairs(t) do 
+		if (base.type(k )== 'number' and math.floor(k )== k and 1 <= k) then -- k,v is an indexed pair
+					if (notisEncodable(v)) then return false end-- All array elements must be encodable
+					maxIndex = math.max(maxIndex, k)
+				else 
+					if (k == 'n') then 
+						if v ~= table.getn(t) then return false end-- False if n does not hold the number of elements
+					else -- Else of (k=='n')
+						if isEncodable(v) then return false end
+					end-- End of (k~='n')
+				end-- End of k,v not an indexed pair
+			end-- End of loop across all pairs
+			return true, maxIndex
 		end
-		function struct:to(chars)
-			for i=1,#chars do 
-				tt[chars:byte(i)] = value
+		
+		--- Determines whether the given Lua object / table / variable can be JSON encoded. The only
+		-- types that are JSON encodable are: string, boolean, number, nil, table and json.null.
+		-- In this implementation, all other types are ignored.
+		-- @param o The object to examine.
+		-- @return boolean True if the object should be JSON encoded, false if it should be ignored.
+		function isEncodable(o)
+			local t = base.type(o)
+			return (t == 'string' or t == 'boolean' or t == 'number' or t == 'nil' or t == 'table') or (t == 'function' and o == null)
+		end
+		
+		-- Radical performance improvement for decode from Eike Decker!
+		 do 
+			local type = base.type
+			local error = base.print--base.error
+			local assert = base.assert
+			local print = base.print
+			local tonumber = base.tonumber
+			-- initialize some values to be used in decoding function
+			
+			-- initializes a table to contain a byte=>table mapping
+			-- the table contains tokens (byte values) as keys and maps them on other
+			-- token tables (mostly, the boolean value 'true' is used to indicate termination
+			-- of a token sequence)
+			-- the token table's purpose is, that it allows scanning a sequence of bytes
+			-- until something interesting has been found (e.g. a token that is not expected)
+			-- name is a descriptor for the table to be printed in error messages
+			local function init_token_table(tt)
+				local struct = {}
+				local value
+				function struct:link(other_tt)
+					value = other_tt
+					return struct
+				end
+				function struct:to(chars)
+					for i = 1, #chars do 
+						tt[chars:byte(i)] = value
+					end
+					return struct
+				end
+				return function (name)
+					tt.name = name
+					return struct
+				end
 			end
-			return struct
-		end
-		return function (name)
-			tt.name = name
-			return struct
-		end
-	end
-	
-	-- keep "named" byte values at hands
-	local 
-		c_esc,
-		c_e,
-		c_l,
-		c_r,
-		c_u,
-		c_f,
-		c_a,
-		c_s,
-		c_slash = ("\\elrufas/"):byte(1,9)
-	
-	-- token tables - tt_doublequote_string = strDoubleQuot, tt_singlequote_string = strSingleQuot
-	local 
-		tt_object_key,
-		tt_object_colon,
-		tt_object_value,
-		tt_doublequote_string,
-		tt_singlequote_string,
-		tt_array_value,
-		tt_array_seperator,
-		tt_numeric,
-		tt_boolean,
-		tt_null,
-		tt_comment_start,
-		tt_comment_middle,
-		tt_ignore --< tt_ignore is special - marked tokens will be tt_ignored
-			= {},{},{},{},{},{},{},{},{},{},{},{},{}
-	
-	-- strings to be used in certain token tables
-	local strchars = "" -- all valid string characters (all except newlines)
-	local allchars = "" -- all characters that are valid in comments
-	--local escapechar = {}
-	for i=0,0xff do 
-		local c = string.char(i)
-		if c~="\n" and c~="\r" then strchars = strchars .. c end
-		allchars = allchars .. c
-		--escapechar[i] = "\\" .. string.char(i)
-	end
-	
---[[	
+			
+			-- keep "named" byte values at hands
+			local 
+			c_esc, 
+			c_e, 
+			c_l, 
+			c_r, 
+			c_u, 
+			c_f, 
+			c_a, 
+			c_s, 
+			c_slash = ("\\elrufas/"):byte(1, 9)
+			
+			-- token tables - tt_doublequote_string = strDoubleQuot, tt_singlequote_string = strSingleQuot
+			local 
+			tt_object_key, 
+			tt_object_colon, 
+			tt_object_value, 
+			tt_doublequote_string, 
+			tt_singlequote_string, 
+			tt_array_value, 
+			tt_array_seperator, 
+			tt_numeric, 
+			tt_boolean, 
+			tt_null, 
+			tt_comment_start, 
+			tt_comment_middle, 
+			tt_ignore--< tt_ignore is special - marked tokens will be tt_ignored
+			 = {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+			
+			-- strings to be used in certain token tables
+			local strchars = ""-- all valid string characters (all except newlines)
+			local allchars = ""-- all characters that are valid in comments
+			--local escapechar = {}
+			for i = 0, 0xff do 
+				local c = string.char(i)
+				if c ~= "\n" and c ~= "\r" then strchars = strchars..c end
+				allchars = allchars..c
+				--escapechar[i] = "\\" .. string.char(i)
+			end
+			
+			--[[	
 	charstounescape = "\"\'\\bfnrt/";
 	unescapechars = "\"'\\\b\f\n\r\t\/";
 	for i=1,#charstounescape do
 		escapechar[ charstounescape:byte(i) ] = unescapechars:sub(i,i)
 	end
 ]]--
-
-	-- obj key reader, expects the end of the object or a quoted string as key
-	init_token_table (tt_object_key) "object (' or \" or } or , expected)" 
-		:link(tt_singlequote_string) :to "'"
-		:link(tt_doublequote_string) :to '"'
-		:link(true)                  :to "}"
-		:link(tt_object_key)         :to ","
-		:link(tt_comment_start)      :to "/"
-		:link(tt_ignore)             :to " \t\r\n"
-	
-	
-	-- after the key, a colon is expected (or comment)
-	init_token_table (tt_object_colon) "object (: expected)" 
-		:link(tt_object_value)       :to ":"  
-		:link(tt_comment_start)      :to "/" 
-		:link(tt_ignore)             :to" \t\r\n"
-		
-	-- as values, anything is possible, numbers, arrays, objects, boolean, null, strings
-	init_token_table (tt_object_value) "object ({ or [ or ' or \" or number or boolean or null expected)"
-		:link(tt_object_key)         :to "{" 
-		:link(tt_array_seperator)    :to "[" 
-		:link(tt_singlequote_string) :to "'" 
-		:link(tt_doublequote_string) :to '"' 
-		:link(tt_numeric)            :to "0123456789.-" 
-		:link(tt_boolean)            :to "tf" 
-		:link(tt_null)               :to "n" 
-		:link(tt_comment_start)      :to "/" 
-		:link(tt_ignore)             :to " \t\r\n"
-		
-	-- token tables for reading strings
-	init_token_table (tt_doublequote_string) "double quoted string"
-		:link(tt_ignore)             :to (strchars)
-		:link(c_esc)                 :to "\\"
+			
+			-- obj key reader, expects the end of the object or a quoted string as key
+			init_token_table(tt_object_key)"object (' or \" or } or , expected)"
+			:link(tt_singlequote_string):to"'"
+			:link(tt_doublequote_string):to'"'
+			:link(true):to"}"
+			:link(tt_object_key):to","
+			:link(tt_comment_start):to"/"
+			:link(tt_ignore):to" \t\r\n"
+			
+			
+			-- after the key, a colon is expected (or comment)
+			init_token_table(tt_object_colon)"object (: expected)"
+			:link(tt_object_value):to":"
+			:link(tt_comment_start):to"/"
+			:link(tt_ignore):to" \t\r\n"
+			
+			-- as values, anything is possible, numbers, arrays, objects, boolean, null, strings
+			init_token_table(tt_object_value)"object ({ or [ or ' or \" or number or boolean or null expected)"
+			:link(tt_object_key):to"{"
+			:link(tt_array_seperator):to"["
+			:link(tt_singlequote_string):to"'"
+			:link(tt_doublequote_string):to'"'
+			:link(tt_numeric):to"0123456789.-"
+			:link(tt_boolean):to"tf"
+			:link(tt_null):to"n"
+			:link(tt_comment_start):to"/"
+			:link(tt_ignore):to" \t\r\n"
+			
+			-- token tables for reading strings
+			init_token_table(tt_doublequote_string)"double quoted string"
+			:link(tt_ignore):to(strchars)
+			:link(c_esc):to"\\"
 		:link(true)                  :to '"'
 		
 	init_token_table (tt_singlequote_string) "single quoted string"
@@ -301,14 +301,14 @@ do
 		:link(true)                  :to "'"
 		
 	-- array reader that expects termination of the array or a comma that indicates the next value
-	init_token_table (tt_array_value) "array (, or ] expected)"
-		:link(tt_array_seperator)    :to "," 
+	init_token_table (tt_array_value) "array(,  or ]expected)"
+		:link(tt_array_seperator)    :to ", " 
 		:link(true)                  :to "]"
-		:link(tt_comment_start)      :to "/" 
-		:link(tt_ignore)             :to " \t\r\n"
+		:link(tt_comment_start)      :to " / " 
+		:link(tt_ignore)             :to " \ t \ r \ n"
 	
 	-- a value, pretty similar to tt_object_value
-	init_token_table (tt_array_seperator) "array ({ or [ or ] or ' or \" or number or boolean or null expected)"
+	init_token_table (tt_array_seperator) "array({ or  or ] or ' or \" or number or boolean or null expected)"
 		:link(tt_object_key)         :to "{" 
 		:link(tt_array_seperator)    :to "[" 
 		:link(tt_singlequote_string) :to "'" 
@@ -518,7 +518,7 @@ do
 			end
 		end
 		
-		-- now let's read data from our string and pretend it's an object value
+		-- now let'sreaddatafromourstring and pretendit's an object value
 		local r = read_object_value()
 		
 		if pos<=#js_string then
@@ -529,3 +529,4 @@ do
 		return r
 	end
 end
+

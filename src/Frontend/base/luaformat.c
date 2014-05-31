@@ -52,6 +52,7 @@ static const string * split(FormatState * fs, FormatType type){
 #define next() fs->buf[++fs->curpos]
 #define back() fs->buf[--fs->curpos]
 #define peek() fs->buf[fs->curpos+1]
+#define lookback() fs->buf[fs->curpos-1]
 
 static const string * readidentifier(FormatState * fs)
 {
@@ -83,7 +84,14 @@ static const string * readstring(FormatState * fs){
 	if (c == '\"') {
 		while (fs->curpos < fs->len) {
 			c = next();
-			if (c == '\"') {
+			if (c == '\"' && lookback() != '\\') {
+				break;
+			}
+		}
+	} else if (c == '\'') {
+		while (fs->curpos < fs->len) {
+			c = next();
+			if (c == '\'' && lookback() != '\\') {
 				break;
 			}
 		}
@@ -190,6 +198,8 @@ static const string * lex(FormatState * fs){
 			return readpunct(fs);
 		} else if (c == '\"') {
 			return readstring(fs);
+		} else if (c == '\'') {
+			return readstring(fs);
 		} else if (c == '[') {
 			if (peek() == '[') {
 				next();
@@ -236,6 +246,22 @@ static int istoken(const string * token, const char * s){
 
 #define ISTOKEN(s) istoken(token, s)
 
+static int isemptyline(FormatStateOut * fso){
+	int pos = fso->curpos-1;
+	
+	while (pos>0) {
+		char * s = fso->outbuf + pos;
+		if (*s == '\n') {
+			break;
+		}
+		if (*s != ' ' && *s != '\t') {
+			return 0;
+		} 
+		--pos;
+	}
+	return 1;
+}
+
 char * lua_format(const char * buf, int * len){
 	FormatState * fs = malloc(sizeof(FormatState));
 	FormatStateOut * fso = malloc(sizeof(FormatStateOut));
@@ -276,7 +302,10 @@ char * lua_format(const char * buf, int * len){
 			} else if (ISTOKEN(")")) {
 				--fs->level;
 				writetoken(fso, token->s, token->len);
-			}else if (ISTOKEN(".") || ISTOKEN(":") || ISTOKEN("{") || ISTOKEN("}") || ISTOKEN("[") || ISTOKEN("]") 
+			} else if (ISTOKEN(",")) {
+				writetoken(fso, token->s, token->len);
+				writetoken(fso, " ", 1);
+			} else if (ISTOKEN(".") || ISTOKEN(":") || ISTOKEN("{") || ISTOKEN("}") || ISTOKEN("[") || ISTOKEN("]")
 				|| ISTOKEN("#") || ISTOKEN(",")) {
 				writetoken(fso, token->s, token->len);
 			} else {
@@ -295,17 +324,31 @@ char * lua_format(const char * buf, int * len){
 			} else if (ISTOKEN("then") || ISTOKEN("do") ) {
 				writetoken(fso, " ", 1);
 				writetoken(fso, token->s, token->len);
+				writetoken(fso, " ", 1);
 				++fs->level;
 			} else if (ISTOKEN("end")) {
-				backtoken(fso, 1);
+				if (isemptyline(fso)) {
+					backtoken(fso, 1);
+				} else {
+					writetoken(fso, " ", 1);
+				}
+				
 				writetoken(fso, token->s, token->len);
 				--fs->level;
 			} else if (ISTOKEN("else")) {
-				backtoken(fso, 1);
+				if (isemptyline(fso)) {
+					backtoken(fso, 1);
+				} else {
+					writetoken(fso, " ", 1);
+				}
 				writetoken(fso, token->s, token->len);
 				writetoken(fso, " ", 1);
 			} else if (ISTOKEN("elseif")) {
-				backtoken(fso, 1);
+				if (isemptyline(fso)) {
+					backtoken(fso, 1);
+				} else {
+					writetoken(fso, " ", 1);
+				}
 				writetoken(fso, token->s, token->len);
 				writetoken(fso, " ", 1);
 				--fs->level;
@@ -313,18 +356,13 @@ char * lua_format(const char * buf, int * len){
 				writetoken(fso, " ", 1);
 				writetoken(fso, token->s, token->len);
 				writetoken(fso, " ", 1);
-			} else if (ISTOKEN("function")) {
-
-			} else if (ISTOKEN("function")) {
-
-			} else if (ISTOKEN("function")) {
-
-			} else {
+			}else {
 				writetoken(fso, token->s, token->len);
 			}
 		}
 	}
 	*len = fso->curpos;
+	fso->outbuf[*len] = 0;
 	return fso->outbuf;
 }
 
