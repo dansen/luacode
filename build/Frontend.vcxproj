@@ -107,10 +107,14 @@
       <OutputFile>$(OutDir)Decoda.exe</OutputFile>
       <AdditionalLibraryDirectories>..\bin\release;..\libs\wxWidgets\lib\vc_lib;..\libs\wxScintilla\lib;..\libs\Update\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /Q /E "..\\bin\\res" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Frontend\AboutDialog.h" />
     <ClInclude Include="..\src\Frontend\AutoCompleteManager.h" />
+    <ClInclude Include="..\src\Frontend\base\Singleton.h" />
     <ClInclude Include="..\src\Frontend\Bitmaps.h" />
     <ClInclude Include="..\src\Frontend\BreakpointsWindow.h" />
     <ClInclude Include="..\src\Frontend\ButtonBar.h" />
@@ -185,6 +189,7 @@
     </ClCompile>
     <ClCompile Include="..\src\Frontend\AutoCompleteManager.cpp">
     </ClCompile>
+    <ClCompile Include="..\src\Frontend\base\Singleton.cpp" />
     <ClCompile Include="..\src\Frontend\BreakpointsWindow.cpp">
     </ClCompile>
     <ClCompile Include="..\src\Frontend\ButtonBar.cpp">

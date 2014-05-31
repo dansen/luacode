@@ -368,6 +368,7 @@ public:
      */
     void OnToolsSettings(wxCommandEvent& event);
 
+	void onRefreshLua(wxCommandEvent& event);
     /**
      * Called when the user selects Tools/External Tools from the menu.
      */
@@ -1451,7 +1452,6 @@ private:
         ID_DebugProcess                     = 66,
         // 67 was help/register
         ID_EditFindPrevious                 = 68,
-
         ID_NotebookTabCheckOut              = 69,
         ID_NotebookTabCheckIn               = 70,
         ID_NotebookTabUndoCheckOut          = 71,
@@ -1459,31 +1459,23 @@ private:
         ID_NotebookTabShowHistory           = 73,
         ID_NotebookTabSave                  = 74, 
         ID_NotebookTabClose                 = 75,
-
         ID_EditCut                          = 76,
         ID_EditCopy                         = 77,
         ID_EditPaste                        = 78,
         ID_EditDelete                       = 79,
         ID_EditSelectAll                    = 80,
-        
         ID_Breakpoints                      = 81,
         ID_WindowBreakpoints                = 82,
-
         ID_HelpSupport                      = 83,
-        
         ID_DebugDeleteAllBreakpoints        = 84,
-
         ID_NotebookTabShowFile              = 85,
-
         ID_Search                           = 86,
         ID_WindowSearch                     = 87,
-
 		ID_EditInsertBeforeLine = 88,
 		ID_EditInsertAfterLine = 89,
-        
 		ID_OpenConsole = 90,
-
 		ID_GotoFile = 91,
+		ID_ToolsRefreshLua = 92,
 
         ID_FirstExternalTool                = 1000,
         ID_FirstRecentFile                  = 2000,

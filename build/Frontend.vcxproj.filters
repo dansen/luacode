@@ -243,6 +243,9 @@
     <ClInclude Include="..\src\Frontend\SingleInstance.h">
       <Filter>gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Frontend\base\Singleton.h">
+      <Filter>base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Frontend\luaext\luacodeTolua.cpp">
@@ -447,6 +450,9 @@
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Frontend\Utility.c">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\base\Singleton.cpp">
       <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>

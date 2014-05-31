@@ -28,7 +28,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "Config.h"
 
 #include <sstream>
-
+#include "luaext/ScriptManager.h"
 #include <wx/cmdline.h>
 
 IMPLEMENT_APP(MainApp)
@@ -98,7 +98,7 @@ MainApp::MainApp()
 bool MainApp::OnInit()
 {
 	//Æô¶¯luaÐéÄâ»ú
-
+	ScriptManager::sharedMgr()->init("lua/");
 	//
     UINT openFilesMessage = RegisterWindowMessage("Decoda_OpenFiles");
 

@@ -96,6 +96,8 @@ public:
     virtual void pushNil(void);
     virtual bool pushFunctionByHandler(int nHandler);
 	virtual bool pushFunctionByStr(const char * func);
+	virtual void pushLightUserData(void * lightdata);
+
     virtual int executeFunction(int numArgs);
     
     virtual int executeFunctionByHandler(int nHandler, int numArgs);

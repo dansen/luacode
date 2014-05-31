@@ -19,6 +19,8 @@ You should have received a copy of the GNU General Public License
 along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+#include "Utility.h"
+#include <CCLuaEngine.h>
 #include "SearchTextCtrl.h"
 #include "Config.h"
 #include "MainFrame.h"
@@ -185,6 +187,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     // Tools menu events.
     EVT_MENU(ID_ToolsExternalTools,                 MainFrame::OnToolsExternalTools)
     EVT_MENU(ID_ToolsSettings,                      MainFrame::OnToolsSettings)
+	EVT_MENU(ID_ToolsRefreshLua, MainFrame::onRefreshLua)
 
     // Window menu events.
     EVT_MENU(ID_WindowProjectExplorer,              MainFrame::OnWindowProjectExplorer)
@@ -2066,6 +2069,13 @@ public:
 	}
 };
 
+void MainFrame::onRefreshLua(wxCommandEvent& event)
+{
+	CCLuaStack * stack = CCLuaEngine::defaultEngine()->getLuaStack();
+	stack->pushLightUserData(this);
+	stack->executeFunctionByStr("refresh", 1);
+}
+
 void MainFrame::OnToolsSettings(wxCommandEvent& event)
 {
 
@@ -3859,7 +3869,7 @@ void MainFrame::UpdateToolsMenu()
     m_menuTools->Append(ID_ToolsExternalTools,    _("&External Tools..."));
     m_menuTools->AppendSeparator();
     m_menuTools->Append(ID_ToolsSettings,         _("&Settings..."));
-
+	m_menuTools->Append(ID_ToolsRefreshLua, _("&Refresh Lua..."));
 }
 
 void MainFrame::RunTool(ExternalTool* tool)
@@ -6259,26 +6269,7 @@ const wxString& MainFrame::GetApplicationName()
 
 void MainFrame::onOpenConsole(wxCommandEvent& event)
 {
-	if (isConsoleOpened){
-		FreeConsole();
-	}else{
-		AllocConsole();
-		CreateConsoleScreenBuffer(GENERIC_WRITE | GENERIC_READ, 0, 0, CONSOLE_TEXTMODE_BUFFER, 0);
-
-		HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
-		HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-		HANDLE eoutput = GetStdHandle(STD_ERROR_HANDLE);
-
-		FILE *fi = _fdopen(_open_osfhandle((long)input, _O_TEXT), "r");  *stdin = *fi;  setvbuf(stdin, NULL, _IONBF, 0);
-		FILE *fo = _fdopen(_open_osfhandle((long)output, _O_TEXT), "w"); *stdout = *fo; setvbuf(stdout, NULL, _IONBF, 0);
-		FILE *fe = _fdopen(_open_osfhandle((long)eoutput, _O_TEXT), "w"); *stderr = *fe; setvbuf(stderr, NULL, _IONBF, 0);
-
-		::SetConsoleMode(input, ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT
-			| ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT | ENABLE_PROCESSED_OUTPUT |
-			ENABLE_WRAP_AT_EOL_OUTPUT | ENABLE_LINE_INPUT | 0x0004 | 0x0040);
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
-	}
-	isConsoleOpened = !isConsoleOpened;
+	switch_console();
 }
 
 

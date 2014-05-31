@@ -27,7 +27,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "AutoCompleteManager.h"
 #include "Tokenizer.h"
 #include "Bitmaps.h"
-
+#include <CCLuaEngine.h>
 #include "res/functionicon.xpm"
 #include "res/classicon.xpm"
 #include <algorithm>
@@ -232,27 +232,13 @@ void CodeEdit::SetDefaultLexer()
     classIcon.SetMask(new wxMask(classicon, maskColor));
     
     RegisterImage(AutoCompleteManager::Type_Class, classIcon);
-
 }
 
 void CodeEdit::SetLuaLexer()
 {
-
-    SetDefaultLexer();
-
-    SetLexer(wxSCI_LEX_LUA);
-
-    const char* keywords =
-        "and       break     do        else      elseif "
-        "end       false     for       function  if "
-        "in        local     nil       not       or "
-        "repeat    return    then      true      until     while";
-
-	SetKeyWords(KeywordKeyword, keywords);
-	//102 217 239
-	const char * innerFunction =
-		"module print dofile ";
-	SetKeyWords(KeywordInnerFuntion, innerFunction);
+	CCLuaStack * stack = CCLuaEngine::defaultEngine()->getLuaStack();
+	stack->pushLightUserData(this);
+	stack->executeFunctionByStr("SetLuaLexer", 1);
 }
 
 bool CodeEdit::Untabify()

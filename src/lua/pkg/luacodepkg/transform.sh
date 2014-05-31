@@ -1,1 +1,1 @@
-./../bin/Transform CCGUIToLua.cpp
+./../bin/Transform luacodeToLua.cpp

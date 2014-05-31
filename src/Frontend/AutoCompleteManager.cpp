@@ -83,7 +83,6 @@ static int calSequenceScore(const char * p, const char * c)
 	while(p[j++]){
 		score++;
 	}
-	//printf("%s %s %d\n", c, p, score);
 	return score;
 }
 
@@ -118,7 +117,6 @@ void AutoCompleteManager::GetMatchingItems(const wxString& module, const wxStrin
         // Check that the scope is correct.
         
         bool inScope = false;
-		printf("%s\t", itr->scope);
         if (/**/true)
         {
             // We've got no way of knowing the type of the variable in Lua (since
@@ -139,7 +137,6 @@ void AutoCompleteManager::GetMatchingItems(const wxString& module, const wxStrin
 	for (std::set<StringScore>::iterator itr = scores.begin(); itr != scores.end(); ++itr){
 
 		items += itr->entry->name;
-		printf("%s %d\n", itr->entry->name.c_str(), itr->score);
 		// Add the appropriate icon for the type of the identifier.
 		if (itr->entry->type != Type_Unknown)
 		{

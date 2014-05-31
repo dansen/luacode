@@ -153,13 +153,11 @@ bool isIdentify(const char * token)
 
 		if(i == 0){
 			if (token[i] != '_' && !alpha){
-				//printf("%s ", token);
 				return false;
 			}
 		}else{
 			bool num = token[i] >= '0' && token[i] <= '9';
 			if(token[i] != '_' && !alpha && !num){
-				//printf("%s ", token);
 				return false;
 			}
 		}

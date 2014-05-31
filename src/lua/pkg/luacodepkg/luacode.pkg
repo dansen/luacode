@@ -5,7 +5,26 @@ typedef unsigned int size_t;
 typedef unsigned char GLubyte;
 typedef unsigned int bituint;
 typedef long long int64_t;
+typedef std::string wxString;
 
 extern bool isseq(const char * p, const char * c);
 extern bool isseq_ignorecase(const char * p, const char * c);
+extern void switch_console();
+extern void color_print(const char * s, int color);
+
+class ScriptManager
+{
+	static ScriptManager * sharedMgr();
+	void init(const char * workpath);
+	void dofile(const char * path);
+	void dostring(const char * str);
+}
+
+class CodeEdit
+{
+	void SetDefaultLexer();
+	void SetLexer (int lexer);
+	void SetKeyWords (int keywordSet, const wxString& keyWords);
+}
+
 

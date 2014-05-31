@@ -217,6 +217,12 @@ void CCLuaStack::pushInt(int intValue)
     lua_pushinteger(m_state, intValue);
 }
 
+
+void CCLuaStack::pushLightUserData(void * lightdata)
+{
+	lua_pushlightuserdata(m_state, lightdata);
+}
+
 void CCLuaStack::pushFloat(float floatValue)
 {
     lua_pushnumber(m_state, floatValue);
