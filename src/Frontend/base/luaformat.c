@@ -369,32 +369,3 @@ char * lua_format(const char * buf, int * len){
 	fso->outbuf[*len] = 0;
 	return fso->outbuf;
 }
-
-void luaformat()
-{
-	const char * path = "test.lua";
-	char * buf;
-	char * out;
-	FILE * fp = fopen(path, "rb");
-	if (!fp) {
-		return;
-	}
-	fseek(fp, 0, SEEK_END);
-	int size = ftell(fp);
-	rewind(fp);
-	buf = malloc(size);
-	fread(buf, 1, size, fp);
-	fclose(fp);
-	//parse
-	out = lua_format(buf, &size);
-	//write to file
-	fp = fopen("test2.lua", "wb");
-	fwrite(out, 1, size, fp);
-	fclose(fp);
-}
-
-
-
-
-
-

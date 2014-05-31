@@ -1,11 +1,12 @@
 
 
 function math.randoms(min, max, cnt, duplicate)
-	if duplicate == nil then
+	if duplicate == nil then 
 		duplicate = true
 	end
-	if cnt > (max - min + 1) then
+	if cnt > (max - min + 1) then 
 		logger.error("math randoms error.")
+		
 		return nil
 	end
 	local tbl = {}

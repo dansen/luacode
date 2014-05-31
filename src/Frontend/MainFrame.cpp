@@ -861,11 +861,11 @@ void MainFrame::OnFileOpen(wxCommandEvent& event)
 
 void MainFrame::OnFileSave(wxCommandEvent& event)
 {
-
     int pageIndex = GetSelectedPage();
 
     if (pageIndex != -1)
     {
+		
         SaveFile(m_openFiles[pageIndex], false);
     }
 
@@ -4572,6 +4572,7 @@ bool MainFrame::SaveFile(OpenFile* file, bool promptForName)
 	if (file->edit->GetModify() == false) {
 		return true;
 	}
+
     wxLogNull logNo;
 
     wxFileName fileName = file->file->fileName;
