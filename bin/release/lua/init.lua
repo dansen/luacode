@@ -10,6 +10,7 @@ end
 function refresh(frame)
 	dofile("util/util.lua")
 	dofile("luacode/luacode.lua")
+	dofile("luacode/mainframe.lua")
 end
 
 --重写traceback函数
@@ -19,7 +20,6 @@ function __G__TRACKBACK__(msg)
 end
 
 function keyboard_Pressed(key)
-	
 end
 
 local function initLuaStack()

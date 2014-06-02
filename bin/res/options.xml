@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <options>
   <window>
-    <maximized>false</maximized>
+    <maximized>true</maximized>
     <rect>
       <x>325</x>
       <y>33</y>
@@ -253,7 +253,7 @@
     </command>
     <command>
       <id>38</id>
-      <key>Ctrl+Alt+W</key>
+      <key>Ctrl+Shift+W</key>
     </command>
     <command>
       <id>43</id>

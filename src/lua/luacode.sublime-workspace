@@ -459,6 +459,14 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "pkg/luacodepkg/luacode.pkg",
+			"settings":
+			{
+				"buffer_size": 56939,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -507,6 +515,11 @@
 	},
 	"file_history":
 	[
+		"/D/github/luacode/bin/res/lua/luacode/codeedit.lua",
+		"/D/github/luacode/bin/res/lua/init.lua",
+		"/D/github/luacode/bin/res/lua/luacode/mainframe.lua",
+		"/C/Users/Savic/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Savic/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
 		"/E/svn-space/TestProjects/luaformat/luaformat/test.lua",
 		"/E/svn-space/TestProjects/luaformat/luaformat/test2.lua",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/util/util.lua",
@@ -514,7 +527,6 @@
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/layout/pages/FightScene.lua",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/xc/fight/FightSystem.lua",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/event/EventCode.lua",
-		"/D/github/luacode/bin/res/lua/init.lua",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/Init.lua",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/util/logger.lua",
 		"/D/github/luacode/src/lua/pkg/luacodepkg/luacode.pkg",
@@ -525,7 +537,6 @@
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/xc/login/LoadingList.lua",
 		"/D/github/luacode/src/lua/pkg/luacodepkg/ccgui.pkg",
 		"/C/Users/Savic/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
-		"/C/Users/Savic/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/layout/pages/HotSellList.xml",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/config/t_s_mission.lua",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/Test.lua",
@@ -539,7 +550,6 @@
 		"/C/Users/Savic/AppData/Roaming/Decoda/options.xml",
 		"/D/github/luacode/.gitignore",
 		"/D/github/luacode/build/Decoda.sln",
-		"/C/Users/Savic/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
 		"/E/CardGame/source/cardgame/trunk/Client/decoda-master/README.txt",
 		"/E/CardGame/source/cardgame/trunk/Client/decoda-master/premake4.lua",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/xc/player/NetPlayer.lua",
@@ -632,13 +642,11 @@
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/tools/tolua++/CCNode.pkg",
 		"/E/CardGame/version1.1.0.0/game/Resources/script/net/netEventData/dbmgr/dbbaseclass.lua",
 		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/xc/common/ui/ShowTextTips.lua",
-		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/util/bit.lua",
-		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/xc/card/CardSkin.lua",
-		"/E/CardGame/source/cardgame/trunk/Art/刀塔传奇/UI/alpha/HVGA/dialog_bg_alpha_mask"
+		"/E/CardGame/source/cardgame/trunk/Client/ver1.1.0.0/game/Resources/script/util/bit.lua"
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 38.0
 	},
 	"find_in_files":
 	{
@@ -657,6 +665,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Scroll",
+			"max",
+			"line",
+			"OpenFile",
+			"OpenFile*",
+			"OpenFile",
+			"OpenFileInfo",
+			"OpenFile",
+			"openfile",
+			"move",
+			"AutoCompShow",
 			"_des",
 			"function util.cas",
 			"util.cas",
@@ -773,18 +792,7 @@
 			"sound",
 			"richtex",
 			"FIGHT_SCENE_INIT",
-			"IDAT",
-			"idat",
-			"end",
-			"454e",
-			"0a00",
-			"504e",
-			"npcName",
-			"t_s_mission",
-			"_init",
-			"gamePlayer.setEnergy(",
-			"updateEnergyText",
-			"this"
+			"IDAT"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -807,14 +815,48 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "pkg/luacodepkg/luacode.pkg",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 56939,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								48158,
+								48170
+							]
+						],
+						"settings":
+						{
+							"function_name_status_row": -1,
+							"last_modified_indicator": true,
+							"last_modified_indicator_multiline": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 29369.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 27.0
+		"height": 30.0
 	},
 	"input":
 	{
@@ -854,7 +896,7 @@
 	"project": "luacode.sublime-project",
 	"replace":
 	{
-		"height": 50.0
+		"height": 56.0
 	},
 	"save_all_on_build": true,
 	"select_file":

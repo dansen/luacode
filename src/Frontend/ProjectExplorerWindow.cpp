@@ -287,7 +287,7 @@ void ProjectExplorerWindow::RebuildForFile(Project::File* file)
                 
                 // Check to see if the symbol matches the filter.
                 //if (MatchesFilter(symbol->name, m_filter))
-				if (isseq_ignorecase(symbol->name, m_filter))
+				if (symbol->type != Symbol::SymbolFunction && isseq_ignorecase(symbol->name, m_filter))
                 {
                     AddSymbol(m_root, file, symbol);
                 }

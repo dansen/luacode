@@ -3031,22 +3031,17 @@ void MainFrame::GotoNewLine(Project::File* file, unsigned int newLine)
 
 void MainFrame::GotoNewLine(CodeEdit* edit, unsigned int newLine, bool center)
 {
-
     // Show the file.
-
     int pageIndex = m_notebook->GetPageIndex(edit);
     m_notebook->SetSelection(pageIndex);
 
     if (center)
     {
-
         // Scroll so that the line is in the center of the display.
-
         int linesOnScreen = edit->LinesOnScreen();
         int startLine     = std::max<int>(0, newLine - linesOnScreen / 2);
-
+		 
         edit->ScrollToLine(startLine);
-
     }
     else
     {
@@ -4429,7 +4424,7 @@ OpenFileInfo* MainFrame::OpenProjectFile(Project::File* file)
     
     openFile->edit = new CodeEdit;
     openFile->edit->SetAutoCompleteManager( &m_autoCompleteManager );
-    openFile->edit->Create(m_notebook);
+    openFile->edit->Create(m_notebook, -1, wxPoint(0, 0), wxSize(3024, 3024));
     openFile->edit->SetDropTarget( new CodeEditDropTarget(openFile->edit, this) );
     
     wxString fileName = openFile->file->fileName.GetFullPath();

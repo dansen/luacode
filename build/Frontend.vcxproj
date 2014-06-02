@@ -108,7 +108,8 @@
       <AdditionalLibraryDirectories>..\bin\release;..\libs\wxWidgets\lib\vc_lib;..\libs\wxScintilla\lib;..\libs\Update\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y /Q /E "..\\bin\\res" "$(OutDir)"</Command>
+      <Command>xcopy /Y /Q /E "..\\bin\\res" "$(OutDir)"
+xcopy /Y /Q /E "..\\bin\\release" "E:\\CardGame\\source\\cardgame\\trunk\\Client\\luacode"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
