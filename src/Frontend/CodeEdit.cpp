@@ -516,9 +516,9 @@ static int indentCount(const char * lastLine){
 	const char * s = lastLine;
 	while (*s) {
 		char c = *s++;
-		if (c == '(' || c == '\t') {
+		if (c == '(' || c == '\t' || c == '{' || c == '[') {
 			++cnt;
-		}else if (c == ')') {
+		} else if (c == ')' || c == '}' || c == ']') {
 			--cnt;
 		}
 	}
@@ -538,7 +538,7 @@ static int indentCount(const char * lastLine){
 void CodeEdit::OnCharAdded(wxScintillaEvent& event)
 {
 	char ch = event.GetKey();
-
+	
 	if (ch == '\n') {
 		int line = GetCurrentLine();
 		int lineLength = LineLength(line);
@@ -577,16 +577,13 @@ void CodeEdit::OnChange(wxScintillaEvent& event)
 
 void CodeEdit::OnModified(wxScintillaEvent& event)
 {
-
 	event.Skip();
 
 	int linesAdded = event.GetLinesAdded();
 
 	// If we're inserting new lines before a line, so we need to move the
 	// markers down. Scintilla doesn't do this automatically for the current line.
-
 	if (linesAdded > 0) {
-
 		unsigned int position = event.GetPosition();
 
 		unsigned int line = LineFromPosition(position);
@@ -603,20 +600,14 @@ void CodeEdit::OnModified(wxScintillaEvent& event)
 
 			// Add the markers back on the new line.
 			MarkerAddSet(line + linesAdded, markers);
-
 		}
-
 	}
-
 }
 
 bool CodeEdit::GetTokenFromPosition(int position, const wxString& joiners, wxString& token)
 {
-
 	if (position != -1) {
-
 		// Search the text.
-
 		int line = LineFromPosition(position);
 		int seek = position - PositionFromLine(line);
 

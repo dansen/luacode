@@ -2,6 +2,7 @@ dofile("luacode/keyevent.lua")
 dofile("luacode/keybinder.lua")
 
 local keymap = {
+	[47] = "/",
 	[314] = "left", 
 	[315] = "up", 
 	[316] = "right", 
@@ -42,7 +43,7 @@ function CodeEdit_OnKeyDown(edit, evt)
 	
 	if key ~= 308 and key ~= 307 and key ~= 306 then 
 		if map then 
-			str = str..keymap[key]
+			str = str.."+"..keymap[key]
 		elseif isalnum(key) then 
 			str = str.."+"..string.lower(string.char(key))
 		end
