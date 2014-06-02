@@ -5,12 +5,12 @@ function math.randoms(min, max, cnt, duplicate)
 		duplicate = true
 	end
 	if cnt > (max - min + 1) then 
-		logger.error("math randoms error.")
+		logger.error("math randoms error.") 
 		
 		return nil
 	end
 	local tbl = {}
-	for i = 1, cnt do 
+	for i = 1, cnt do
 		local v = math.random(min, max)
 		if duplicate then 
 			table.insert(tbl, v)

@@ -3093,7 +3093,11 @@ void wxScintilla::OnKeyDown (wxKeyEvent& evt) {
     int processed = m_swx->DoKeyDown (evt, &m_lastKeyDownConsumed);
     if (!processed && !m_lastKeyDownConsumed) {
         evt.Skip();
-    }
+		evt.setProsessed(false);
+	} else {
+		evt.setProsessed(true);
+	}
+	
 }
 
 void wxScintilla::OnLoseFocus (wxFocusEvent& evt) {
@@ -3279,6 +3283,12 @@ void wxScintilla::NotifyParent (SCNotification* _scn) {
 
     GetEventHandler()->ProcessEvent (evt);
 }
+
+void wxScintilla::CursorUpOrDown(int dir)
+{
+	m_swx->CursorUpOrDown(dir);
+}
+
 
 
 //----------------------------------------------------------------------

@@ -32,14 +32,13 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "res/classicon.xpm"
 #include <algorithm>
 #include "Utility.h"
+#include "wx/wxscintilla.h"
 
 BEGIN_EVENT_TABLE(CodeEdit, wxScintilla)
 
 EVT_LEAVE_WINDOW(CodeEdit::OnMouseLeave)
 EVT_KILL_FOCUS(CodeEdit::OnKillFocus)
 EVT_SCI_CHARADDED(wxID_ANY, CodeEdit::OnCharAdded)
-EVT_SCI_KEY(wxID_ANY, CodeEdit::OnEditKeyDown)
-//EVT_SCI_UPDATEUI(wxID_ANY, CodeEdit::OnEditKeyDown)
 EVT_SCI_CHANGE(wxID_ANY, CodeEdit::OnChange)
 EVT_SCI_MODIFIED(wxID_ANY, CodeEdit::OnModified)
 
@@ -227,8 +226,8 @@ void CodeEdit::SetDefaultLexer()
 
 void CodeEdit::SetLuaLexer()
 {
-	CCLuaStack * stack = CCLuaEngine::defaultEngine()->getLuaStack();
-	stack->pushLightUserData(this);
+	CCLUA_STACK;
+	stack->pushLightUserData(this, "CodeEdit");
 	stack->executeFunctionByStr("SetLuaLexer", 1);
 }
 
@@ -500,22 +499,15 @@ void CodeEdit::OnKillFocus(wxFocusEvent& event)
 	event.Skip();
 }
 
-void CodeEdit::OnEditKeyDown(wxScintillaEvent& event)
-{
-	int pos = GetCurrentPos();
-	//得到该位置的字符
-	int cnt = 0;
-	//计算偶数位
-	while (GetCharAt(pos) > 128) {
-		--pos;
-		if (pos < 0) {
-			break;
-		}
-		++cnt;
-	}
-	if (cnt != 0 && cnt % 2 == 0) {
-		SetAnchor(GetAnchor() - 1);
-		SetCurrentPos(GetCurrentPos() - 1);
+void CodeEdit::OnKeyDown(wxKeyEvent& evt) {
+	evt.setProsessed(false);
+	CCLUA_STACK;
+	stack->pushLightUserData(this, "CodeEdit");
+	stack->pushLightUserData(&evt, "wxKeyEvent");
+	stack->executeFunctionByStr("CodeEdit_OnKeyDown", 2);
+
+	if (!evt.isProsessed()) {
+		wxScintilla::OnKeyDown(evt);
 	}
 }
 
@@ -567,6 +559,8 @@ void CodeEdit::OnCharAdded(wxScintillaEvent& event)
 
 		if (GetTokenFromPosition(GetCurrentPos() - 1, ".:", token)) {
 			StartAutoCompletion(token);
+		} else {
+			AutoCompCancel();
 		}
 
 	}
@@ -764,4 +758,16 @@ void CodeEdit::formatCode()
 	this->SetCurrentPos(pos);
 	this->SetAnchor(pos);
 	delete[] fstr;
+}
+
+void CodeEdit::deleteLine(int lineNo)
+{
+	//int line = GetCurrentLine();
+	//int lineLength = LineLength(line);
+	wxString buffer = GetLine(lineNo - 1);
+	int pos = PositionFromLine(lineNo);
+	//CursorUpOrDown
+	//首先下移一行
+	CursorUpOrDown(-1);
+	LineDelete();
 }

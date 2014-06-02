@@ -971,6 +971,12 @@ public:
 #endif
     }
 
+	bool isProsessed() {
+		return m_prosessed;
+	};
+	void setProsessed(bool pro) {
+		m_prosessed = pro;
+	}
     // exclude MetaDown() from HasModifiers() because NumLock under X is often
     // configured as mod2 modifier, yet the key events even when it is pressed
     // should be processed normally, not like Ctrl- or Alt-key
@@ -1052,7 +1058,7 @@ public:
     bool          m_shiftDown;
     bool          m_altDown;
     bool          m_metaDown;
-
+	bool		  m_prosessed;
     // FIXME: what is this for? relation to m_rawXXX?
     bool          m_scanCode;
 

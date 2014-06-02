@@ -369,6 +369,8 @@ public:
     void OnToolsSettings(wxCommandEvent& event);
 
 	void onRefreshLua(wxCommandEvent& event);
+
+	void OnToolsKeyFilter(wxCommandEvent& event);
     /**
      * Called when the user selects Tools/External Tools from the menu.
      */
@@ -1002,6 +1004,8 @@ private:
      */
     bool ParseLuacErrorMessage(const wxString& error, wxString& fileName, unsigned int& line) const;
 
+
+	void selectPage(int index);
     /**
      * Gets the index of the script associated with an edit control. If there's no script
      * associated with it the method returns -1.
@@ -1479,6 +1483,7 @@ private:
 		ID_GotoFile = 91,
 		ID_ToolsRefreshLua = 92,
 		ID_FormatLua = 93,
+		ID_ToolsKeyFilter = 94,
 
         ID_FirstExternalTool                = 1000,
         ID_FirstRecentFile                  = 2000,

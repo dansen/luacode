@@ -249,6 +249,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual void Initialise() = 0;
 	virtual void Finalise();
 
+public:
 	void InvalidateStyleData();
 	void InvalidateStyleRedraw();
 	virtual void RefreshColourPalette(Palette &pal, bool want);

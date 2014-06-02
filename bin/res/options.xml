@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <options>
   <window>
-    <maximized>true</maximized>
+    <maximized>false</maximized>
     <rect>
-      <x>432</x>
-      <y>101</y>
-      <xSize>1024</xSize>
-      <ySize>768</ySize>
+      <x>325</x>
+      <y>33</y>
+      <xSize>1281</xSize>
+      <ySize>880</ySize>
     </rect>
   </window>
   <layout mode="editing">layout2|name=output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=callstack;caption=Call Stack;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=vmlist;caption=Virtual Machines;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=watch;caption=Watch;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=projectexplorer;caption=Project Explorer;state=2099196;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=250;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=breakpoints;caption=Breakpoints;state=2099196;dir=3;layer=0;row=0;pos=1;prop=100000;bestw=20;besth=20;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=search;caption=Search Results;state=2099196;dir=3;layer=0;row=0;pos=2;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=notebook;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(3,0,0)=258|dock_size(4,0,0)=279|dock_size(5,0,0)=18|</layout>
@@ -29,14 +29,14 @@
     </displayitem>
     <displayitem>
       <id>2</id>
-      <foreColor>#6969fa</foreColor>
+      <foreColor>#0088ff</foreColor>
       <backColor>#002240</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>3</id>
-      <foreColor>#fd991f</foreColor>
+      <foreColor>#ff8c1f</foreColor>
       <backColor>#002240</backColor>
       <bold>false</bold>
       <italic>false</italic>
@@ -281,10 +281,10 @@
     </command>
   </keybindings>
   <recent_files>
-    <file1>C:\Users\Savic\Desktop\untitled.lua</file1>
-    <file2></file2>
-    <file3></file3>
-    <file4></file4>
+    <file1>D:\github\luacode\bin\res\lua\luacode\keyevent.lua</file1>
+    <file2>D:\github\luacode\bin\res\lua\luacode\codeedit.lua</file2>
+    <file3>D:\github\luacode\bin\res\lua\luacode\keybinder.lua</file3>
+    <file4>C:\Users\Savic\Desktop\untitled.lua</file4>
     <file5></file5>
     <file6></file6>
     <file7></file7>

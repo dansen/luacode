@@ -105,7 +105,7 @@ void AutoComplete::Show(bool show) {
 }
 
 void AutoComplete::Cancel() {
-	if (lb->Created()) {
+	if (lb && lb->Created()) {
 		lb->Clear();
 		lb->Destroy();
 		active = false;

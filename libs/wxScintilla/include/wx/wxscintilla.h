@@ -3330,14 +3330,13 @@ public:
     // Append a string to the end of the document without changing the selection.
     void AppendTextRaw (const char* text);
 
+	void CursorUpOrDown(int dir);
+
 #ifdef SWIG
     %pythoncode "_stc_utf8_methods.py"
 #endif
 #endif
-
-
-//----------------------------------------------------------------------
-
+	
 #ifndef SWIG
 protected:
     // Event handlers
@@ -3353,7 +3352,7 @@ protected:
     void OnContextMenu (wxContextMenuEvent& evt);
     void OnMouseWheel (wxMouseEvent& evt);
     void OnChar (wxKeyEvent& evt);
-    void OnKeyDown (wxKeyEvent& evt);
+    virtual void OnKeyDown (wxKeyEvent& evt);
     void OnLoseFocus (wxFocusEvent& evt);
     void OnGainFocus (wxFocusEvent& evt);
     void OnSysColourChanged (wxSysColourChangedEvent& evt);

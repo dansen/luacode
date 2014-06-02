@@ -28,7 +28,7 @@
 extern "C" {
 #include "lua.h"
 }
-
+#define  CCLUA_STACK CCLuaStack * stack = CCLuaEngine::defaultEngine()->getLuaStack()
 #include "CCLuaStack.h"
 
 // Lua support for cocos2d-x

@@ -142,6 +142,9 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_MENU(ID_FormatLua, MainFrame::OnEditFormatLua)
 	EVT_UPDATE_UI(ID_FormatLua, MainFrame::EnableWhenFileIsOpen)
 
+	EVT_MENU(ID_ToolsKeyFilter, MainFrame::OnToolsKeyFilter)
+	EVT_UPDATE_UI(ID_ToolsKeyFilter, MainFrame::EnableWhenFileIsOpen)
+	
     // Project menu events.
     EVT_MENU(ID_ProjectAddExistingFile,             MainFrame::OnProjectAddExistingFile)
     EVT_MENU(ID_ProjectAddNewFile,                  MainFrame::OnProjectAddNewFile)
@@ -518,6 +521,11 @@ MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint&
 	for (int i = 0; i < KeywordTotal; ++i){
 		keywordDirty[i] = true;
 	}
+
+	//lua bind
+	CCLUA_STACK;
+	stack->pushLightUserData(this, "MainFrame");
+	stack->executeFunctionByStr("mainFrameInit", 1);
 }
 
 MainFrame::~MainFrame()
@@ -837,9 +845,17 @@ void MainFrame::OnFileExit(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnFileNew(wxCommandEvent& event)
 {
+	wxString path;
+	int pageIndex = GetSelectedPage();
+
+	if (pageIndex != -1) {
+		wxFileName fileName = m_openFiles[pageIndex]->file->fileName;
+		path = fileName.GetPath();
+	}
     Project::File* file = m_project->AddTemporaryFile("");
     UpdateForNewFile(file);
     OpenProjectFile(file);
+	file->fileName.SetPath(path);
 }
 
 void MainFrame::OnFileOpen(wxCommandEvent& event)
@@ -2072,8 +2088,13 @@ public:
 void MainFrame::onRefreshLua(wxCommandEvent& event)
 {
 	CCLuaStack * stack = CCLuaEngine::defaultEngine()->getLuaStack();
-	stack->pushLightUserData(this);
+	stack->pushLightUserData(this, "MainFrame");
 	stack->executeFunctionByStr("refresh", 1);
+}
+
+void MainFrame::OnToolsKeyFilter(wxCommandEvent& event)
+{
+	
 }
 
 void MainFrame::OnToolsSettings(wxCommandEvent& event)
@@ -2231,7 +2252,6 @@ void MainFrame::OnNotebookPageChanged(wxAuiNotebookEvent& event)
     }    
     
     UpdateStatusBarLineAndColumn();
-
 }
 
 void MainFrame::OnNotebookTabMiddleUp(wxAuiNotebookEvent& event)
@@ -3870,6 +3890,7 @@ void MainFrame::UpdateToolsMenu()
     m_menuTools->AppendSeparator();
     m_menuTools->Append(ID_ToolsSettings,         _("&Settings..."));
 	m_menuTools->Append(ID_ToolsRefreshLua, _("&Refresh Lua..."));
+	m_menuTools->Append(ID_ToolsKeyFilter, _("&Key Filter..."));
 }
 
 void MainFrame::RunTool(ExternalTool* tool)
@@ -4605,11 +4626,10 @@ bool MainFrame::SaveFile(OpenFile* file, bool promptForName)
     }
 
     wxString fullPath = fileName.GetFullPath();
+	wxString fullName = fileName.GetFullName();
 
-    if (fullPath.IsEmpty() || promptForName)
+	if (fullName.IsEmpty() || promptForName)
     {
-        
-
         wxString p = fileName.GetPath();
 
         fullPath = wxFileSelector(_("Save As"), fileName.GetPath(),
@@ -6315,4 +6335,11 @@ void MainFrame::applyKeyword(CodeEdit * edit, KeywordType type)
 {
 	edit->SetKeyWords(type, keywordStr[type]);
 	edit->Recolor();
+}
+
+void MainFrame::selectPage(int index)
+{
+	if (index >= 0 && index < m_openFiles.size()) {
+		m_notebook->SetSelection(index);
+	}
 }

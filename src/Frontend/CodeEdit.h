@@ -68,7 +68,7 @@ public:
 	 */
 	CodeEdit();
 	~CodeEdit();
-
+	void OnKeyDown(wxKeyEvent& evt);
 	/**
 	 * Sets the auto completion manager used to supply the editor with data
 	 * for trying to complete the user's typing.
@@ -76,6 +76,8 @@ public:
 	void SetAutoCompleteManager(const AutoCompleteManager* autoCompleteManager);
 
 	void formatCode();
+
+	void deleteLine(int lineNo);
 
 	/**
 	 * Sets the font and color settings used in the editor.

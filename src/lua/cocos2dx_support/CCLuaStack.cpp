@@ -74,7 +74,7 @@ int lua_print(lua_State * luastate)
             t += "\t";
     }
 
-	printf("[LUA-print] %s", t.c_str());
+	printf("[LUA-print] %s\n", t.c_str());
 	
     return 0;
 }
@@ -217,10 +217,9 @@ void CCLuaStack::pushInt(int intValue)
     lua_pushinteger(m_state, intValue);
 }
 
-
-void CCLuaStack::pushLightUserData(void * lightdata)
+void CCLuaStack::pushLightUserData(void * lightdata, const char * name)
 {
-	lua_pushlightuserdata(m_state, lightdata);
+	tolua_pushusertype(m_state, lightdata, name);
 }
 
 void CCLuaStack::pushFloat(float floatValue)
