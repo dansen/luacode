@@ -300,16 +300,19 @@ char * lua_format(const char * buf, int * len){
 		} else if (token->type == Blank) {
 			//
 		} else if (token->type == Punct) {
-			if (ISTOKEN("(")) {
+			if (ISTOKEN("(") || ISTOKEN("{") || ISTOKEN("[")) {
 				++fs->level;
 				writetoken(fso, token->s, token->len);
-			} else if (ISTOKEN(")")) {
+			} else if (ISTOKEN(")") || ISTOKEN("}") || ISTOKEN("]")) {
 				--fs->level;
+				if (isemptyline(fso)) {
+					backtoken(fso, 1);
+				}
 				writetoken(fso, token->s, token->len);
 			} else if (ISTOKEN(",")) {
 				writetoken(fso, token->s, token->len);
 				writetoken(fso, " ", 1);
-			} else if (ISTOKEN(".") || ISTOKEN(":") || ISTOKEN("{") || ISTOKEN("}") || ISTOKEN("[") || ISTOKEN("]")
+			} else if (ISTOKEN(".") || ISTOKEN(":")
 				|| ISTOKEN("#") || ISTOKEN(",")) {
 				writetoken(fso, token->s, token->len);
 			} else {
