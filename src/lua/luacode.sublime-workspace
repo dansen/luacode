@@ -831,13 +831,13 @@
 						"selection":
 						[
 							[
-								48158,
-								48170
+								712,
+								712
 							]
 						],
 						"settings":
 						{
-							"function_name_status_row": -1,
+							"function_name_status_row": 29,
 							"last_modified_indicator": true,
 							"last_modified_indicator_multiline": true,
 							"syntax": "Packages/Text/Plain text.tmLanguage",
@@ -845,7 +845,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 29369.0,
+						"translation.y": 67.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,

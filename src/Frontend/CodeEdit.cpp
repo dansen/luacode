@@ -532,6 +532,8 @@ static int indentCount(const char * lastLine){
 	if (strstr(lastLine, " do")) {
 		++cnt;
 	}
+
+	cnt = cnt < 0 ? 0 : cnt;
 	return cnt;
 }
 
