@@ -1,4 +1,16 @@
 keybinders = {
+	["alt+up"] = event_cursorPageBegin,
+	["alt+down"] = event_cursorPageEnd,
+	["alt+right"] = event_cursorLineEnd,
+	["alt+left"] = event_cursorLineBegin,
 	["ctrl+d"] = event_deleteLine,
 	["alt+1"] = event_selectTab,
+	["alt+2"] = event_selectTab,
+	["alt+3"] = event_selectTab,
+	["alt+4"] = event_selectTab,
+	["alt+5"] = event_selectTab,
+	["alt+6"] = event_selectTab,
+	["alt+7"] = event_selectTab,
+	["alt+8"] = event_selectTab,
+	["alt+9"] = event_selectTab,
 }

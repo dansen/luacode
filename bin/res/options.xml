@@ -9,7 +9,7 @@
       <ySize>880</ySize>
     </rect>
   </window>
-  <layout mode="editing">layout2|name=output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=callstack;caption=Call Stack;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=vmlist;caption=Virtual Machines;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=watch;caption=Watch;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=projectexplorer;caption=Project Explorer;state=2099196;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=250;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=breakpoints;caption=Breakpoints;state=2099196;dir=3;layer=0;row=0;pos=1;prop=100000;bestw=20;besth=20;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=search;caption=Search Results;state=2099196;dir=3;layer=0;row=0;pos=2;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=notebook;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(3,0,0)=258|dock_size(4,0,0)=279|dock_size(5,0,0)=18|</layout>
+  <layout mode="editing">layout2|name=output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=callstack;caption=Call Stack;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=vmlist;caption=Virtual Machines;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=watch;caption=Watch;state=2099196;dir=3;layer=0;row=0;pos=1;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=projectexplorer;caption=Project Explorer;state=2099196;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=250;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=breakpoints;caption=Breakpoints;state=2099196;dir=3;layer=0;row=0;pos=2;prop=100000;bestw=20;besth=20;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=search;caption=Search Results;state=2099196;dir=3;layer=0;row=0;pos=3;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=notebook;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(3,0,0)=258|dock_size(4,0,0)=279|dock_size(5,0,0)=18|</layout>
   <layout mode="debugging">layout2|name=output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=0;prop=144947;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=callstack;caption=Call Stack;state=2099196;dir=3;layer=0;row=0;pos=1;prop=107684;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=vmlist;caption=Virtual Machines;state=2099196;dir=3;layer=0;row=0;pos=2;prop=47369;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=watch;caption=Watch;state=2099196;dir=3;layer=0;row=0;pos=3;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=projectexplorer;caption=Project Explorer;state=2099196;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=250;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=breakpoints;caption=Breakpoints;state=2099196;dir=3;layer=0;row=0;pos=4;prop=100000;bestw=20;besth=20;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=search;caption=Search Results;state=2099196;dir=3;layer=0;row=0;pos=5;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=notebook;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(3,0,0)=165|dock_size(4,0,0)=252|dock_size(5,0,0)=18|</layout>
   <fontcolor>
     <font>0;-16;0;0;0;400;0;0;0;0;3;2;1;49;Consolas</font>
@@ -268,10 +268,6 @@
       <key>Alt+7</key>
     </command>
     <command>
-      <id>35</id>
-      <key>Alt+3</key>
-    </command>
-    <command>
       <id>82</id>
       <key>Alt+F9</key>
     </command>
@@ -302,6 +298,7 @@
     <file8></file8>
     <file9></file9>
   </recent_projects>
+  <last_project_loaded>D:\github\luacode\bin\luacode.deproj</last_project_loaded>
   <find_directories>
     <file1></file1>
     <file2></file2>

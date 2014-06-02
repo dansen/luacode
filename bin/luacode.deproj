@@ -10,10 +10,19 @@
     <filename>res\lua\init.lua</filename>
   </file>
   <file>
+    <filename>res\lua\luacode\keybinder.lua</filename>
+  </file>
+  <file>
+    <filename>res\lua\luacode\keyevent.lua</filename>
+  </file>
+  <file>
     <filename>res\lua\util\logger.lua</filename>
   </file>
   <file>
     <filename>res\lua\luacode\luacode.lua</filename>
+  </file>
+  <file>
+    <filename>res\lua\luacode\mainframe.lua</filename>
   </file>
   <file>
     <filename>res\lua\util\math.lua</filename>

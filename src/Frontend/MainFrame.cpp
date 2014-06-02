@@ -530,7 +530,6 @@ MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint&
 
 MainFrame::~MainFrame()
 {
-
     m_fileChangeWatcher.Shutdown();
 
     if (m_fileStatusThread[0] != NULL)
@@ -728,7 +727,7 @@ void MainFrame::InitializeMenu()
 
     wxMenuBar* menuBar = new wxMenuBar;
     menuBar->Append( menuFile,                          _("&File"));
-    menuBar->Append( menuEdit,                          _("&Edit"));
+    menuBar->Append( menuEdit,                          _("Edit"));
     menuBar->Append( menuProject,                       _("&Project"));
     menuBar->Append( menuDebug,                         _("&Debug"));
     menuBar->Append( menuSourceControl,                 _("&SCC"));
@@ -1625,7 +1624,7 @@ void MainFrame::OnDebugToggleBreakpoint(wxCommandEvent& event)
     if (pageIndex != -1)
     {
 
-        OpenFile* openFile = m_openFiles[pageIndex];
+        OpenFileInfo* openFile = m_openFiles[pageIndex];
         unsigned int newLine = openFile->edit->GetCurrentLine();
         
         ToggleBreakpoint(openFile->file, newLine);
@@ -1996,7 +1995,7 @@ void MainFrame::OnDebugEvent(wxDebugEvent& event)
             Project::File* file = m_project->GetFileForScript(scriptIndex);
             unsigned int newLine = OldToNewLine(file, event.GetLine());
 
-            OpenFile* openFile = GetFileForScript(scriptIndex);
+            OpenFileInfo* openFile = GetFileForScript(scriptIndex);
 
             if (openFile != NULL)
             {
@@ -2151,7 +2150,7 @@ void MainFrame::OnToolsSettings(wxCommandEvent& event)
 }
 
 
-void MainFrame::UpdateFileBreakpoint(OpenFile* file, unsigned int newLine, bool set)
+void MainFrame::UpdateFileBreakpoint(OpenFileInfo* file, unsigned int newLine, bool set)
 {
 
     if (file != NULL)
@@ -2240,7 +2239,7 @@ void MainFrame::OnNotebookPageChanged(wxAuiNotebookEvent& event)
 
     if (pageIndex != -1)
     {
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
         m_fileChangeWatcher.SetFile(file->file->fileName);
         
         SetMostRecentlyUsedPage(pageIndex);
@@ -2508,7 +2507,7 @@ void MainFrame::OnCodeEditMarginClick(wxScintillaEvent& event)
         unsigned int pos  = event.GetPosition();
         unsigned int newLine = m_openFiles[pageIndex]->edit->LineFromPosition(pos);
 
-        OpenFile* openFile = m_openFiles[pageIndex];
+        OpenFileInfo* openFile = m_openFiles[pageIndex];
         ToggleBreakpoint(openFile->file, newLine);
 
     }
@@ -2564,7 +2563,7 @@ void MainFrame::UpdateLineMappingIfNecessary(Project::File* file)
     if (openFileIndex != -1)
     {
 
-        OpenFile* openFile = m_openFiles[openFileIndex];
+        OpenFileInfo* openFile = m_openFiles[openFileIndex];
         
         if (openFile->edit->GetIsLineMappingDirty())
         {
@@ -2586,7 +2585,7 @@ void MainFrame::OnCodeEditReadOnlyModifyAttempt(wxScintillaEvent& event)
     if (pageIndex != -1)
     {
 
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
 
         // If thi is an "unavailable" file, don't let the user edit it at all.
         if (file->file->state != CodeState_Normal)
@@ -2752,7 +2751,7 @@ void MainFrame::OnCodeEditModified(wxScintillaEvent& event)
 
 }
 
-MainFrame::OpenFile* MainFrame::OpenScript(unsigned int scriptIndex)
+OpenFileInfo * MainFrame::OpenScript(unsigned int scriptIndex)
 {
 
     Project::File* file = m_project->GetFileForScript(scriptIndex);
@@ -2770,7 +2769,7 @@ void MainFrame::ShowScriptLine(unsigned int scriptIndex, unsigned int line)
         
         ClearCurrentLineMarker();
 
-        OpenFile* file = GotoOldLine(scriptIndex, line, false);
+        OpenFileInfo* file = GotoOldLine(scriptIndex, line, false);
   
         m_currentScriptIndex    = scriptIndex;
         m_currentLine           = line;
@@ -2786,7 +2785,7 @@ void MainFrame::ShowScriptLine(unsigned int scriptIndex, unsigned int line)
 
 }
 
-MainFrame::OpenFile* MainFrame::GetFileForScript(unsigned int scriptIndex) const
+OpenFileInfo* MainFrame::GetFileForScript(unsigned int scriptIndex) const
 {
 
     for (unsigned int i = 0; i < m_openFiles.size(); ++i)
@@ -2822,7 +2821,7 @@ void MainFrame::OnBreak(wxDebugEvent& event)
     if (m_breakScriptIndex != -1)
     {
 
-        OpenFile* file = GetFileForScript(m_breakScriptIndex);
+        OpenFileInfo* file = GetFileForScript(m_breakScriptIndex);
 
         if (file == NULL)
         {
@@ -2958,7 +2957,7 @@ void MainFrame::ClearCurrentLineMarker()
     if (m_currentScriptIndex != -1 && m_currentLine != -1)
     {
 
-        OpenFile* file = GetFileForScript(m_currentScriptIndex);
+        OpenFileInfo* file = GetFileForScript(m_currentScriptIndex);
 
         if (file != NULL)
         {
@@ -2979,7 +2978,7 @@ void MainFrame::ClearBreakLineMarker()
     if (m_breakScriptIndex != -1 && m_breakLine != -1)
     {
 
-        OpenFile* file = GetFileForScript(m_breakScriptIndex);
+        OpenFileInfo* file = GetFileForScript(m_breakScriptIndex);
 
         if (file != NULL)
         {
@@ -3007,7 +3006,7 @@ void MainFrame::GotoError(const wxString& message)
     else if (ParseErrorMessage(message, target, newLine))
     {
 
-        OpenFile* file = OpenDocument(target);
+        OpenFileInfo* file = OpenDocument(target);
 
         if (file != NULL)
         {
@@ -3021,7 +3020,7 @@ void MainFrame::GotoError(const wxString& message)
 void MainFrame::GotoNewLine(Project::File* file, unsigned int newLine)
 {
 
-    OpenFile* openFile = OpenProjectFile(file);
+    OpenFileInfo* openFile = OpenProjectFile(file);
 
     if (openFile != NULL)
     {
@@ -3063,12 +3062,12 @@ void MainFrame::GotoNewLine(CodeEdit* edit, unsigned int newLine, bool center)
 
 }
 
-MainFrame::OpenFile* MainFrame::GotoOldLine(unsigned int scriptIndex, unsigned int oldLine, bool center)
+OpenFileInfo* MainFrame::GotoOldLine(unsigned int scriptIndex, unsigned int oldLine, bool center)
 {
 
     // Open the file if necessary.
 
-    OpenFile* file = GetFileForScript(scriptIndex);
+    OpenFileInfo* file = GetFileForScript(scriptIndex);
 
     if (file == NULL)
     {
@@ -3120,7 +3119,7 @@ bool MainFrame::ParseErrorMessage(const wxString& error, wxString& fileName, uns
             for (unsigned int fileIndex = 0; fileIndex < m_openFiles.size() && !foundMatch; ++fileIndex)
             {
                 
-                OpenFile* file = m_openFiles[fileIndex];
+                OpenFileInfo* file = m_openFiles[fileIndex];
                 wxString fullName = file->file->fileName.GetFullPath();
 
                 if (fullName.EndsWith(partialName))
@@ -3378,7 +3377,7 @@ void MainFrame::OnProjectExplorerItemActivated(wxTreeEvent& event)
     if (data != NULL && data->file != NULL)
     {
 
-        OpenFile* file = OpenProjectFile(data->file);
+        OpenFileInfo* file = OpenProjectFile(data->file);
 
         if (file == NULL)
         {
@@ -3457,7 +3456,7 @@ void MainFrame::OnSourceControlCheckIn(wxCommandEvent& event)
     if (pageIndex != -1)
     {
         
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
 
         std::vector<std::string> fileNames;
         fileNames.push_back(std::string(file->file->fileName.GetFullPath()));
@@ -3478,7 +3477,7 @@ void MainFrame::OnUpdateSourceControlCheckIn(wxUpdateUIEvent& event)
 
     if (pageIndex != -1)
     {
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
         allow = file->file->status == Project::Status_CheckedOut;
     }
 
@@ -3494,7 +3493,7 @@ void MainFrame::OnSourceControlCheckOut(wxCommandEvent& event)
     if (pageIndex != -1)
     {
         
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
 
         std::vector<std::string> fileNames;
         fileNames.push_back(std::string(file->file->fileName.GetFullPath()));
@@ -3515,7 +3514,7 @@ void MainFrame::OnUpdateSourceControlCheckOut(wxUpdateUIEvent& event)
 
     if (pageIndex != -1)
     {
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
         allow = file->file->status == Project::Status_CheckedIn;
     }
 
@@ -3531,7 +3530,7 @@ void MainFrame::OnSourceControlUndoCheckOut(wxCommandEvent& event)
     if (pageIndex != -1)
     {
         
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
 
         std::vector<std::string> fileNames;
         fileNames.push_back(std::string(file->file->fileName.GetFullPath()));
@@ -3552,7 +3551,7 @@ void MainFrame::OnUpdateSourceControlUndoCheckOut(wxUpdateUIEvent& event)
 
     if (pageIndex != -1)
     {
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
         allow = file->file->status == Project::Status_CheckedOut;
     }
 
@@ -3589,7 +3588,7 @@ void MainFrame::OnFindReplace(wxFindDialogEvent& event)
     if (pageIndex != -1)
     {
 
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
 
         // Check to see if the currently selected text matches our search string.
 
@@ -3632,7 +3631,7 @@ void MainFrame::OnFindReplaceAll(wxFindDialogEvent& event)
     if (pageIndex != -1)
     {
         
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
 
         file->edit->BeginUndoAction();
 
@@ -3707,7 +3706,7 @@ void MainFrame::OnFindNext(wxFindDialogEvent& event)
     FindNext(event.GetFindString(), event.GetFlags());
 }
 
-void MainFrame::FindText(OpenFile* file, const wxString& text, int flags)
+void MainFrame::FindText(OpenFileInfo* file, const wxString& text, int flags)
 {
 
     bool firstSearch = false;
@@ -4407,7 +4406,7 @@ void MainFrame::UpdateForNewState()
 
 }
 
-MainFrame::OpenFile* MainFrame::OpenProjectFile(Project::File* file)
+OpenFileInfo* MainFrame::OpenProjectFile(Project::File* file)
 {
 
     // Cancel MRU paging.
@@ -4424,7 +4423,7 @@ MainFrame::OpenFile* MainFrame::OpenProjectFile(Project::File* file)
 
     // The file isn't open, so open it.
 
-    OpenFile* openFile = new OpenFile;
+    OpenFileInfo* openFile = new OpenFileInfo;
 
     openFile->file = file;
     
@@ -4588,7 +4587,7 @@ void MainFrame::SetVmName(unsigned int vm, const wxString& name)
 
 }
 
-bool MainFrame::SaveFile(OpenFile* file, bool promptForName)
+bool MainFrame::SaveFile(OpenFileInfo* file, bool promptForName)
 {
 	if (file->edit->GetModify() == false) {
 		return true;
@@ -4690,7 +4689,7 @@ void MainFrame::OpenDocuments(const wxArrayString& fileNames)
     }
 }
 
-MainFrame::OpenFile* MainFrame::OpenDocument(const wxString& fileName)
+OpenFileInfo* MainFrame::OpenDocument(const wxString& fileName)
 {
 
     wxString param = fileName;
@@ -4710,7 +4709,7 @@ MainFrame::OpenFile* MainFrame::OpenDocument(const wxString& fileName)
         }
     }
 
-    OpenFile* openFile = NULL;
+    OpenFileInfo* openFile = NULL;
 
     // Check to see if the file is already open.
     for (unsigned int i = 0; i < m_openFiles.size(); ++i)
@@ -4857,7 +4856,7 @@ void MainFrame::FindNext(const wxString& text, int flags)
 
     if (pageIndex != -1)
     {
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
         FindText(file, text, flags);
     }
 
@@ -4898,7 +4897,7 @@ void MainFrame::ToggleBreakpoint(Project::File* file, unsigned int newLine)
 {
 
     unsigned int openFileIndex = GetOpenFileIndex(file);
-    OpenFile* openFile = NULL;
+    OpenFileInfo* openFile = NULL;
 
     if (openFileIndex != -1)
     {
@@ -4966,7 +4965,7 @@ void MainFrame::DeleteAllBreakpoints()
         Project::File* file = m_project->GetFile(fileIndex);
 
         unsigned int openFileIndex = GetOpenFileIndex(file);
-        OpenFile* openFile = NULL;
+        OpenFileInfo* openFile = NULL;
 
         if (openFileIndex != -1)
         {
@@ -5008,7 +5007,7 @@ void MainFrame::CheckReload()
     }
 }
 
-void MainFrame::CheckReload(OpenFile* file)
+void MainFrame::CheckReload(OpenFileInfo* file)
 {
 
     wxString fileName = file->file->fileName.GetFullPath();
@@ -5326,7 +5325,7 @@ void MainFrame::GetNotebookTabSelectedFileNames(std::vector<std::string>& fileNa
 
 }
 
-void MainFrame::loadFile(OpenFile* openFile, const char * path)
+void MainFrame::loadFile(OpenFileInfo* openFile, const char * path)
 {
 	//读取文件内容
 	std::string s = fileStringANSI(path);
@@ -5337,7 +5336,7 @@ void MainFrame::loadFile(OpenFile* openFile, const char * path)
 	applyKeyword(openFile->edit, KeywordTable);
 }
 
-void MainFrame::ReloadFile(OpenFile* file)
+void MainFrame::ReloadFile(OpenFileInfo* file)
 {
 
     CodeEdit& editor = *file->edit;
@@ -5967,7 +5966,7 @@ void MainFrame::UpdateDocumentReadOnlyStatus()
     if (pageIndex != -1)
     {
 
-        OpenFile* file = m_openFiles[pageIndex];
+        OpenFileInfo* file = m_openFiles[pageIndex];
         bool writeable = true;
 
         if (!file->file->state == CodeState_Normal)
@@ -6018,7 +6017,7 @@ void MainFrame::HandleUpdate()
 }
 
 //更新语法高亮
-void MainFrame::UpdateSyntaxColoring(OpenFile* openFile)
+void MainFrame::UpdateSyntaxColoring(OpenFileInfo* openFile)
 {
 
     Project::File* file = openFile->file;
@@ -6039,7 +6038,7 @@ void MainFrame::UpdateSyntaxColoring(OpenFile* openFile)
 bool MainFrame::PreNotebookPageClose(int page, bool promptForSave)
 {
 
-    OpenFile* openFile = m_openFiles[page];
+    OpenFileInfo* openFile = m_openFiles[page];
 
     // Check if we need to save the document.
 

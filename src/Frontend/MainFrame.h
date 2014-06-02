@@ -89,6 +89,24 @@ public:
 };
 
 /**
+* File that's open the the notebook. The fileIndex is the index of the
+* file in the project.
+*/
+typedef struct OpenFileInfo
+{
+	CodeEdit*               edit;
+	Project::File*          file;
+	time_t                  timeStamp;
+}OpenFileInfo;
+
+enum Mode
+{
+	Mode_Editing,
+	Mode_Debugging,
+	Mode_NumModes,  // Always keep this last.
+};
+
+/**
  * Main application window.
  */
 class MainFrame: public wxFrame
@@ -100,18 +118,6 @@ private:
 	std::set<Keyword> keywords[KeywordTotal];
 	wxString keywordStr[KeywordTotal];
 public:
-
-    /**
-     * File that's open the the notebook. The fileIndex is the index of the
-     * file in the project.
-     */
-    struct OpenFile
-    {
-        CodeEdit*               edit;
-        Project::File*          file;
-        time_t                  timeStamp;
-    };
-
 	//添加关键字
 	void addKeyword(KeywordType type, const char * str);
 	//更新
@@ -861,7 +867,7 @@ public:
     /**
      * Opens the specified document into the editor.
      */
-    OpenFile* OpenDocument(const wxString& fileName);
+    OpenFileInfo* OpenDocument(const wxString& fileName);
 
     /**
      * Opens all of the specified documents in the editor.
@@ -932,14 +938,9 @@ public:
 
     DECLARE_EVENT_TABLE()
 
-private:
+public:
     
-    enum Mode
-    {
-        Mode_Editing,
-        Mode_Debugging,
-        Mode_NumModes,  // Always keep this last.
-    };
+    
 
     /**
      * Creates the menu for the window.
@@ -974,7 +975,7 @@ private:
      * Moves the caret to the line in the script indicated and brings the editor
      * into focus.
      */
-    OpenFile* GotoOldLine(unsigned int scriptIndex, unsigned int newLine, bool center);
+    OpenFileInfo* GotoOldLine(unsigned int scriptIndex, unsigned int newLine, bool center);
 
     /**
      * Extracts the topic from an error message which is formatted to correspond
@@ -1086,12 +1087,12 @@ private:
      * Returns the open file that corresponds to the scriptIndex. If the
      * file is not opened the method retrns NULL.
      */
-    OpenFile* GetFileForScript(unsigned int scriptIndex) const;
+    OpenFileInfo* GetFileForScript(unsigned int scriptIndex) const;
 
     /**
      * Opens script code from the debugger into the editor.
      */
-    OpenFile* OpenScript(unsigned int scriptIndex);
+    OpenFileInfo* OpenScript(unsigned int scriptIndex);
 
     /**
      * Closes all of the open files. If any of the open files need to be saved, the
@@ -1113,7 +1114,7 @@ private:
     /**
      * Opens a file from the project into the editor.
      */
-    OpenFile* OpenProjectFile(Project::File* file);
+    OpenFileInfo* OpenProjectFile(Project::File* file);
 
     /**
      * Removes a file from the project (does not delete the file on disk).
@@ -1125,7 +1126,7 @@ private:
      * marker will be added at the specified line, otherwise it will be removed.
      * Note this only updates the UI and does not actually set breakpoints.
      */
-    void UpdateFileBreakpoint(OpenFile* file, unsigned int line, bool set);
+    void UpdateFileBreakpoint(OpenFileInfo* file, unsigned int line, bool set);
 
     /**
      * Adds the virtual machine to the list of virtual machines handled by the
@@ -1148,7 +1149,7 @@ private:
      * Saves thge specified file. If the file does not have an appropriate file
      * name associated with it, the user will be prompted for one.
      */
-    bool SaveFile(OpenFile* file, bool promptForName);
+    bool SaveFile(OpenFileInfo* file, bool promptForName);
 
     /**
      * Closes the document in the specified page of the notebook.
@@ -1169,7 +1170,7 @@ private:
     /**
      * Searches for the specified text in the open file.
      */
-    void FindText(OpenFile* file, const wxString& text, int flags);
+    void FindText(OpenFileInfo* file, const wxString& text, int flags);
 
     /**
      * Performs a find next operation in the currently open document.
@@ -1196,13 +1197,13 @@ private:
      * Checks to see if the specified file needs to be reloaded because it has
      * changed on disk.
      */
-    void CheckReload(OpenFile* file);
+    void CheckReload(OpenFileInfo* file);
 
     /**
      * Reloads the contents of the specified file from disk.
      */
-    void ReloadFile(OpenFile* file);
-	void loadFile(OpenFile* file, const char * path);
+    void ReloadFile(OpenFileInfo* file);
+	void loadFile(OpenFileInfo* file, const char * path);
     /**
      * Searches the files for the specified text. If baseDirectory is specified,
      * the filenames are all displayed relative to the directory.
@@ -1324,7 +1325,7 @@ private:
     /**
      * Updates the syntax coloring for the file based on the file name extension.
      */
-    void UpdateSyntaxColoring(OpenFile* openFile);
+    void UpdateSyntaxColoring(OpenFileInfo* openFile);
 
     /**
      * Call this before closing a notebook page to handle saving, cleaning up
@@ -1500,7 +1501,7 @@ private:
     Updater                         m_updater;
 
     Project*                        m_project;       
-    std::vector<OpenFile*>          m_openFiles;
+    std::vector<OpenFileInfo*>          m_openFiles;
     SymbolParser*                   m_symbolParser;
     bool                            m_waitForFinalSymbolParse; //For batch loading files more efficiently 
     

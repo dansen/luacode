@@ -9,7 +9,7 @@ end
 function logger.warn(str_, ...)
 	local str = string.format(str_, ...)
 	if str == nil then 
-		return 
+		return
 	end
 	color_print("<lua-warn>"..str, 0xffff00)
 end
