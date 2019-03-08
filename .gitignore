@@ -2,7 +2,6 @@
 *.idb
 *.log
 *.obj
-*.exe
 *.lastbuildstate
 *.sdf
 *.tlog
