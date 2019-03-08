@@ -14,3 +14,6 @@ bin/debug/Decoda.ilk
 *.ilk
 build/Decoda.VC.db
 build/Decoda.VC.VC.opendb
+bin/debug/LuaInject.dll
+bin/debug/LuaInject.dll
+bin/debug/LuaInject.ilk
