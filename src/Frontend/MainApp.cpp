@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 
 Decoda
 Copyright (C) 2007-2013 Unknown Worlds Entertainment, Inc. 
@@ -138,10 +138,10 @@ bool MainApp::OnInit()
 {
 	SetConsoleOutputCP(CP_UTF8);
 
-	//Æô¶¯luaĞéÄâ»ú
+	//å¯åŠ¨luaè™šæ‹Ÿæœº
 	ScriptManager::sharedMgr()->init("lua/");
 
-	//¿½±´options.xmlÎÄ¼şµ½CÅÌ
+	//æ‹·è´options.xmlæ–‡ä»¶åˆ°Cç›˜
 	if (!CopyOptionsToCommon()) {
 		return false;
 	}
