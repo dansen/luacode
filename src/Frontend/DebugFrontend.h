@@ -52,9 +52,15 @@ public:
 
     struct StackFrame
     {
-        unsigned int    scriptIndex;
-        unsigned int    line;
+        int    scriptIndex;
+        int    line;
         std::string     function;
+
+		StackFrame() {
+			scriptIndex = -1;
+			line = 0;
+			function = "";
+		}
     };
 
     enum State
