@@ -17,3 +17,4 @@ bin/debug/LuaInject.dll
 bin/debug/LuaInject.dll
 bin/debug/LuaInject.ilk
 bin/release/Decoda.exe
+libs/wxScintilla/lib/wxscintilla.lib

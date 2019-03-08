@@ -166,7 +166,7 @@
     </ResourceCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>liblua.lib;imm32.lib;comctl32.lib;rpcrt4.lib;imagehlp.lib;Update.lib;wxbase28.lib;wxmsw28_core.lib;wxmsw28_aui.lib;wxscintilla.lib;wxbase28_xml.lib;wxexpat.lib;wxmsw28_adv.lib;wxmsw28_qa.lib;wxzlib.lib;wxmsw28_richtext.lib;wxmsw28_html.lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
