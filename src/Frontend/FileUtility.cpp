@@ -159,7 +159,7 @@ const char * get_options_path()
 
 	if (result != S_OK) {
 		return 0;
-	}
+	} 
 
 	static char config_path[1024];
 	sprintf(config_path, "%s/luacode/options.xml", documents);
