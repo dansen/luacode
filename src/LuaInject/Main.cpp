@@ -29,25 +29,19 @@ HINSTANCE g_hInstance = NULL;
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD reason, LPVOID reserved)
 {
-
     g_hInstance = hInstance;
 
     if (reason == DLL_PROCESS_ATTACH)
     {
-
-        // This line can be uncommented to give yourself an opportunity to attach
-        // the MSVC debugger to the process being debugged in Decoda to allow
-        // LuaInject to be debugged.
-        //MessageBox(NULL, "Waiting to attach the debugger", NULL, MB_OK);
-
         if (!DebugBackend::Get().Initialize(hInstance))
         {
             return FALSE;
         }
-
     }
     else if (reason == DLL_PROCESS_DETACH)
     {
+		std::string stack = TraceStack();
+		DebugBackend::Get().Message(stack.c_str());
         DebugBackend::Destroy();
     }
 

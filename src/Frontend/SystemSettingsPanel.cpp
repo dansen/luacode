@@ -31,7 +31,7 @@ END_EVENT_TABLE()
 
 SystemSettingsPanel::SystemSettingsPanel( wxWindow* parent, int id, wxPoint pos, wxSize size, int style ) : wxPanel( parent, id, pos, size, style )
 {
-
+	SetDoubleBuffered(true);
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 2, 1, 0, 0 );
 	fgSizer4->AddGrowableCol( 0 );

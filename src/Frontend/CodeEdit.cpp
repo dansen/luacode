@@ -41,10 +41,11 @@ EVT_KILL_FOCUS(CodeEdit::OnKillFocus)
 EVT_SCI_CHARADDED(wxID_ANY, CodeEdit::OnCharAdded)
 EVT_SCI_CHANGE(wxID_ANY, CodeEdit::OnChange)
 EVT_SCI_MODIFIED(wxID_ANY, CodeEdit::OnModified)
+EVT_KEY_DOWN(CodeEdit::OnKeyDown)
 
 END_EVENT_TABLE()
 
-CodeEdit::CodeEdit()
+CodeEdit::CodeEdit() :wxScintilla()
 {
 	// The minimum number of characters that must be typed before autocomplete
 	// is displayed for global symbols. We impose a minimum so that autocomplete
@@ -54,6 +55,7 @@ CodeEdit::CodeEdit()
 	m_tipWindow = NULL;
 	m_enableAutoComplete = true;
 	m_lineMappingDirty = true;
+	SetDoubleBuffered(true);
 }
 
 CodeEdit::~CodeEdit()
@@ -148,7 +150,10 @@ void CodeEdit::SetFontColorSettings(const FontColorSettings& settings)
 	StyleSetForeground(wxSCI_LUA_NUMBER, settings.GetColors(FontColorSettings::DisplayItem_Number).foreColor);
 	StyleSetBackground(wxSCI_LUA_NUMBER, settings.GetColors(FontColorSettings::DisplayItem_Number).backColor);
 
+	//ÐÐºÅ
 	StyleSetSize(wxSCI_STYLE_LINENUMBER, font.GetPointSize());
+	StyleSetForeground(wxSCI_STYLE_LINENUMBER, settings.GetColors(FontColorSettings::DisplayItem_Comment).foreColor);
+	StyleSetBackground(wxSCI_STYLE_LINENUMBER, settings.GetColors(FontColorSettings::DisplayItem_Default).backColor);
 
 	// Set the caret color as the inverse of the background color so it's always visible.
 	SetCaretForeground(GetInverse(settings.GetColors(FontColorSettings::DisplayItem_Default).backColor));

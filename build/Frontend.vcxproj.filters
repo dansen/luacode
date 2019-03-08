@@ -31,6 +31,9 @@
     <Filter Include="debug">
       <UniqueIdentifier>{d47791e4-3f5d-45b0-acfe-3049db03e8d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="controls">
+      <UniqueIdentifier>{b954c3f6-57df-4e8e-bdb8-e9ab95166487}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Frontend\luaext\luacodeTolua.h">
@@ -246,6 +249,9 @@
     <ClInclude Include="..\src\Frontend\base\Singleton.h">
       <Filter>base</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Frontend\controls\FileTreeCtrl.h">
+      <Filter>controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Frontend\luaext\luacodeTolua.cpp">
@@ -457,6 +463,9 @@
     </ClCompile>
     <ClCompile Include="..\src\Frontend\base\luaformat.c">
       <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Frontend\controls\FileTreeCtrl.cpp">
+      <Filter>controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

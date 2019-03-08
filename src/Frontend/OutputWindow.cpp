@@ -33,8 +33,10 @@ END_EVENT_TABLE()
 
 
 OutputWindow::OutputWindow(MainFrame* mainFrame, wxWindowID winid)
-    : wxTextCtrl(mainFrame, winid, _(""), wxDefaultPosition, wxSize(200,150), wxTE_MULTILINE | wxTE_READONLY | wxTE_DONTWRAP | wxTE_RICH | wxBORDER_SUNKEN)
+    : wxTextCtrl(mainFrame, winid, _(""), wxDefaultPosition, wxSize(200,150), 
+		wxTE_MULTILINE | wxTE_READONLY | wxTE_DONTWRAP | wxTE_RICH | wxBORDER_NONE)
 {
+	SetDoubleBuffered(true);
     m_mainFrame = mainFrame;
 }
 

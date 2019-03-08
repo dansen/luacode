@@ -69,8 +69,8 @@ END_EVENT_TABLE()
 ProjectExplorerWindow::ProjectExplorerWindow(wxWindow* parent, wxWindowID winid)
     : wxPanel(parent, winid)
 {
-
     SetSize(250, 300);
+	SetDoubleBuffered(true);
 
     m_stopExpansion = 0;
 
@@ -117,7 +117,8 @@ ProjectExplorerWindow::ProjectExplorerWindow(wxWindow* parent, wxWindowID winid)
 
     gSizer1->Add( gSizer2, 1, wxEXPAND, 5  );
 
-    m_tree = new wxTreeCtrl(this, winid, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT | wxTR_HIDE_ROOT | wxTR_MULTIPLE | wxTR_EXTENDED);
+    m_tree = new FileTreeCtrl(this, winid, wxDefaultPosition, wxDefaultSize,
+		wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT | wxTR_HIDE_ROOT | wxTR_MULTIPLE | wxTR_EXTENDED| wxBORDER_NONE);
     m_tree->AssignImageList(imageList);
 
     // The "best size" for the tree component must be 0 so that the tree control doesn't
@@ -330,6 +331,7 @@ bool ProjectExplorerWindow::MatchesFilter(const wxString& string, const wxString
 
 void ProjectExplorerWindow::AddFile(wxTreeItemId parent, Project::File* file)
 {
+	std::string filename = file->fileName.GetFullPath();
 
     ItemData* data = new ItemData;
     data->file      = file;

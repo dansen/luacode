@@ -501,7 +501,6 @@ void DebugFrontend::EventThreadProc()
 
     while (m_eventChannel.ReadUInt32(eventId))
     {
-
         unsigned int vm;
         m_eventChannel.ReadUInt32(vm);
 
@@ -626,7 +625,7 @@ void DebugFrontend::EventThreadProc()
             
             event.SetMessage(message);            
 
-        }
+		}
 
         // Dispatch the message to the UI.
         if (m_eventHandler != NULL)
@@ -666,7 +665,6 @@ DWORD WINAPI DebugFrontend::StaticEventThreadProc(LPVOID param)
     DebugFrontend* self = static_cast<DebugFrontend*>(param);
     self->EventThreadProc();
     return 0;
-
 }
 
 void DebugFrontend::Continue(unsigned int vm)

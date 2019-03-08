@@ -29,7 +29,7 @@ END_EVENT_TABLE()
 FindInFilesDialog::FindInFilesDialog( wxWindow* parent, int id )
     : wxDialog( parent, id,  wxT("Find in Files"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
-
+	SetDoubleBuffered(true);
 	wxFlexGridSizer* fgSizer18;
 	fgSizer18 = new wxFlexGridSizer( 2, 1, 0, 0 );
 	fgSizer18->AddGrowableCol( 0 );

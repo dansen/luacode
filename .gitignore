@@ -10,3 +10,7 @@
 bin/debug/Decoda.ilk
 bin/debug/Decoda.exe
 bin/debug/Decoda.ilk
+*.exe
+*.ilk
+build/Decoda.VC.db
+build/Decoda.VC.VC.opendb

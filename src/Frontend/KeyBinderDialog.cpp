@@ -23,7 +23,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "KeyBinderDialog.h"
 #include "KeyMonitorTextCtrl.h"
 #include "StlUtility.h"
-
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS 1
 #include <hash_map>
 #include <algorithm>
 #include <assert.h>
@@ -40,7 +40,7 @@ END_EVENT_TABLE()
 KeyBinderDialog::KeyBinderDialog(wxWindow* parent, int id, wxPoint pos, wxSize size, int style)
     : wxPanel( parent, id, pos, size, style )
 {
-
+	SetDoubleBuffered(true);
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 2, 1, 0, 0 );
 	fgSizer1->AddGrowableCol( 0 );

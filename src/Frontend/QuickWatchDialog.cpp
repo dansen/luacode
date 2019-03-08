@@ -36,7 +36,7 @@ END_EVENT_TABLE()
 QuickWatchDialog::QuickWatchDialog(wxWindow* parent, int id, wxString title, wxPoint pos, wxSize size, int style )
     : wxDialog( parent, id, title, pos, size, style )
 {
-
+	SetDoubleBuffered(true);
     SetMinSize(size);
 
 	wxFlexGridSizer* fgSizer1;

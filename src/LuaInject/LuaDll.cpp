@@ -27,7 +27,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "CriticalSection.h"
 #include "CriticalSectionLock.h"
 #include "DebugHelp.h"
-
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS 1
 #include <windows.h>
 #include <tlhelp32.h>
 #include <psapi.h>
@@ -56,6 +56,7 @@ typedef lua_State*      (*lua_open_500_cdecl_t)         ();
 typedef lua_State*      (*lua_newstate_cdecl_t)         (lua_Alloc, void*);
 typedef void            (*lua_close_cdecl_t)            (lua_State*);
 typedef lua_State*      (*lua_newthread_cdecl_t)        (lua_State*);
+typedef lua_State*      (*lua_tothread_cdecl_t)        (lua_State*, int);
 typedef int             (*lua_error_cdecl_t)            (lua_State*);
 typedef int             (*lua_absindex_cdecl_t)         (lua_State*, int);
 typedef int             (*lua_sethook_cdecl_t)          (lua_State*, lua_Hook, int, int);
@@ -129,6 +130,7 @@ typedef lua_State*      (__stdcall *lua_open_500_stdcall_t)       ();
 typedef lua_State*      (__stdcall *lua_newstate_stdcall_t)       (lua_Alloc, void*);
 typedef void            (__stdcall *lua_close_stdcall_t)          (lua_State*);
 typedef lua_State*      (__stdcall *lua_newthread_stdcall_t)      (lua_State*);
+typedef lua_State*      (__stdcall *lua_tothread_stdcall_t)      (lua_State*, int);
 typedef int             (__stdcall *lua_error_stdcall_t)          (lua_State*);
 typedef int             (__stdcall *lua_absindex_stdcall_t)       (lua_State*, int);
 typedef int             (__stdcall *lua_sethook_stdcall_t)        (lua_State*, lua_Hook_stdcall, int, int);
@@ -226,6 +228,7 @@ struct LuaInterface
     lua_newstate_cdecl_t         lua_newstate_dll_cdecl;
     lua_close_cdecl_t            lua_close_dll_cdecl;
     lua_newthread_cdecl_t        lua_newthread_dll_cdecl;
+	lua_tothread_cdecl_t        lua_tothread_dll_cdecl;
     lua_error_cdecl_t            lua_error_dll_cdecl;
 		lua_absindex_cdecl_t         lua_absindex_dll_cdecl;
     lua_gettop_cdecl_t           lua_gettop_dll_cdecl;
@@ -300,6 +303,7 @@ struct LuaInterface
     lua_newstate_stdcall_t       lua_newstate_dll_stdcall;
     lua_close_stdcall_t          lua_close_dll_stdcall;
     lua_newthread_stdcall_t      lua_newthread_dll_stdcall;
+	lua_tothread_stdcall_t      lua_tothread_dll_stdcall;
     lua_error_stdcall_t          lua_error_dll_stdcall;
     lua_absindex_stdcall_t       lua_absindex_dll_stdcall;
     lua_gettop_stdcall_t         lua_gettop_dll_stdcall;
@@ -747,7 +751,7 @@ const char* GetName(unsigned long api, const lua_Debug* ar)
     switch( g_interfaces[api].version)
     {
         case 520: return ar->ld52.name;
-        default: return ar->ld51.name;
+        default: return ar->ld51.name ? ar->ld51.name:"";
     }
 }
 
@@ -1080,6 +1084,18 @@ void lua_close_dll(unsigned long api, lua_State* L)
     {
         g_interfaces[api].lua_close_dll_stdcall(L);
     }
+}
+
+lua_State * lua_tothread_dll(unsigned long api, lua_State * L, int id)
+{
+	if (g_interfaces[api].lua_tothread_dll_cdecl != NULL)
+	{
+		return g_interfaces[api].lua_tothread_dll_cdecl(L, id);
+	}
+	else
+	{
+		return g_interfaces[api].lua_tothread_dll_stdcall(L, id);
+	}
 }
 
 lua_State* lua_newthread_dll(unsigned long api, lua_State* L)
@@ -2434,7 +2450,6 @@ lua_State* lua_newstate_worker(unsigned long api, lua_Alloc f, void* ud, bool& s
 // calling convention at run-time and removes and extra argument from the stack.
 __declspec(naked) lua_State* lua_newstate_intercept(unsigned long api, lua_Alloc f, void* ud)
 {
-
     lua_State*      result;
     bool            stdcall;
 
@@ -2452,7 +2467,6 @@ __declspec(naked) lua_State* lua_newstate_intercept(unsigned long api, lua_Alloc
 #pragma auto_inline(off)
 lua_State* lua_newthread_worker(unsigned long api, lua_State* L, bool& stdcall)
 {
-    
     lua_State* result = NULL;
 
     if (!g_interfaces[api].finishedLoading)
@@ -3157,7 +3171,6 @@ std::string GetApplicationDirectory()
 
 bool LoadLuaFunctions(const stdext::hash_map<std::string, DWORD64>& symbols, HANDLE hProcess)
 {
-
     #define GET_FUNCTION_OPTIONAL(function)                                                                                     \
         {                                                                                                                       \
             stdext::hash_map<std::string, DWORD64>::const_iterator iterator = symbols.find(#function);                          \
@@ -3245,6 +3258,7 @@ bool LoadLuaFunctions(const stdext::hash_map<std::string, DWORD64>& symbols, HAN
     // Start reporting errors about functions we couldn't hook.
     report = true;
     
+	GET_FUNCTION(lua_tothread);
     GET_FUNCTION(lua_newthread);
     GET_FUNCTION(lua_close);
     GET_FUNCTION(lua_error);

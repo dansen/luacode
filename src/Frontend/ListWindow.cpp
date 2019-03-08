@@ -30,9 +30,9 @@ END_EVENT_TABLE()
 
 
 ListWindow::ListWindow(MainFrame* mainFrame, wxWindowID winid)
-    : ListView(mainFrame, winid, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL)
+    : ListView(mainFrame, winid, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL|wxNO_BORDER)
 {
-
+	SetDoubleBuffered(true);
     SetAllowColumnResizing(false);
 
     // Add the column that will contain the "active" icon.

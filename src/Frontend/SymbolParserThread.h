@@ -74,8 +74,8 @@ private:
     /**
      * Parses the symbols for the file.
      */
-	void ParseFileSymbols(wxString & fileName, wxInputStream& input, std::vector<Symbol*>& symbols, std::set<wxString> names);
-	void addSymbol(std::vector<Symbol*>& symbols, Symbol * sym, std::set<wxString> names);
+	void ParseFileSymbols(wxString & fileName, wxInputStream& input, std::vector<Symbol*>& symbols, std::set<wxString> & names);
+	void addSymbol(std::vector<Symbol*>& symbols, Symbol * sym, std::set<wxString> & names);
 private:
 
     /**

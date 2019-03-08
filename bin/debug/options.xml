@@ -3,83 +3,83 @@
   <window>
     <maximized>true</maximized>
     <rect>
-      <x>98</x>
-      <y>209</y>
-      <xSize>1024</xSize>
-      <ySize>768</ySize>
+      <x>325</x>
+      <y>33</y>
+      <xSize>1281</xSize>
+      <ySize>880</ySize>
     </rect>
   </window>
-  <layout mode="editing">layout2|name=output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=callstack;caption=Call Stack;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=vmlist;caption=Virtual Machines;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=watch;caption=Watch;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=projectexplorer;caption=Project Explorer;state=2099196;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=250;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=breakpoints;caption=Breakpoints;state=2099196;dir=3;layer=0;row=0;pos=1;prop=100000;bestw=20;besth=20;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=search;caption=Search Results;state=2099196;dir=3;layer=0;row=0;pos=2;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=notebook;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(3,0,0)=258|dock_size(4,0,0)=279|dock_size(5,0,0)=18|</layout>
-  <layout mode="debugging">layout2|name=output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=0;prop=144947;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=callstack;caption=Call Stack;state=2099196;dir=3;layer=0;row=0;pos=1;prop=107684;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=vmlist;caption=Virtual Machines;state=2099196;dir=3;layer=0;row=0;pos=2;prop=47369;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=watch;caption=Watch;state=2099196;dir=3;layer=0;row=0;pos=3;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=projectexplorer;caption=Project Explorer;state=2099196;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=250;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=breakpoints;caption=Breakpoints;state=2099196;dir=3;layer=0;row=0;pos=4;prop=100000;bestw=20;besth=20;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=search;caption=Search Results;state=2099196;dir=3;layer=0;row=0;pos=5;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=notebook;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(3,0,0)=165|dock_size(4,0,0)=252|dock_size(5,0,0)=18|</layout>
+  <layout mode="editing">layout2|name=output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=callstack;caption=Call Stack;state=2099198;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=watch;caption=Watch;state=2099196;dir=3;layer=0;row=0;pos=1;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=projectexplorer;caption=Project Explorer;state=2099196;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=250;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=breakpoints;caption=Breakpoints;state=2099196;dir=3;layer=0;row=0;pos=2;prop=100000;bestw=20;besth=20;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=notebook;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(3,0,0)=237|dock_size(4,0,0)=286|dock_size(5,0,0)=18|</layout>
+  <layout mode="debugging">layout2|name=output;caption=Output;state=2099196;dir=3;layer=0;row=0;pos=0;prop=144947;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=callstack;caption=Call Stack;state=2099196;dir=3;layer=0;row=0;pos=1;prop=86526;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=vmlist;caption=Virtual Machines;state=2099196;dir=3;layer=0;row=0;pos=2;prop=93158;bestw=96;besth=76;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=watch;caption=Watch;state=2099196;dir=3;layer=0;row=0;pos=3;prop=75369;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=projectexplorer;caption=Project Explorer;state=2099196;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=250;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=breakpoints;caption=Breakpoints;state=2099196;dir=3;layer=0;row=0;pos=4;prop=100000;bestw=20;besth=20;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=search;caption=Search Results;state=2099196;dir=3;layer=0;row=0;pos=5;prop=100000;bestw=196;besth=146;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=notebook;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=16;besth=16;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(3,0,0)=224|dock_size(4,0,0)=280|dock_size(5,0,0)=18|</layout>
   <fontcolor>
     <font>0;-16;0;0;0;400;0;0;0;0;3;2;1;49;Consolas</font>
     <displayitem>
       <id>0</id>
-      <foreColor>#ffffff</foreColor>
-      <backColor>#002240</backColor>
+      <foreColor>#000000</foreColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>1</id>
       <foreColor>#75715e</foreColor>
-      <backColor>#002240</backColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>2</id>
-      <foreColor>#6969fa</foreColor>
-      <backColor>#002240</backColor>
+      <foreColor>#0088ff</foreColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>3</id>
-      <foreColor>#fd991f</foreColor>
-      <backColor>#002240</backColor>
+      <foreColor>#ff8c1f</foreColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>4</id>
-      <foreColor>#a6e22c</foreColor>
-      <backColor>#002240</backColor>
+      <foreColor>#ff00ff</foreColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>5</id>
       <foreColor>#00ffff</foreColor>
-      <backColor>#002240</backColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>6</id>
-      <foreColor>#66d9ef</foreColor>
-      <backColor>#002240</backColor>
+      <foreColor>#000000</foreColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>7</id>
-      <foreColor>#fa9696</foreColor>
-      <backColor>#002240</backColor>
+      <foreColor>#000000</foreColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>8</id>
-      <foreColor>#e6db82</foreColor>
-      <backColor>#002240</backColor>
+      <foreColor>#000000</foreColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
     <displayitem>
       <id>9</id>
-      <foreColor>#ff0000</foreColor>
-      <backColor>#222826</backColor>
+      <foreColor>#0000ff</foreColor>
+      <backColor>#ffffff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
@@ -100,14 +100,14 @@
     <displayitem>
       <id>12</id>
       <foreColor>#ffffff</foreColor>
-      <backColor>#0a246a</backColor>
+      <backColor>#3390ff</backColor>
       <bold>false</bold>
       <italic>false</italic>
     </displayitem>
   </fontcolor>
   <editor>
     <indentsize>4</indentsize>
-    <usetabs>true</usetabs>
+    <usetabs>false</usetabs>
     <removetabsonload>false</removetabsonload>
     <showlinenumbers>true</showlinenumbers>
     <loadlastprojectonstartup>true</loadlastprojectonstartup>
@@ -116,7 +116,7 @@
     <showwhitespace>false</showwhitespace>
   </editor>
   <system>
-    <check_for_updates>true</check_for_updates>
+    <check_for_updates>false</check_for_updates>
   </system>
   <keybindings>
     <command>
@@ -180,10 +180,6 @@
       <key>Ctrl+G</key>
     </command>
     <command>
-      <id>61</id>
-      <key>Ctrl+/</key>
-    </command>
-    <command>
       <id>88</id>
       <key>Ctrl+Shift+Return</key>
     </command>
@@ -194,6 +190,10 @@
     <command>
       <id>91</id>
       <key>Ctrl+P</key>
+    </command>
+    <command>
+      <id>93</id>
+      <key>Ctrl+Alt+F</key>
     </command>
     <command>
       <id>44</id>
@@ -236,6 +236,10 @@
       <key>Ctrl+Shift+F9</key>
     </command>
     <command>
+      <id>92</id>
+      <key>F2</key>
+    </command>
+    <command>
       <id>39</id>
       <key>Ctrl+Tab</key>
     </command>
@@ -249,7 +253,7 @@
     </command>
     <command>
       <id>38</id>
-      <key>Ctrl+Alt+W</key>
+      <key>Ctrl+Shift+W</key>
     </command>
     <command>
       <id>43</id>
@@ -258,10 +262,6 @@
     <command>
       <id>33</id>
       <key>Alt+7</key>
-    </command>
-    <command>
-      <id>35</id>
-      <key>Alt+3</key>
     </command>
     <command>
       <id>82</id>
@@ -273,27 +273,28 @@
     </command>
   </keybindings>
   <recent_files>
-    <file1>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\game\Resources\script\xc\fight\FightSystem.lua</file1>
-    <file2>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\game\Resources\script\util\bit.lua</file2>
-    <file3>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\Debug.win32\untitled.lua</file3>
-    <file4>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\game\Resources\script\xc\card\CardSystem.lua</file4>
-    <file5>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\game\Resources\script\util\DelaySystem.lua</file5>
-    <file6>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\game\Resources\script\util\animate.lua</file6>
-    <file7>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\Debug.win32\untitled1.lua</file7>
-    <file8>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\game\Resources\script\util\action.lua</file8>
-    <file9>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\game\Resources\script\event\EventCode.lua</file9>
+    <file1>E:\Source\mirror\server\ServerWin32V2\Server\Server\Source\Lua\Common\GoldenSharkRobot.lua</file1>
+    <file2>E:\Source\mirror\server\ServerWin32V2\Server\Server\Source\Lua\Module\GoldenSharkContest.lua</file2>
+    <file3>...rWin32V2\Server\Server\Release/../Source/Lua/Common/GoldenSharkRobot.lua</file3>
+    <file4>D:\github\luacode\bin\res\lua\luacode\codeedit.lua</file4>
+    <file5>D:\github\luacode\bin\res\lua\luacode\keyevent.lua</file5>
+    <file6>D:\github\luacode\bin\res\lua\luacode\keybinder.lua</file6>
+    <file7>C:\Users\Savic\Desktop\untitled.lua</file7>
+    <file8></file8>
+    <file9></file9>
   </recent_files>
   <recent_projects>
-    <file1>E:\CardGame\source\cardgame\trunk\Client\ver1.1.0.0\Debug.win32\cardgame.deproj</file1>
-    <file2></file2>
-    <file3></file3>
-    <file4></file4>
-    <file5></file5>
-    <file6></file6>
+    <file1>E:\Source\mirror\server\ServerWin32V2\Server\Server\Release\poker.deproj</file1>
+    <file2>E:\mirror\server\tmp\DDZAI\ddz.deproj</file2>
+    <file3>E:\oversea\lhdb\server\tmp\DDZAI\ddz.deproj</file3>
+    <file4>C:\Users\Administrator\Dropbox\Work\DDZAI\ddz.deproj</file4>
+    <file5>E:\project\lhdb_gamehall\dev_server\DDZAI\ddz.deproj</file5>
+    <file6>D:\github\luacode\bin\luacode.deproj</file6>
     <file7></file7>
     <file8></file8>
     <file9></file9>
   </recent_projects>
+  <last_project_loaded>E:\Source\mirror\server\ServerWin32V2\Server\Server\Release\poker.deproj</last_project_loaded>
   <find_directories>
     <file1></file1>
     <file2></file2>

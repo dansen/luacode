@@ -37,6 +37,7 @@
 #if defined(HAVE_EXT_HASH_MAP)
     #include <ext/hash_set>
 #elif defined(HAVE_HASH_MAP)
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS 1
     #include <hash_set>
 #endif
 

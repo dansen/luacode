@@ -81,7 +81,7 @@ const wxColour FontColorSettingsPanel::s_defaultColor[] =
 
 FontColorSettingsPanel::FontColorSettingsPanel( wxWindow* parent, int id, wxPoint pos, wxSize size, int style ) : wxPanel( parent, id, pos, size, style )
 {
-
+	SetDoubleBuffered(true);
     wxFlexGridSizer* fgSizer6;
 	fgSizer6 = new wxFlexGridSizer( 4, 1, 0, 0 );
 	fgSizer6->AddGrowableCol( 0 );

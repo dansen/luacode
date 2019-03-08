@@ -29,12 +29,12 @@ void LineMapper::Update(const std::string& oldCode, const std::string& newCode)
 {
 
     std::vector<std::string> X;
-    DivideIntoLines(oldCode, X);
+    //DivideIntoLines(oldCode, X);
 
     std::vector<std::string> Y;
-    DivideIntoLines(newCode, Y);
+    //DivideIntoLines(newCode, Y);
     
-    Diff(X, Y);
+    //Diff(X, Y);
 
 }
 

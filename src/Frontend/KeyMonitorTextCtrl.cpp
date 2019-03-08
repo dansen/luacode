@@ -35,9 +35,6 @@ END_EVENT_TABLE()
 
 void KeyMonitorTextCtrl::OnKey(wxKeyEvent &event)
 {
-	if(event.GetKeyCode() != 308){
-		//printf("key:%d %d\n", event.GetKeyCode(), event.GetModifiers());
-	}
     // backspace cannot be used as shortcut key...
     if (event.GetKeyCode() == WXK_BACK)
     {

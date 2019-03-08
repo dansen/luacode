@@ -71,10 +71,10 @@ static void SkipWhitespace(wxInputStream& input, unsigned int& lineNumber)
         }
         else if (c == '/')
         {
-            input.GetC();
             char c2 = input.Peek();
             if (c2 == '*')
             {
+				input.GetC();
                 // C++ block comment.
                 input.GetC();
                 while (!input.Eof())
@@ -94,6 +94,7 @@ static void SkipWhitespace(wxInputStream& input, unsigned int& lineNumber)
             }
             else if (c2 == '/')
             {
+				input.GetC();
                 // C++ single line comment.
                 while (!input.Eof() && input.GetC() != '\n')
                 {
@@ -103,7 +104,6 @@ static void SkipWhitespace(wxInputStream& input, unsigned int& lineNumber)
             }
             else
             {
-                input.Ungetch(c);
                 break;
             }
         }

@@ -30,6 +30,7 @@ StaticTextEx::StaticTextEx(wxWindow* parent, wxWindowID id, const wxString& labe
     : wxPanel(parent, id, pos, size, style, name)
 {
     m_label = label;
+	SetDoubleBuffered(true);
 }
 
 void StaticTextEx::OnPaint(wxPaintEvent& event)

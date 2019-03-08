@@ -1006,7 +1006,7 @@ public:
     bool ParseLuacErrorMessage(const wxString& error, wxString& fileName, unsigned int& line) const;
 
 
-	void selectPage(int index);
+	void selectPage(size_t index);
     /**
      * Gets the index of the script associated with an edit control. If there's no script
      * associated with it the method returns -1.
@@ -1507,19 +1507,33 @@ private:
     
     wxAuiManager                    m_mgr;
     wxString                        m_modeLayout[Mode_NumModes];
+
+	//±à¼­Æ÷ÏÔÊ¾¶àÒ³µÄÒ³Ãætab
     wxAuiNotebook*                  m_notebook;
+
+	//×´Ì¬À¸
     wxStatusBar*                    m_statusBar;
+
+	//
     Mode                            m_mode;
 
+	//²Ëµ¥À¸
     wxMenu*                         m_menuTools;
 
+	//×ó²àä¯ÀÀÎÄ¼þ
     ProjectExplorerWindow*          m_projectExplorer;
+
+	//¶ÑÕ»
     ListWindow*                     m_callStack;
-    ListWindow*                     m_vmList;
+
+	//Êä³ö
     OutputWindow*                   m_output;    
+
+	//±äÁ¿¼à²ì
     WatchWindow*                    m_watch;
+
+	//¶Ïµã
     BreakpointsWindow*              m_breakpointsWindow;
-    SearchWindow*                   m_searchWindow;
 
     unsigned int                    m_vm;
     std::vector<unsigned int>       m_vms;

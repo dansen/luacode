@@ -34,12 +34,12 @@ CriticalSection::~CriticalSection()
 
 void CriticalSection::Enter()
 {
-    EnterCriticalSection(&m_criticalSection);
+    //EnterCriticalSection(&m_criticalSection);
 }
 
 void CriticalSection::Exit()
 {
-    LeaveCriticalSection(&m_criticalSection);
+    //LeaveCriticalSection(&m_criticalSection);
 }
 
 bool CriticalSection::TryEnter()

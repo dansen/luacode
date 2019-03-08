@@ -353,7 +353,7 @@ wxString GetExecutablePath()
 }
 
 MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint& pos, const wxSize& size)
-    : wxFrame(NULL, -1, title, pos, size), m_timerIdleWakeUp(this)
+    : wxFrame(NULL, -1, title, pos, size, wxDEFAULT_FRAME_STYLE), m_timerIdleWakeUp(this)
 {
 	isConsoleOpened = false;
     m_project = NULL;
@@ -382,9 +382,6 @@ MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint&
     // Create the call stack window.
     m_callStack = new ListWindow(this, ID_CallStack);
 
-    // Create the virtual machine list window.
-    m_vmList = new ListWindow(this, ID_VmList);
-
     // Create the watch window.
     m_watch = new WatchWindow(this, ID_Watch);
 
@@ -393,10 +390,11 @@ MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint&
 
     m_breakpointsWindow = new BreakpointsWindow(this, ID_Breakpoints);
 
-    m_searchWindow = new SearchWindow(this, ID_Search);
-
     // Create the notebook that holds all of the open scripts.
-    m_notebook = new wxAuiNotebook(this, ID_Notebook, wxDefaultPosition, wxDefaultSize, wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_DEFAULT_STYLE);
+    m_notebook = new wxAuiNotebook(this, ID_Notebook, wxDefaultPosition, wxDefaultSize, 
+		wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_DEFAULT_STYLE | wxNO_BORDER);
+
+	m_notebook->GetAuiManager().GetArtProvider()->SetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE, 0);
         
     // Add the panes to the manager
     
@@ -406,9 +404,6 @@ MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint&
     m_mgr.AddPane(m_callStack, wxBOTTOM, wxT("Call Stack"));
     m_mgr.GetPane(m_callStack).Name("callstack");
 
-    m_mgr.AddPane(m_vmList, wxBOTTOM, wxT("Virtual Machines"));
-    m_mgr.GetPane(m_vmList).Name("vmlist");
-
     m_mgr.AddPane(m_watch,wxBOTTOM, wxT("Watch"));
     m_mgr.GetPane(m_watch).Name("watch");
 
@@ -417,9 +412,6 @@ MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint&
 
     m_mgr.AddPane(m_breakpointsWindow, wxBOTTOM, wxT("Breakpoints"));
     m_mgr.GetPane(m_breakpointsWindow).Name("breakpoints");
-
-    m_mgr.AddPane(m_searchWindow, wxBOTTOM, wxT("Search Results"));
-    m_mgr.GetPane(m_searchWindow).Name("search");
 
     m_mgr.AddPane(m_notebook, wxCENTER);
     m_mgr.GetPane(m_notebook).Name("notebook");
@@ -437,7 +429,7 @@ MainFrame::MainFrame(const wxString& title, int openFilesMessage, const wxPoint&
     // Save the default configuration for editing.
     m_mgr.GetPane(m_watch).Show(false);
     m_mgr.GetPane(m_callStack).Show(false);
-    m_mgr.GetPane(m_vmList).Show(false);
+	m_mgr.GetPane(m_notebook).Show(false);
     m_modeLayout[Mode_Editing] = m_mgr.SavePerspective();
 
     // Since the options contain the layout, load them after we've setup the panes.
@@ -766,7 +758,6 @@ bool MainFrame::OpenProject(const wxString& fileName, bool reportError)
 {
 
     m_output->Clear();
-    m_searchWindow->Clear();
 
     Project* project = new Project;
 
@@ -803,9 +794,6 @@ void MainFrame::SetProject(Project* project)
     CloseAllFiles();
 
     m_output->Clear();
-    m_searchWindow->Clear();
-
-    m_lastProjectLoaded.Empty();
 
     delete m_project;
     m_project = project;
@@ -1206,10 +1194,7 @@ void MainFrame::OnEditFindInFiles(wxCommandEvent& event)
          
         m_findTextHistory.Add(text);
 
-        m_searchWindow->Clear();
         ShowSearchWindow();
-
-        m_searchWindow->SearchMessage(wxString::Format("Find all \"%s\"", text.ToAscii()));
 
         FindInFiles(text, fileNames, dialog.GetMatchCase(), dialog.GetMatchWholdWord(), baseDirectory);
 
@@ -1667,7 +1652,6 @@ void MainFrame::OnWindowWatch(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnWindowVirtualMachines(wxCommandEvent& WXUNUSED(event))
 {
-    m_mgr.GetPane(m_vmList).Show();
     m_mgr.Update();
 }
 
@@ -1812,16 +1796,12 @@ void MainFrame::OnMenu(wxCommandEvent& event)
 
 void MainFrame::UpdateScriptLineMappingFromFile(const Project::File* file, DebugFrontend::Script* script)
 {
-
-    if (file->fileName.FileExists())
+    /*if (file->fileName.FileExists())
     {
-
-        // Read the file from disk.
         wxFile diskFile(file->fileName.GetFullPath());
 
         if (diskFile.IsOpened())
         {
-        
             unsigned int diskFileSize = file->fileName.GetSize().GetLo();
             char* diskFileSource = new char[diskFileSize + 1];
 
@@ -1831,16 +1811,12 @@ void MainFrame::UpdateScriptLineMappingFromFile(const Project::File* file, Debug
             script->lineMapper.Update(script->source, diskFileSource);
 
             delete [] diskFileSource;
-            diskFileSource = NULL;
-
         }
-    }
-
+    }*/
 }
 
 void MainFrame::SetMostRecentlyUsedPage(int pageIndex)
 {
-
     if (m_tabOrderIndex == -1 && pageIndex != -1)
     {
         int nextPageIndex = pageIndex;
@@ -1898,7 +1874,6 @@ void MainFrame::RemovePageFromTabOrder(int pageIndex)
 
 void MainFrame::OnDebugEvent(wxDebugEvent& event)
 {
-
     char vmText[256];
     sprintf(vmText, "0x%08x: ", event.GetVm());
 
@@ -1906,18 +1881,19 @@ void MainFrame::OnDebugEvent(wxDebugEvent& event)
     {
     case EventId_LoadScript:
         {
-
             // Sync up the breakpoints for this file.
-
             unsigned int scriptIndex = event.GetScriptIndex();
-            Project::File* file = m_project->GetFileForScript(scriptIndex);
+			Project::File* file = 0;// m_project->GetFileForScript(scriptIndex);
 
             if (file == NULL)
             {
                 // Check to see if one of the existing files' contents match this script.
                 DebugFrontend::Script* script = DebugFrontend::Get().GetScript(scriptIndex);
-                file = GetFileMatchingSource( wxFileName(DebugFrontend::Get().GetScript(scriptIndex)->name), script->source );
-            
+
+				wxFileName fn = wxFileName(DebugFrontend::Get().GetScript(scriptIndex)->name);
+
+                file = GetFileMatchingSource( fn, script->source );
+				
                 if (file != NULL)
                 {
                     // Map lines in case the loaded script is different than what we have on disk.
@@ -1936,10 +1912,7 @@ void MainFrame::OnDebugEvent(wxDebugEvent& event)
             }
             else
             {
-                // Check that we haven't already assigned this guy an index. If
-                // we have, overwriting it will cause the previous index to no
-                // longer exist in our project.
-                assert(file->scriptIndex == -1);
+
             }
 
             if (file != NULL)
@@ -1977,19 +1950,19 @@ void MainFrame::OnDebugEvent(wxDebugEvent& event)
         }
         break;
     case EventId_CreateVM:
-        m_output->OutputMessage(wxString::Format("%sVM created", vmText));
-        AddVmToList(event.GetVm());
+        //m_output->OutputMessage(wxString::Format("%sVM created", vmText));
+        //AddVmToList(event.GetVm());
         break;
     case EventId_DestroyVM:
-        m_output->OutputMessage(wxString::Format("%sVM destroyed", vmText));
-        RemoveVmFromList(event.GetVm());
+        //m_output->OutputMessage(wxString::Format("%sVM destroyed", vmText));
+        //RemoveVmFromList(event.GetVm());
         break;
     case EventId_Break:
+		//触发断点
         OnBreak(event);
         break;
     case EventId_SetBreakpoint:
         {
-            
             unsigned int scriptIndex = event.GetScriptIndex();
 
             Project::File* file = m_project->GetFileForScript(scriptIndex);
@@ -2929,9 +2902,9 @@ void MainFrame::OnSessionEnd(wxDebugEvent& event)
     ClearCurrentLineMarker();
 
     // Check if all of the VMs have been closed.
-    if (!m_vms.empty())
+    if (!m_vms.empty()) 
     {
-        m_output->OutputWarning("Warning 1003: Not all virtual machines were destroyed");
+        //m_output->OutputWarning("Warning 1003: Not all virtual machines were destroyed");
     }
 
     m_project->CleanUpAfterSession();
@@ -2944,7 +2917,6 @@ void MainFrame::OnSessionEnd(wxDebugEvent& event)
 
     SetContext(0, 0);
     m_vms.clear();
-    m_vmList->DeleteAllItems();
 
     SetMode(Mode_Editing);
     m_output->OutputMessage("Debugging session ended");
@@ -3223,12 +3195,11 @@ void MainFrame::SetContext(unsigned int vm, unsigned int stackLevel)
 
     // Update the selection in the VM list.
 
-    m_vmList->ClearAllIcons();
     unsigned int vmIndex = std::find(m_vms.begin(), m_vms.end(), vm) - m_vms.begin();
 
     if (vmIndex < m_vms.size())
     {
-        m_vmList->SetItemIcon(vmIndex, ListWindow::Icon_YellowArrow);
+
     }
 
     // Update the icons in the call stack.
@@ -4422,9 +4393,13 @@ OpenFileInfo* MainFrame::OpenProjectFile(Project::File* file)
 
     openFile->file = file;
     
-    openFile->edit = new CodeEdit;
+    openFile->edit = new CodeEdit();
     openFile->edit->SetAutoCompleteManager( &m_autoCompleteManager );
-    openFile->edit->Create(m_notebook, -1, wxPoint(0, 0), wxSize(3024, 3024));
+
+	//设置编辑器的边框样式
+    openFile->edit->Create(m_notebook, -1, wxPoint(0, 0), wxSize(3024, 3024), wxNO_BORDER);
+
+	//拖放
     openFile->edit->SetDropTarget( new CodeEditDropTarget(openFile->edit, this) );
     
     wxString fileName = openFile->file->fileName.GetFullPath();
@@ -4542,14 +4517,6 @@ void MainFrame::DeleteProjectFile(Project::File* file)
 
 void MainFrame::AddVmToList(unsigned int vm)
 {
-
-    assert(std::find(m_vms.begin(), m_vms.end(), vm) == m_vms.end());
-    m_vms.push_back(vm);
-
-    char vmText[256];
-    sprintf(vmText, "0x%08x", vm);
-
-    m_vmList->Append(vmText);
     
 }
 
@@ -4562,7 +4529,6 @@ void MainFrame::RemoveVmFromList(unsigned int vm)
     if (iterator != m_vms.end())
     {
         unsigned int index = iterator - m_vms.begin();
-        m_vmList->DeleteItem(index);
         m_vms.erase(iterator);
     }
 
@@ -4577,7 +4543,6 @@ void MainFrame::SetVmName(unsigned int vm, const wxString& name)
     if (iterator != m_vms.end())
     {
         unsigned int index = iterator - m_vms.begin();
-        m_vmList->SetString(index, name);
     }
 
 }
@@ -4619,7 +4584,7 @@ bool MainFrame::SaveFile(OpenFileInfo* file, bool promptForName)
 
     }
 
-    wxString fullPath = fileName.GetFullPath();
+	wxString fullPath = fileName.GetShortPath();
 	wxString fullName = fileName.GetFullName();
 
 	if (fullName.IsEmpty() || promptForName)
@@ -5462,12 +5427,6 @@ void MainFrame::FindInFiles(const wxString& text, const wxArrayString& fileNames
         free(buffer);
 
     }
-
-    // Output some statistics.
-    m_searchWindow->SearchMessage(messages);
-    m_searchWindow->SearchMessage(wxString::Format("Total found: %d\tMatching files: %d\tTotal files searched: %d",
-        numMatches, numMatchingFiles, fileNames.Count()));
-
 }
 
 bool MainFrame::FindInLine(const wxString& text, const wxString& line, bool matchWholeWord) const
@@ -5844,7 +5803,6 @@ void MainFrame::ShowWatchWindow()
 
 void MainFrame::ShowSearchWindow()
 {
-    m_mgr.GetPane(m_searchWindow).Show();
     m_mgr.Update();
 }
 
@@ -5865,17 +5823,52 @@ void MainFrame::SetMode(Mode mode)
 
 }
 
+//设置ime的位置
+bool SetInlinePosition(HWND hWnd, int x, int y, int font_height)
+{
+	bool ret = false;
+	HIMC hIMC = ImmGetContext(hWnd);
+
+	if (ImmGetOpenStatus(hIMC)) {
+		COMPOSITIONFORM cf = { 0 };
+		cf.dwStyle = CFS_POINT;
+		cf.ptCurrentPos.x = x;
+		cf.ptCurrentPos.y = y;
+		if (ImmSetCompositionWindow(hIMC, &cf)) {
+			/*LOGFONTW lf = { 0 };
+			lf.lfHeight = font_height;
+			// lf.lfFaceName = font_face;
+			if (ImmSetCompositionFontW(hIMC, &lf)) {
+				ret = TRUE;
+			}*/
+		}
+	}
+
+	ImmReleaseContext(hWnd, hIMC);
+	return ret;
+}
+
 bool MainFrame::MSWProcessMessage(WXMSG* pMsg)
 {
-
     MSG* msg = static_cast<MSG*>(pMsg);
+
+	switch (msg->message) {
+	case WM_IME_STARTCOMPOSITION:
+	case WM_IME_COMPOSITION: {
+		//开始输入消息
+		int pageIndex = GetSelectedPage();
+		CodeEdit* edit = m_openFiles[pageIndex]->edit;
+		wxPoint pt = edit->PointFromPosition(edit->GetCurrentPos());
+		//设置位置
+		SetInlinePosition(msg->hwnd, pt.x, pt.y, 20);
+		break;
+	}
+	default:
+		break;
+	}
 
     if (msg->message == m_openFilesMessage)
     {
-
-        // Handle the special message other instances send to us to tell us to
-        // open files.
-
         wxString command = wxGetApp().GetInstanceCommandLine();
         
         wxStringInputStream stream(command);
@@ -5890,8 +5883,7 @@ bool MainFrame::MSWProcessMessage(WXMSG* pMsg)
             }
         }
 
-        // Restore the window if it's minimized.
-        Maximize(false);
+		Maximize(false);
         Show(true);
 
         return true;
@@ -6179,27 +6171,14 @@ void MainFrame::BringToFront()
 
 Project::File* MainFrame::GetFileMatchingSource(const wxFileName& fileName, const std::string& source) const
 {
-
-    for (unsigned int i = 0; i < m_project->GetNumFiles(); ++i)
-    {
-
-        Project::File* file = m_project->GetFile(i);
-        
-        if (file->scriptIndex == -1 && file->fileName.GetFullName().CmpNoCase(fileName.GetFullName()) == 0)
-        {
-            return file;
-        }
-
-    }
-
-    return NULL;
-
+	Project::File* file = m_project->GetFile(fileName);
+	return file;
 }
 
 void MainFrame::AutoOpenLastProject()
 {
 
-    if (/*m_editorSettings.GetLoadLastProjectOnStartup() &&*/ !m_lastProjectLoaded.IsEmpty())
+    if (m_editorSettings.GetLoadLastProjectOnStartup() && !m_lastProjectLoaded.IsEmpty())
     {
         if (!OpenProject(m_lastProjectLoaded, false))
         {
@@ -6213,8 +6192,11 @@ void MainFrame::AutoOpenLastProject()
 
 void MainFrame::OnSymbolsParsed(SymbolParserEvent& event)
 {
-
     unsigned int fileId = event.GetFileId();
+	if (fileId) {
+		return;
+	}
+
     Project::File* file = m_project->GetFileById(fileId);
 
     //If we are batch loading files, wait for the final symbol parse of that
@@ -6331,7 +6313,7 @@ void MainFrame::applyKeyword(CodeEdit * edit, KeywordType type)
 	edit->Recolor();
 }
 
-void MainFrame::selectPage(int index)
+void MainFrame::selectPage(size_t index)
 {
 	if (index >= 0 && index < m_openFiles.size()) {
 		m_notebook->SetSelection(index);

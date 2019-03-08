@@ -29,9 +29,50 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "XmlUtility.h"
 #include "DebugHelp.h"
 
+#pragma comment(lib, "Dbghelp.lib")
+
 #include <assert.h>
 #include <algorithm>
 #include <sstream>
+#include <string>
+
+std::string TraceStack()
+{
+	static const int MAX_STACK_FRAMES = 5;
+
+	void *pStack[MAX_STACK_FRAMES];
+
+	HANDLE process = GetCurrentProcess();
+	SymInitialize(process, NULL, TRUE);
+	WORD frames = CaptureStackBackTrace(0, MAX_STACK_FRAMES, pStack, NULL);
+
+	std::ostringstream oss;
+	oss << "stack traceback: " << std::endl;
+	for (WORD i = 0; i < frames; ++i) {
+		DWORD64 address = (DWORD64)(pStack[i]);
+
+		DWORD64 displacementSym = 0;
+		char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR)];
+		PSYMBOL_INFO pSymbol = (PSYMBOL_INFO)buffer;
+		pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+		pSymbol->MaxNameLen = MAX_SYM_NAME;
+
+		DWORD displacementLine = 0;
+		IMAGEHLP_LINE64 line;
+		//SymSetOptions(SYMOPT_LOAD_LINES);
+		line.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
+
+		if (SymFromAddr(process, address, &displacementSym, pSymbol)
+			&& SymGetLineFromAddr64(process, address, &displacementLine, &line)) {
+			oss << "\t" << pSymbol->Name << " at " << line.FileName << ":" << line.LineNumber << "(0x" << std::hex << pSymbol->Address << std::dec << ")" << std::endl;
+		}
+		else {
+			oss << "\terror: " << GetLastError() << std::endl;
+		}
+	}
+	return oss.str();
+}
+
 
 DebugBackend* DebugBackend::s_instance = NULL;
 
@@ -69,7 +110,6 @@ const char* MemoryReader(lua_State* L, void* data, size_t* size)
 
 bool DebugBackend::Script::GetHasBreakPoint(unsigned int line) const
 {
-    
     for (size_t i = 0; i < breakpoints.size(); i++)
     {
         if(breakpoints[i] == line)
@@ -83,7 +123,6 @@ bool DebugBackend::Script::GetHasBreakPoint(unsigned int line) const
 
 bool DebugBackend::Script::HasBreakPointInRange(unsigned int start, unsigned int end) const
 {
-    
     for (size_t i = 0; i < breakpoints.size(); i++)
     {
         if(breakpoints[i] >= start && breakpoints[i] < end)
@@ -448,67 +487,26 @@ int DebugBackend::PostLoadScript(unsigned long api, int result, lua_State* L, co
 
     if (result != 0)
     {
+		// Make sure no other threads are running Lua while we handle the error.
+		CriticalSectionLock lock(m_criticalSection);
+		CriticalSectionLock lock2(m_breakLock);
 
-        {
+		// Get the error mesasge.
+		const char* message = lua_tostring_dll(api, L, -1);
 
-            // Make sure no other threads are running Lua while we handle the error.
-            CriticalSectionLock lock(m_criticalSection);
-            CriticalSectionLock lock2(m_breakLock);
+		// Stop execution.
+		SendBreakEvent(api, L, 1);
 
-            // Get the error mesasge.
-            const char* message = lua_tostring_dll(api, L, -1);
+		// Send an error event.
+		m_eventChannel.WriteUInt32(EventId_LoadError);
+		m_eventChannel.WriteUInt32(reinterpret_cast<int>(L));
+		m_eventChannel.WriteString(message);
+		m_eventChannel.Flush();
 
-            // Stop execution.
-            SendBreakEvent(api, L, 1);
-
-            // Send an error event.
-            m_eventChannel.WriteUInt32(EventId_LoadError);
-            m_eventChannel.WriteUInt32(reinterpret_cast<int>(L));
-            m_eventChannel.WriteString(message);
-            m_eventChannel.Flush();
-        
-        }
-
-        // Wait for the front-end to tell use to continue.
+		// Wait for the front-end to tell use to continue.
         WaitForContinue();
-
     }
-    /*
-    else
-    {
-
-        // Get the valid line numbers for placing breakpoints for this script.
-
-        lua_Debug ar;
-        lua_pushvalue_dll(L, -1);
-        
-        if (lua_getinfo_dll(L, ">L", &ar))
-        {
-
-            int lineTable = lua_gettop_dll(L);
-
-            lua_pushnil_dll(L);
-            while (lua_next_dll(L, lineTable) != 0)
-            {
-
-                int lineNumber = lua_tointeger_dll(L, -2);
-                script->validLines.push_back(lineNumber);
-
-                lua_pop_dll(L, 1);
-
-            }
-
-            // Pop the line table.
-            lua_pop_dll(L, 1);
-
-        }
-
-        // Sort the valid line numbers for easier/faster processing.
-        std::sort(script->validLines.begin(), script->validLines.end());
-        
-    }
-    */
-
+   
     if (registered)
     {
         // Stop execution so that the frontend has an opportunity to send us the break points
@@ -522,9 +520,8 @@ int DebugBackend::PostLoadScript(unsigned long api, int result, lua_State* L, co
 
 int DebugBackend::RegisterScript(lua_State* L, const char* source, size_t size, const char* name, bool unavailable)
 {
-
     CriticalSectionLock lock(m_criticalSection);
-
+	
     bool freeName = false;
 
     // If no name was specified, use the source as the name. This is similar to what
@@ -588,7 +585,6 @@ int DebugBackend::RegisterScript(lua_State* L, const char* source, size_t size, 
     
     unsigned int scriptIndex = m_scripts.size();
     m_scripts.push_back(script);
-
     m_nameToScript.insert(std::make_pair(name, scriptIndex));
 
     std::string fileName;
@@ -695,7 +691,6 @@ void DebugBackend::Message(const char* message, MessageType type)
 
 void DebugBackend::HookCallback(unsigned long api, lua_State* L, lua_Debug* ar)
 {
-
     m_criticalSection.Enter(); 
    
     if (!lua_checkstack_dll(api, L, 2))
@@ -706,8 +701,8 @@ void DebugBackend::HookCallback(unsigned long api, lua_State* L, lua_Debug* ar)
 
     // Note this executes in the thread of the script being debugged,
     // not our debugger, so we can block.
-
     VirtualMachine* vm = NULL;
+
     StateToVmMap::const_iterator iterator = m_stateToVm.find(L);
 
     if (iterator == m_stateToVm.end())
@@ -955,7 +950,7 @@ void DebugBackend::UpdateHookMode(unsigned long api, lua_State* L, lua_Debug* ho
 
     if(!vm->haveActiveBreakpoints)
     {
-        mode = HookMode_None;
+        //mode = HookMode_None;
     }
 
     if(currentMode != mode)
@@ -971,7 +966,6 @@ void DebugBackend::UpdateHookMode(unsigned long api, lua_State* L, lua_Debug* ho
 
 bool DebugBackend::StackHasBreakpoint(unsigned long api, lua_State* L)
 {
-    
     lua_Debug functionInfo;
     VirtualMachine* vm = GetVm(L);
 
@@ -980,6 +974,7 @@ bool DebugBackend::StackHasBreakpoint(unsigned long api, lua_State* L)
         lua_getinfo_dll(api, L, "S", &functionInfo);
 
         int linedefined = GetLineDefined( api, &functionInfo);
+
         if (linedefined == -1)
         {
             //ignore c functions
@@ -1363,7 +1358,6 @@ void DebugBackend::DeleteAllBreakpoints(){
 
 void DebugBackend::SendBreakEvent(unsigned long api, lua_State* L, int stackTop)
 {
-
     CriticalSectionLock lock(m_criticalSection);
 
     VirtualMachine* vm = GetVm(L);
@@ -2110,11 +2104,14 @@ bool DebugBackend::Evaluate(unsigned long api, lua_State* L, const std::string& 
     // Reenable the debugger hook
     EnableIntercepts(true);
     SetHookMode(api, L, HookMode_Full);
-    if(GetVm(L)->haveActiveBreakpoints || m_mode == Mode_StepInto || m_mode == Mode_StepOver){
+
+    if(GetVm(L)->haveActiveBreakpoints || m_mode == Mode_StepInto || m_mode == Mode_StepOver)
+	{
+
     }
 
     int t2 = lua_gettop_dll(api, L);
-    assert(t1 == t2);
+    //assert(t1 == t2);
 
     return error == 0;
 
@@ -2321,6 +2318,9 @@ TiXmlNode* DebugBackend::GetValueAsText(unsigned long api, lua_State* L, int n, 
         if( node == NULL)
         {
         node = GetTableAsText(api, L, -1, maxDepth - 1, typeNameOverride);
+		if (node == 0) {
+			return 0;
+		}
         }
         // Remove the duplicated value.
         lua_pop_dll(api, L, 1);
@@ -2509,8 +2509,7 @@ TiXmlNode* DebugBackend::GetValueAsText(unsigned long api, lua_State* L, int n, 
 
                 if (!m_warnedAboutUserData)
                 {
-                    DebugBackend::Get().Message("Warning 1008: No __tostring or __towatch metamethod was provided for userdata", MessageType_Warning);
-                    m_warnedAboutUserData = true;
+					return NULL;
                 }
         
                 void* p = lua_touserdata_dll(api, L, valueIndex);
@@ -2625,10 +2624,20 @@ TiXmlNode* DebugBackend::GetTableAsText(unsigned long api, lua_State* L, int t, 
         {
 
             TiXmlNode* key = new TiXmlElement("key");
-            key->LinkEndChild( GetValueAsText(api, L, -2, maxDepth - 1, NULL, true) );
+
+			TiXmlNode * n = GetValueAsText(api, L, -2, maxDepth - 1, NULL, true);
+			if (!n) {
+				return 0;
+			}
+            key->LinkEndChild( n );
 
             TiXmlNode* value = new TiXmlElement("data");
-            value->LinkEndChild( GetValueAsText(api, L, -1, maxDepth - 1) );
+
+			n = GetValueAsText(api, L, -1, maxDepth - 1);
+			if (!n) {
+				return 0;
+			}
+            value->LinkEndChild( n );
 
             TiXmlNode* element = new TiXmlElement("element");
 

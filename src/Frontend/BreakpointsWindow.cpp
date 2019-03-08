@@ -43,11 +43,13 @@ BEGIN_EVENT_TABLE( BreakpointsWindow, wxPanel )
 END_EVENT_TABLE()
 
 BreakpointsWindow::BreakpointsWindow(MainFrame* mainFrame, wxWindowID winid)
-    : wxPanel(mainFrame, winid)
+	: wxPanel(mainFrame, winid, wxDefaultPosition,
+		wxDefaultSize,
+		wxTAB_TRAVERSAL | wxNO_BORDER)
 {
 
     // Create the tool bar.
-
+	SetDoubleBuffered(true);
     m_buttonBar = new ButtonBar(this, wxID_ANY);
     m_buttonBar->SetToolBitmapSize( wxSize(22, 22) );
 
@@ -114,6 +116,9 @@ void BreakpointsWindow::RemoveFile(Project::File* file)
 
 void BreakpointsWindow::UpdateBreakpoints()
 {
+	if (m_breakpointList->GetItemCount() == 0) {
+		return;
+	}
 
     m_breakpointList->Freeze();
     m_breakpointList->DeleteAllItems();
@@ -141,8 +146,11 @@ void BreakpointsWindow::UpdateBreakpoints(Project::File* file)
 
 void BreakpointsWindow::AddBreakpointsForFile(Project::File* file)
 {
+	if (file->breakpoints.empty()) {
+		return;
+	}
 
-    std::vector<unsigned int> breakpoints = file->breakpoints;
+    std::vector<unsigned int> & breakpoints = file->breakpoints;
     std::sort(breakpoints.begin(), breakpoints.end());
 
     for (unsigned int breakpointIndex = 0; breakpointIndex < breakpoints.size(); ++breakpointIndex)

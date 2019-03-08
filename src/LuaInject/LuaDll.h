@@ -33,6 +33,7 @@ typedef int (*lua_CFunction_dll) (unsigned long api, lua_State *L);
 
 lua_State*      lua_newstate_dll        (unsigned long api, lua_Alloc, void*);
 lua_State*      lua_newthread_dll       (unsigned long api, lua_State* L);
+lua_State*      lua_tothread_dll		(unsigned long api, lua_State* L, int);
 void            lua_close_dll           (unsigned long api, lua_State*);
 int             lua_error_dll           (unsigned long api, lua_State*);
 int             lua_absindex_dll        (unsigned long api, lua_State*, int);

@@ -283,9 +283,6 @@ char * lua_format(const char * buf, int * len){
 		if (!token){
 			break;
 		}
-		if (token->len > 100) {
-			printf("%d \n", token->len);
-		}
 		if (token->len == 0){
 			continue;
 		}

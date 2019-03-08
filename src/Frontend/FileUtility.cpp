@@ -144,12 +144,10 @@ void ShowFileInFolder (wxFileName& inPath) {
     }
   }
 
-  if (folderPath)
-    CoTaskMemFree(folderPath);
-
-  if (filePath)
-    CoTaskMemFree(filePath);
-
+  if (folderPath) {
+	  CoTaskMemFree(folderPath);
+	  CoTaskMemFree(filePath);
+  }
+    
   desktopFolder->Release();
-  
 }

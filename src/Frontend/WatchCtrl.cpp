@@ -36,7 +36,7 @@ END_EVENT_TABLE()
 WatchCtrl::WatchCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator &validator, const wxString& name)
     : wxTreeListCtrl(parent, id, pos, size, style, validator, name)
 {
-
+	SetDoubleBuffered(true);
     AddColumn(_("Name"), 0, wxALIGN_LEFT);
     SetColumnEditable(0, true);
     AddColumn(_("Value"), 0, wxALIGN_LEFT);
@@ -423,6 +423,9 @@ wxString WatchCtrl::GetNodeAsText(wxXmlNode* node, wxString& type)
         else if (node->GetName() == "table")
         {
             text = GetTableAsText(node);
+			if (!text) {
+				return "";
+			}
         }
         else if (node->GetName() == "values")
         {

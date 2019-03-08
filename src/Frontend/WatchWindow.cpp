@@ -34,7 +34,7 @@ END_EVENT_TABLE()
 WatchWindow::WatchWindow(wxWindow* parent, wxWindowID winid)
     : WatchCtrl(parent, winid, wxDefaultPosition, wxDefaultSize)
 {
-
+	SetDoubleBuffered(true);
     m_root = AddRoot(_T("Root"));
     SetItemText(m_root, 1, _T("Root"));
     

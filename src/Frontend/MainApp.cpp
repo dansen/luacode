@@ -97,6 +97,7 @@ MainApp::MainApp()
 
 bool MainApp::OnInit()
 {
+	SetConsoleOutputCP(CP_UTF8);
 	//Æô¶¯luaÐéÄâ»ú
 	ScriptManager::sharedMgr()->init("lua/");
 	//

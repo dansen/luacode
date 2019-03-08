@@ -29,6 +29,8 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "Protocol.h"
 
 #include <vector>
+#include <set>
+#include <map>
 
 // 
 // Forward declarations.
@@ -60,7 +62,7 @@ public:
 
         CodeState                   state;
         bool                        temporary;
-        unsigned int                scriptIndex;
+        int                scriptIndex;
         wxFileName                  fileName;
         std::vector<unsigned int>   breakpoints;
         wxString                    tempName;
@@ -213,7 +215,7 @@ public:
      * Gets the open file that matches the script specified by the scriptIndex.
      * If there is no open file matching the scriptIndex the method returns NULL.
      */
-    File* GetFileForScript(unsigned int scriptIndex) const;
+    File* GetFileForScript(int scriptIndex);
 
     /**
      * Gets the file that matches the file name.
@@ -245,12 +247,14 @@ public:
     /**
      * Gets the specified file.
      */
-    File* GetFile(unsigned int fileIndex);
+    File* GetFile(int fileIndex);
 
     /**
      * Gets the specified file.
      */
-    const File* GetFile(unsigned int fileIndex) const;
+    const File* GetFile(int fileIndex) const;
+
+	File* GetFile(const wxFileName& fileName);
 
     /**
      * Returns the file with the specified file id, or NULL if the file doesn't
@@ -375,6 +379,8 @@ private:
     wxString                m_symbolsDirectory;
 
     std::vector<File*>      m_files;
+	std::map<std::string, File*>   m_filenames;
+	std::map<int, File*> m_fileindexes;
 
     unsigned int            m_tempIndex;
 

@@ -4080,12 +4080,8 @@ void Editor::NotifyMacroRecord(unsigned int iMessage, uptr_t wParam, sptr_t lPar
 	case SCI_SELECTIONDUPLICATE:
 	case SCI_COPYALLOWLINE:
 		break;
-
-		// Filter out all others like display changes. Also, newlines are redundant
-		// with char insert messages.
 	case SCI_NEWLINE:
 	default:
-		//		printf("Filtered out %ld of macro recording\n", iMessage);
 		return ;
 	}
 

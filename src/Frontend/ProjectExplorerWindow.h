@@ -22,7 +22,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef PROJECT_EXPLORER_WINDOW_H
 #define PROJECT_EXPLORER_WINDOW_H
-
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS 1
 #include <wx/wx.h>
 #include <wx/treectrl.h>
 #include <wx/thread.h>
@@ -30,7 +30,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include <hash_set>
 
 #include "Project.h"
-
+#include "controls/FileTreeCtrl.h"
 //
 // Forward declarations.
 //
@@ -276,7 +276,7 @@ private:
     bool                        m_filterMatchAnywhere;
 
     wxTreeItemId                m_root;
-    wxTreeCtrl*                 m_tree;
+	FileTreeCtrl*                 m_tree;
 
     wxImageList*                m_filterImageList;
     wxBitmapButton*             m_filterButton;

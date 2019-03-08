@@ -42,7 +42,8 @@ class WatchCtrl : public wxTreeListCtrl
 public:
 
     WatchCtrl(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = wxTR_HIDE_ROOT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_ROW_LINES | wxTR_HAS_BUTTONS, const wxValidator &validator = wxDefaultValidator, const wxString& name = ""); 
+        long style = wxTR_HIDE_ROOT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_ROW_LINES | wxTR_HAS_BUTTONS | wxBORDER_NONE, 
+		const wxValidator &validator = wxDefaultValidator, const wxString& name = ""); 
 
     /**
      * Parses a compound expression ({ key = value, key = value, etc. }) and adds it's

@@ -98,7 +98,6 @@ wxString Project::GetName() const
 
 bool Project::Save(const wxString& fileName)
 {
-
     wxFileName userFileName(fileName);
     userFileName.SetExt("deuser");
     
@@ -271,19 +270,48 @@ void Project::SetSccAuxProjectPath(const wxString& sccAuxProjPath)
     m_needsUserSave = true;
 }
 
-Project::File* Project::GetFile(unsigned int fileIndex)
+Project::File* Project::GetFile(int fileIndex)
 {
     return m_files[fileIndex];
 }
 
-const Project::File* Project::GetFile(unsigned int fileIndex) const
+const Project::File* Project::GetFile(int fileIndex) const
 {
     return m_files[fileIndex];
+}
+
+#ifdef WIN32
+int realpath(char * rel_path, char * full)
+{
+	if (_fullpath(full, rel_path, MAX_PATH) != NULL)
+		return 0;
+	return 1;
+}
+#endif
+
+
+Project::File* Project::GetFile(const wxFileName& fileName)
+{
+	if (m_filenames.empty()) {
+		return 0;
+	}
+
+	wxString & f = fileName.GetFullPath();
+
+	char real[MAX_PATH];
+	realpath((char*)f.c_str(), real);
+	
+	auto s =  m_filenames.find(real);
+	if (s == m_filenames.end()) {
+		return 0;
+	}
+
+	File * fp = s->second;
+	return fp;
 }
 
 Project::File* Project::GetFileById(unsigned int fileId)
 {
-
     for (unsigned int fileIndex = 0; fileIndex < m_files.size(); ++fileIndex)
     {
         if (m_files[fileIndex]->fileId == fileId)
@@ -303,16 +331,13 @@ unsigned int Project::GetNumFiles() const
 
 Project::File* Project::AddFile(const wxString& fileName)
 {
-
-    // Check if the file is already in the project.
-
-    for (unsigned int i = 0; i < m_files.size(); ++i)
-    {
-        if (!m_files[i]->temporary && m_files[i]->fileName.SameAs(fileName))
-        {
-            return NULL;
-        }
-    }
+	if (m_filenames.find(fileName.c_str()) != m_filenames.end())
+	{
+		File * fp = m_filenames.find(fileName.c_str())->second;
+		if (fp->temporary) {
+			return 0; 
+		}
+	}
 
     File* file = new File;
 
@@ -329,6 +354,9 @@ Project::File* Project::AddFile(const wxString& fileName)
     }
 
     m_files.push_back(file);
+	m_filenames.insert({ fileName.c_str(), file });
+	m_fileindexes.insert({file->scriptIndex, file});
+
     m_needsSave = true;
     
     return file;
@@ -415,19 +443,25 @@ void Project::CleanUpAfterSession()
 
 }
 
-Project::File* Project::GetFileForScript(unsigned int scriptIndex) const
+Project::File* Project::GetFileForScript(int scriptIndex)
 {
+	auto s = m_fileindexes.find(scriptIndex);
 
-    for (unsigned int i = 0; i < m_files.size(); ++i)
-    {
-        if (m_files[i]->scriptIndex == scriptIndex)
-        {
-            return m_files[i];
-        }
-    }
+	if (s == m_fileindexes.end()) {
+		for (unsigned int i = 0; i < m_files.size(); ++i)
+		{
+			if (m_files[i]->scriptIndex == scriptIndex)
+			{
+				Project::File * fp = m_files[i];
+				m_fileindexes.insert({scriptIndex,fp});
+				return m_files[i];
+			}
+		}
 
-    return NULL;
+		return NULL;
+	}
 
+	return s->second;
 }
 
 Project::File* Project::GetFileForFileName(const wxFileName& fileName) const
@@ -676,7 +710,6 @@ bool Project::LoadBreakpointNode(wxXmlNode* root, std::vector<unsigned int>& bre
 
 bool Project::LoadFileNode(const wxString& baseDirectory, wxXmlNode* node)
 {
-
     if (node->GetName() != "file")
     {
         return false;
@@ -707,15 +740,14 @@ bool Project::LoadFileNode(const wxString& baseDirectory, wxXmlNode* node)
 
             wxString temp = file->fileName.GetFullPath();
             int a  =0;
-
-            
         }
         child = child->GetNext();
     }
 
+	wxString temp = file->fileName.GetFullPath();
     m_files.push_back(file);
+	m_filenames.insert({ temp.c_str(), file });
     return true;
-
 }
 
 std::vector<Project::File*> Project::GetSortedFileList()

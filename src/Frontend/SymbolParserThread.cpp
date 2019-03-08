@@ -93,7 +93,7 @@ wxThread::ExitCode SymbolParserThread::Entry()
 
                 wxStringInputStream input(m_headItem->code);
 
-				ParseFileSymbols(m_headItem->fileName, input, symbols, symbolNames);
+				//ParseFileSymbols(m_headItem->fileName, input, symbols, symbolNames);
 
                 m_itemsLock.Enter();
                 bool isLastItem=m_items.empty();
@@ -166,7 +166,7 @@ bool isIdentify(const char * token)
 	return i>0;
 }
 
-void SymbolParserThread::addSymbol(std::vector<Symbol*>& symbols, Symbol * sym, std::set<wxString> names)
+void SymbolParserThread::addSymbol(std::vector<Symbol*>& symbols, Symbol * sym, std::set<wxString> & names)
 {
 	if(names.find(sym->name) == names.end()){
 		names.insert(sym->name); 
@@ -176,7 +176,7 @@ void SymbolParserThread::addSymbol(std::vector<Symbol*>& symbols, Symbol * sym, 
 	symbols.push_back(sym);
 }
 
-void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& input, std::vector<Symbol*>& symbols, std::set<wxString> names)
+void SymbolParserThread::ParseFileSymbols(wxString & fileName, wxInputStream& input, std::vector<Symbol*>& symbols, std::set<wxString> & names)
 {
     if (!input.IsOk())
     {

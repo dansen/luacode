@@ -22,7 +22,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef DEBUG_BACKEND_H
 #define DEBUG_BACKEND_H
-
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS 1
 #include "Channel.h"
 #include "Protocol.h"
 #include "CriticalSection.h"
@@ -37,6 +37,8 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 //
 // Forward declarations.
 //
+
+extern std::string TraceStack();
 
 class TiXmlNode;
 

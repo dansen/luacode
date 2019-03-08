@@ -90,7 +90,6 @@ void utf8log(const char * pszFormat, ...)
 	OutputDebugStringA("\n");
 
 	WideCharToMultiByte(CP_ACP, 0, wszBuf, sizeof(wszBuf), szBuf, sizeof(szBuf), NULL, FALSE);
-	printf("%s\n", szBuf);
 }
 
 

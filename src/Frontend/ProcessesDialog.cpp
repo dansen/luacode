@@ -38,7 +38,7 @@ END_EVENT_TABLE()
 ProcessesDialog::ProcessesDialog( wxWindow* parent )
     : wxDialog( parent, wxID_ANY, _("Processes"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER )
 {
-	
+	SetDoubleBuffered(true);
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 1, 1, 0, 0 );
 	fgSizer2->AddGrowableCol( 0 );
