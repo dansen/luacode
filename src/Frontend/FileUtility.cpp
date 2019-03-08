@@ -151,3 +151,18 @@ void ShowFileInFolder (wxFileName& inPath) {
     
   desktopFolder->Release();
 }
+
+const char * get_options_path()
+{
+	CHAR documents[MAX_PATH];
+	HRESULT result = SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, documents);
+
+	if (result != S_OK) {
+		return 0;
+	}
+
+	static char config_path[1024];
+	sprintf(config_path, "%s/luacode/options.xml", documents);
+	return config_path;
+}
+

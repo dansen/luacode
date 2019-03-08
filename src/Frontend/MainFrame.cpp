@@ -3899,7 +3899,7 @@ void MainFrame::LoadOptions()
     wxXmlNode* keyBindingNode = NULL;
 
     wxXmlDocument document;
-    if (document.Load("options.xml"))
+    if (document.Load(get_options_path()))
     {
         
         wxXmlNode* root = document.GetRoot();
@@ -4140,8 +4140,7 @@ void MainFrame::SaveOptions()
     wxString directory = GetAppDataDirectory();
 
     // Make sure the directory exists.
-
-    wxFileName fileName(GetAppDataDirectory(), "options.xml");
+    wxFileName fileName(get_options_path());
     fileName.Mkdir(0777, wxPATH_MKDIR_FULL);
 
     document.Save(fileName.GetFullPath());

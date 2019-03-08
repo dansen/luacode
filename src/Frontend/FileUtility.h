@@ -30,4 +30,6 @@ std::string str2ansi(const char * str);
 bool saveFile(const char * path, std::string & str);
 std::string fileStringANSI(const char * path);
 
+const char * get_options_path();
+
 #endif

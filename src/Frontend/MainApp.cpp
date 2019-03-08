@@ -26,6 +26,10 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "CrashHandler.h"
 #include "Report.h"
 #include "Config.h"
+#include <ShlObj.h>
+#include <fstream>
+
+#include "FileUtility.h"
 
 #include <sstream>
 #include "luaext/ScriptManager.h"
@@ -94,12 +98,54 @@ MainApp::MainApp()
     CrashHandler::SetCallback( CrashCallback );
 }
 
+inline bool exists_test0(const std::string& name) {
+	std::ifstream f(name.c_str());
+	bool v = f.good();
+	f.close();
+	return v;
+}
+
+bool CopyOptionsToCommon()
+{
+	CHAR documents[MAX_PATH];
+	HRESULT result = SHGetFolderPath(NULL, CSIDL_APPDATA| CSIDL_FLAG_CREATE, NULL, 0, documents);
+
+	if (result != S_OK) {
+		return false;
+	}
+
+	const char * config_path = get_options_path();
+	char doc_path[1024];
+
+	if (exists_test0(config_path)) {
+		return true;
+	}
+
+	sprintf(doc_path, "%s/luacode", documents);
+
+	mkdir(doc_path);
+
+	std::ifstream  src("options.xml", std::ios::binary);
+	std::ofstream  dst(config_path, std::ios::binary);
+	dst << src.rdbuf();
+	src.close();
+	dst.close();
+
+	return true;
+}
 
 bool MainApp::OnInit()
 {
 	SetConsoleOutputCP(CP_UTF8);
+
 	//启动lua虚拟机
 	ScriptManager::sharedMgr()->init("lua/");
+
+	//拷贝options.xml文件到C盘
+	if (!CopyOptionsToCommon()) {
+		return false;
+	}
+
 	//
     UINT openFilesMessage = RegisterWindowMessage("Decoda_OpenFiles");
 

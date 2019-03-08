@@ -140,7 +140,6 @@ bool Project::Save(const wxString& fileName)
 
 bool Project::Load(const wxString& fileName)
 {
-
     if (!LoadGeneralSettings(fileName))
     {
         return false;
@@ -148,7 +147,6 @@ bool Project::Load(const wxString& fileName)
 
     wxFileName userFileName(fileName);
     userFileName.SetExt("deuser");
-
 
     // Even if we can't load the user settings, we still treat the load as
     // successful. We do this since the user file may not be present.
