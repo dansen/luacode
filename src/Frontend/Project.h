@@ -225,7 +225,7 @@ public:
     /**
      * Adds a file to the project. The new file is returned.
      */
-    File* AddFile(const wxString& fileName);
+    File* AddFile(const wxString& fileName, int index = -1);
 
     /**
      * Adds a script to the project temporarily (during this debug sesssion). The

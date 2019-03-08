@@ -129,8 +129,11 @@ void Channel::Destroy()
 
 bool Channel::Write(const void* buffer, unsigned int length)
 {
+	if (m_pipe == INVALID_HANDLE_VALUE) {
+		return false;
+	}
 
-    assert(m_pipe != INVALID_HANDLE_VALUE);
+	assert(m_pipe != INVALID_HANDLE_VALUE);
 
     if (length == 0)
     {
@@ -215,6 +218,17 @@ bool Channel::ReadUInt32(unsigned int& value)
     }
     value = temp;
     return true;
+}
+
+bool Channel::ReadInt32(int& value)
+{
+	DWORD temp;
+	if (!Read(&temp, 4))
+	{
+		return false;
+	}
+	value = temp;
+	return true;
 }
 
 bool Channel::ReadString(std::string& value)

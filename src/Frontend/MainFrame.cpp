@@ -1883,7 +1883,7 @@ void MainFrame::OnDebugEvent(wxDebugEvent& event)
         {
             // Sync up the breakpoints for this file.
             unsigned int scriptIndex = event.GetScriptIndex();
-			Project::File* file = 0;// m_project->GetFileForScript(scriptIndex);
+			Project::File* file = m_project->GetFileForScript(scriptIndex);
 
             if (file == NULL)
             {
@@ -1908,7 +1908,7 @@ void MainFrame::OnDebugEvent(wxDebugEvent& event)
                 // easy for the user to add break points.
                 file = m_project->AddTemporaryFile(scriptIndex);
                 file->type = "Lua";
-                UpdateForNewFile(file);
+                UpdateForNewFile(file, scriptIndex);
             }
             else
             {
@@ -2835,20 +2835,20 @@ void MainFrame::OnBreak(wxDebugEvent& event)
     
     for (unsigned int i = 0; i < numStackFrames; ++i)
     {
-
         const DebugFrontend::StackFrame& stackFrame = frontend.GetStackFrame(i);
         
         wxString item;
 
         if (stackFrame.scriptIndex != -1)
         {
-
             Project::File* file = m_project->GetFileForScript(stackFrame.scriptIndex);
-            unsigned int lineNumber = OldToNewLine(file, stackFrame.line);
 
-            const DebugFrontend::Script* script = frontend.GetScript(stackFrame.scriptIndex);
-            item.Printf(_("%s!%s Line %d"), script->name.c_str(), stackFrame.function.c_str(), lineNumber + 1);
+			if (file) {
+				unsigned int lineNumber = OldToNewLine(file, stackFrame.line);
 
+				const DebugFrontend::Script* script = frontend.GetScript(stackFrame.scriptIndex);
+				item.Printf(_("%s!%s Line %d"), script->name.c_str(), stackFrame.function.c_str(), lineNumber + 1);
+			}
         }
         else
         {
@@ -6243,10 +6243,10 @@ void MainFrame::OnSymbolsParsed(SymbolParserEvent& event)
     }
 }
 
-void MainFrame::UpdateForNewFile(Project::File* file)
+void MainFrame::UpdateForNewFile(Project::File* file, int index)
 {
 	if (file->tempName.empty()){
-		m_project->AddFile(file->fileName.GetFullPath());
+		m_project->AddFile(file->fileName.GetFullPath(), index);
 	}
     m_projectExplorer->InsertFile(file);
     m_symbolParser->QueueForParsing(file);

@@ -92,6 +92,8 @@ public:
      */
     bool ReadUInt32(unsigned int& value);
 
+	bool ReadInt32(int& value);
+
     /**
      * Reads a string from the channel. This operation blocks until the
      * data is available.

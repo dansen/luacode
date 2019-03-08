@@ -595,7 +595,7 @@ int DebugBackend::RegisterScript(lua_State* L, const char* source, size_t size, 
     // luaL_loadstring and doesn't make for a very good display.
     if (source != NULL && strncmp(name, source, length) == 0)
     {
-        char buffer[32];
+        char buffer[64];
         sprintf(buffer, "@Untitled%d.lua", scriptIndex + 1);
         fileName = buffer;
     }

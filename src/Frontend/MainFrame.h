@@ -1353,7 +1353,7 @@ public:
     /**
      * Called when a new file is added to the project.
      */
-    void UpdateForNewFile(Project::File* file);
+    void UpdateForNewFile(Project::File* file, int index = -1);
 
     /**
      * Updates the line mapper for the specified page. If the line mapper is

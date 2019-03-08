@@ -48,6 +48,10 @@ public:
         std::string     source;     // Source code for the script
         CodeState       state;
         LineMapper      lineMapper; // Current mapping from lines in the local file to backend script lines.
+
+		Script() {
+			name = "";
+		}
     };
 
     struct StackFrame

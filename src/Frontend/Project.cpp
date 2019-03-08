@@ -327,11 +327,12 @@ unsigned int Project::GetNumFiles() const
     return m_files.size();
 }
 
-Project::File* Project::AddFile(const wxString& fileName)
+Project::File* Project::AddFile(const wxString& fileName, int index)
 {
-	if (m_filenames.find(fileName.c_str()) != m_filenames.end())
+	auto v = m_filenames.find(fileName.c_str());
+	if (v != m_filenames.end())
 	{
-		File * fp = m_filenames.find(fileName.c_str())->second;
+		File * fp = v->second;
 		if (fp->temporary) {
 			return 0; 
 		}
@@ -340,7 +341,7 @@ Project::File* Project::AddFile(const wxString& fileName)
     File* file = new File;
 
     file->state         = CodeState_Normal;
-    file->scriptIndex   = -1;
+    file->scriptIndex   = index; 
     file->temporary     = false;
     file->fileName      = fileName;
     file->status        = Status_None;
@@ -363,20 +364,18 @@ Project::File* Project::AddFile(const wxString& fileName)
 
 Project::File* Project::AddTemporaryFile(unsigned int scriptIndex)
 {
-    
     const DebugFrontend::Script* script = DebugFrontend::Get().GetScript(scriptIndex);
     assert(script != NULL);
 
     File* file = new File;
-
     file->state         = script->state;
     file->scriptIndex   = scriptIndex;
     file->temporary     = true;
     file->fileName      = script->name.c_str();
     file->status        = Status_None;
     file->fileId        = ++s_lastFileId;
-
-    m_files.push_back(file);
+	
+	file->fileName.Normalize();
 
     return file;
 
@@ -384,7 +383,6 @@ Project::File* Project::AddTemporaryFile(unsigned int scriptIndex)
 
 Project::File* Project::AddTemporaryFile(const wxString& fileName)
 {
-    
     File* file = new File;
 
     file->state         = CodeState_Normal;
@@ -400,7 +398,7 @@ Project::File* Project::AddTemporaryFile(const wxString& fileName)
         file->tempName = CreateTempName();
     }
 
-    m_files.push_back(file);
+	file->fileName.Normalize();
 
     return file;
 

@@ -543,17 +543,9 @@ void DebugFrontend::EventThreadProc()
 
             for (unsigned int i = 0; i < numStackFrames; ++i)
             {
-
-                m_eventChannel.ReadUInt32(m_stackFrames[i].scriptIndex);
-
-                if (m_stackFrames[i].scriptIndex != -1)
-                {
-                    assert(m_stackFrames[i].scriptIndex < m_scripts.size());
-                }
-
-                m_eventChannel.ReadUInt32(m_stackFrames[i].line);
+                m_eventChannel.ReadInt32(m_stackFrames[i].scriptIndex);
+                m_eventChannel.ReadInt32(m_stackFrames[i].line);
                 m_eventChannel.ReadString(m_stackFrames[i].function);
-            
             }
 
             if (numStackFrames > 0)
