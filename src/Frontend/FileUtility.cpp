@@ -23,6 +23,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "FileUtility.h"
 
 #include <shlobj.h>
+#include <fstream>
 
 static int _fileSize(const char * path)
 {
@@ -165,4 +166,27 @@ const char * get_options_path()
 	sprintf(config_path, "%s/luacode/options.xml", documents);
 	return config_path;
 }
+
+static int realpath(const char * rel_path, char * full)
+{
+	if (_fullpath(full, rel_path, MAX_PATH) != NULL)
+		return 0;
+	return 1;
+}
+
+std::string get_full_path(const char * path)
+{
+	char real[MAX_PATH];
+	realpath(path, real);
+	return real;
+}
+
+bool is_file_exist(const char * path)
+{
+	std::ifstream f(path);
+	bool v = f.good();
+	f.close();
+	return v;
+}
+
 

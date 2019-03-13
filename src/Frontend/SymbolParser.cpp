@@ -25,6 +25,7 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include "DebugFrontend.h"
 #include "Symbol.h"
 #include "StlUtility.h"
+#include "FileUtility.h"
 
 #include <wx/file.h>
 
@@ -86,7 +87,7 @@ void SymbolParser::QueueForParsing(Project::File* file)
     {
 
         wxString code;
-		wxString fileName;
+		wxString fileName = file->fileName.GetFullPath();
 
         if (file->scriptIndex != -1)
         {
@@ -94,10 +95,9 @@ void SymbolParser::QueueForParsing(Project::File* file)
 			fileName = script->name;
             code = script->source.c_str();
         }
-        else if (wxFileExists(file->fileName.GetFullPath()))
+        else if (is_file_exist(fileName.c_str()))
         {
-			fileName = file->fileName.GetFullPath();
-            ReadFile(file->fileName.GetFullPath(), code);
+            ReadFile(fileName, code);
         }
         else
         {
@@ -105,14 +105,12 @@ void SymbolParser::QueueForParsing(Project::File* file)
         }
 
 		m_symbolParserThread.QueueForParsing(fileName, code, file->fileId);
-    
     }
 
 }
 
 bool SymbolParser::ReadFile(const wxString& fileName, wxString& contents)
 {
-
     wxFile file;
 
     if (!file.Open(fileName))

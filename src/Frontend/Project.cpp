@@ -30,6 +30,8 @@ along with Decoda.  If not, see <http://www.gnu.org/licenses/>.
 #include <wx/xml/xml.h>
 #include <wx/filefn.h>
 
+#include "FileUtility.h"
+
 #include <algorithm>
 
 unsigned int Project::s_lastFileId = 0;
@@ -278,15 +280,12 @@ const Project::File* Project::GetFile(int fileIndex) const
     return m_files[fileIndex];
 }
 
-#ifdef WIN32
-int realpath(char * rel_path, char * full)
+static int realpath(char * rel_path, char * full)
 {
 	if (_fullpath(full, rel_path, MAX_PATH) != NULL)
 		return 0;
 	return 1;
 }
-#endif
-
 
 Project::File* Project::GetFile(const wxFileName& fileName)
 {
@@ -731,18 +730,15 @@ bool Project::LoadFileNode(const wxString& baseDirectory, wxXmlNode* node)
 
             if (file->fileName.IsRelative())
             {
-                file->fileName.MakeAbsolute(baseDirectory);
+				fileName = get_full_path(fileName.c_str());
+				file->fileName = fileName;
             }
-
-            wxString temp = file->fileName.GetFullPath();
-            int a  =0;
         }
         child = child->GetNext();
     }
 
-	wxString temp = file->fileName.GetFullPath();
     m_files.push_back(file);
-	m_filenames.insert({ temp.c_str(), file });
+	m_filenames.insert({ fileName.c_str(), file });
     return true;
 }
 
@@ -921,6 +917,9 @@ bool Project::LoadGeneralSettings(const wxString& fileName)
         return false;
     }
     
+	//设置当前目录
+	SetCurrentDirectory(baseDirectory.c_str());
+	//
     wxXmlNode* node = root->GetChildren();
     
     while (node != NULL)

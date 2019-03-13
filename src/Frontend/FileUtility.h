@@ -32,4 +32,8 @@ std::string fileStringANSI(const char * path);
 
 const char * get_options_path();
 
+std::string get_full_path(const char * path);
+
+bool is_file_exist(const char * path);
+
 #endif
